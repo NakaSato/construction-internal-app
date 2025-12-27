@@ -42,7 +42,7 @@ const NavbarApiStatus: React.FC<NavbarApiStatusProps> = ({
   const getStatusColor = () => {
     switch (status) {
       case "online":
-        return "bg-green-500/20 text-green-300 border-green-400/30 hover:bg-green-500/30";
+        return "bg-blue-500/20 text-blue-300 border-blue-400/30 hover:bg-blue-500/30";
       case "offline":
         return "bg-red-500/20 text-red-300 border-red-400/30 hover:bg-red-500/30";
       case "checking":

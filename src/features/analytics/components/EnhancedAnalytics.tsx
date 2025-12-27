@@ -264,21 +264,21 @@ const EnhancedAnalytics: React.FC<EnhancedAnalyticsProps> = ({
           </p>
         </div>
 
-        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6">
+        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-600 text-sm font-medium">
+              <p className="text-blue-600 text-sm font-medium">
                 Safety Performance
               </p>
-              <p className="text-2xl font-bold text-green-900">
+              <p className="text-2xl font-bold text-blue-900">
                 {analytics.averageSafetyScore.toFixed(1)}/10
               </p>
             </div>
-            <div className="p-3 bg-green-200 rounded-full">
+            <div className="p-3 bg-blue-200 rounded-full">
               <span className="text-2xl">🛡️</span>
             </div>
           </div>
-          <p className="text-green-700 text-sm mt-2">
+          <p className="text-blue-700 text-sm mt-2">
             {analytics.averageSafetyScore >= 8
               ? "Excellent safety record"
               : "Needs safety improvement"}

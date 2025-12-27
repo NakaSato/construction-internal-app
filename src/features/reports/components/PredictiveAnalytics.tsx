@@ -392,11 +392,11 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
                 </p>
               </div>
 
-              <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+              <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   Confidence Level
                 </h3>
-                <p className="text-3xl font-bold text-green-600 mb-1">
+                <p className="text-3xl font-bold text-blue-600 mb-1">
                   {insights.completionPrediction.confidence.toFixed(1)}%
                 </p>
                 <p className="text-sm text-gray-600">Based on current trends</p>
@@ -492,7 +492,7 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
                       ? "bg-orange-100 text-orange-800"
                       : insights.riskAssessment.riskLevel === "Medium"
                       ? "bg-yellow-100 text-yellow-800"
-                      : "bg-green-100 text-green-800"
+                      : "bg-blue-100 text-blue-800"
                   }`}
                 >
                   {insights.riskAssessment.riskLevel}
@@ -610,11 +610,11 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
           >
             {/* Resource Optimization Summary */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+              <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   Efficiency Potential
                 </h3>
-                <p className="text-3xl font-bold text-green-600 mb-1">
+                <p className="text-3xl font-bold text-blue-600 mb-1">
                   {insights.resourceOptimization.efficiency.toFixed(1)}%
                 </p>
                 <p className="text-sm text-gray-600">Projected improvement</p>
@@ -657,7 +657,7 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
                       transition={{ duration: 0.3, delay: index * 0.1 }}
                       className={`p-4 rounded-lg border-l-4 ${
                         rec.action === "increase"
-                          ? "bg-green-50 border-green-500"
+                          ? "bg-blue-50 border-blue-500"
                           : rec.action === "decrease"
                           ? "bg-red-50 border-red-500"
                           : "bg-blue-50 border-blue-500"
@@ -671,7 +671,7 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
                           <span
                             className={`px-2 py-1 rounded text-xs font-medium ${
                               rec.action === "increase"
-                                ? "bg-green-100 text-green-800"
+                                ? "bg-blue-100 text-blue-800"
                                 : rec.action === "decrease"
                                 ? "bg-red-100 text-red-800"
                                 : "bg-blue-100 text-blue-800"
@@ -776,7 +776,7 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                     className={`p-4 rounded-lg border-2 ${
                       day.productivityImpact > 90
-                        ? "border-green-200 bg-green-50"
+                        ? "border-blue-200 bg-blue-50"
                         : day.productivityImpact > 70
                         ? "border-yellow-200 bg-yellow-50"
                         : "border-red-200 bg-red-50"
@@ -807,7 +807,7 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
                         <span
                           className={`font-medium ${
                             day.productivityImpact > 90
-                              ? "text-green-600"
+                              ? "text-blue-600"
                               : day.productivityImpact > 70
                               ? "text-yellow-600"
                               : "text-red-600"

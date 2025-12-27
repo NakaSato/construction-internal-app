@@ -76,7 +76,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
       case "InProgress":
         return "bg-blue-100 text-blue-800 border-blue-200";
       case "Completed":
-        return "bg-green-100 text-green-800 border-green-200";
+        return "bg-blue-100 text-blue-800 border-blue-200";
       case "OnHold":
         return "bg-red-100 text-red-800 border-red-200";
       case "Cancelled":
@@ -121,7 +121,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
       case "Medium":
         return "text-yellow-600";
       case "Low":
-        return "text-green-600";
+        return "text-blue-600";
       default:
         return "text-gray-600";
     }
@@ -523,7 +523,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                         👁️ View Details
                       </button>
                       {(isAdmin || isManager) && (
-                        <button className="flex-1 bg-green-50 text-green-700 py-2 px-4 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium border border-green-200">
+                        <button className="flex-1 bg-blue-50 text-blue-700 py-2 px-4 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium border border-blue-200">
                           ✏️ Edit
                         </button>
                       )}
@@ -610,7 +610,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                         👁️ View
                       </button>
                       {(isAdmin || isManager) && (
-                        <button className="bg-green-50 text-green-700 py-2 px-3 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium">
+                        <button className="bg-blue-50 text-blue-700 py-2 px-3 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium">
                           ✏️ Edit
                         </button>
                       )}

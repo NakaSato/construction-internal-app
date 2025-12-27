@@ -193,10 +193,10 @@ const DailyReports: React.FC = () => {
                 </div>
               )}
 
-              <div className="bg-green-50 rounded-lg p-4">
+              <div className="bg-blue-50 rounded-lg p-4">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                       <svg
                         className="w-4 h-4 text-white"
                         fill="currentColor"
@@ -211,10 +211,10 @@ const DailyReports: React.FC = () => {
                     </div>
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-green-900">
+                    <p className="text-sm font-medium text-blue-900">
                       Avg Hours
                     </p>
-                    <p className="text-2xl font-bold text-green-600">
+                    <p className="text-2xl font-bold text-blue-600">
                       {stats.averageHours}
                     </p>
                   </div>

@@ -86,7 +86,7 @@ const ErrorReport: React.FC<ErrorReportProps> = ({
           <ul className="space-y-1">
             {error.suggestions.map((suggestion, index) => (
               <li key={index} className="flex items-start space-x-2">
-                <span className="text-green-600 mt-0.5">•</span>
+                <span className="text-blue-600 mt-0.5">•</span>
                 <span className="text-sm">{suggestion}</span>
               </li>
             ))}

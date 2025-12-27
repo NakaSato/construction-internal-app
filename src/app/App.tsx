@@ -102,7 +102,7 @@ const App: React.FC = () => {
                     primary: "#10b981",
                     secondary: "#fff",
                   },
-                  className: "bg-green-600 text-white",
+                  className: "bg-blue-600 text-white",
                 },
                 error: {
                   duration: 6000, // Increased duration for error messages

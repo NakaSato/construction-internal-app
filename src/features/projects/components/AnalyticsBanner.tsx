@@ -19,7 +19,7 @@ const AnalyticsBanner = ({ analytics, project }: AnalyticsBannerProps) => {
               <div className="text-xs text-blue-700">Total Projects</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-green-700">
+              <div className="text-lg font-bold text-blue-700">
                 {analytics.activeProjects.toLocaleString()}
               </div>
               <div className="text-xs text-blue-700">Active</div>
@@ -71,7 +71,7 @@ const AnalyticsBanner = ({ analytics, project }: AnalyticsBannerProps) => {
               <div className="text-xs text-blue-600">Cancelled</div>
             </div>
             <div className="text-center">
-              <div className="text-sm font-bold text-green-600">
+              <div className="text-sm font-bold text-blue-600">
                 ${(analytics.totalRevenueValue / 1000000).toFixed(1)}M
               </div>
               <div className="text-xs text-blue-600">Est. Revenue</div>

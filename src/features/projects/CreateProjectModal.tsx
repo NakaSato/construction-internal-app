@@ -87,7 +87,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
             </div>
 
             {/* Timeline */}
-            <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-xl border">
+            <div className="bg-gradient-to-r from-blue-50 to-blue-50 p-6 rounded-xl border">
               <h3 className="text-xl font-bold text-gray-900 mb-4">
                 📅 Timeline
               </h3>

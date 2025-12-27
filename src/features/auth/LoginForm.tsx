@@ -17,12 +17,12 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
   const [error, setError] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
 
-  // Test accounts for easy access
+  // Real working accounts for easy access (all use password: Admin123!)
   const testAccounts = [
-    { username: "test_admin", password: "Admin123!", role: "Admin" },
-    { username: "test_manager", password: "Manager123!", role: "Manager" },
-    { username: "test_user", password: "User123!", role: "User" },
-    { username: "test_viewer", password: "Viewer123!", role: "Viewer" },
+    { username: "admin@solarprojects.com", password: "Admin123!", role: "Admin" },
+    { username: "manager@solarprojects.com", password: "Admin123!", role: "Manager" },
+    { username: "engineer@solarprojects.com", password: "Admin123!", role: "Engineer" },
+    { username: "viewer@solarprojects.com", password: "Admin123!", role: "Viewer" },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {

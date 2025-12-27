@@ -166,7 +166,7 @@ export default function RegisterForm({
       case 4:
         return { strength: "Good", color: "text-blue-600" };
       case 5:
-        return { strength: "Strong", color: "text-green-600" };
+        return { strength: "Strong", color: "text-blue-600" };
       default:
         return { strength: "Weak", color: "text-red-600" };
     }
@@ -207,9 +207,8 @@ export default function RegisterForm({
                 name="fullName"
                 type="text"
                 required
-                className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${
-                  errors.fullName ? "border-red-300" : "border-gray-300"
-                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${errors.fullName ? "border-red-300" : "border-gray-300"
+                  } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
                 placeholder="Enter your full name"
                 value={formData.fullName}
                 onChange={handleInputChange}
@@ -233,9 +232,8 @@ export default function RegisterForm({
                 name="username"
                 type="text"
                 required
-                className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${
-                  errors.username ? "border-red-300" : "border-gray-300"
-                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${errors.username ? "border-red-300" : "border-gray-300"
+                  } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
                 placeholder="Choose a username"
                 value={formData.username}
                 onChange={handleInputChange}
@@ -259,9 +257,8 @@ export default function RegisterForm({
                 name="email"
                 type="email"
                 required
-                className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${
-                  errors.email ? "border-red-300" : "border-gray-300"
-                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${errors.email ? "border-red-300" : "border-gray-300"
+                  } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleInputChange}
@@ -312,9 +309,8 @@ export default function RegisterForm({
                   name="password"
                   type={showPassword ? "text" : "password"}
                   required
-                  className={`mt-1 appearance-none relative block w-full px-3 py-2 pr-10 border ${
-                    errors.password ? "border-red-300" : "border-gray-300"
-                  } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                  className={`mt-1 appearance-none relative block w-full px-3 py-2 pr-10 border ${errors.password ? "border-red-300" : "border-gray-300"
+                    } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
                   placeholder="Create a strong password"
                   value={formData.password}
                   onChange={handleInputChange}
@@ -354,11 +350,10 @@ export default function RegisterForm({
                   name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   required
-                  className={`mt-1 appearance-none relative block w-full px-3 py-2 pr-10 border ${
-                    errors.confirmPassword
-                      ? "border-red-300"
-                      : "border-gray-300"
-                  } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                  className={`mt-1 appearance-none relative block w-full px-3 py-2 pr-10 border ${errors.confirmPassword
+                    ? "border-red-300"
+                    : "border-gray-300"
+                    } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
                   placeholder="Confirm your password"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}

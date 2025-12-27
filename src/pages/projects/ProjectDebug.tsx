@@ -103,7 +103,7 @@ const ProjectDebug: React.FC = () => {
                 <span
                   className={`px-3 py-1 rounded-full text-sm font-medium ${
                     isAuthenticated
-                      ? "bg-green-100 text-green-800"
+                      ? "bg-blue-100 text-blue-800"
                       : "bg-red-100 text-red-800"
                   }`}
                 >
@@ -131,7 +131,7 @@ const ProjectDebug: React.FC = () => {
                 <span
                   className={`px-3 py-1 rounded-full text-sm font-medium ${
                     token
-                      ? "bg-green-100 text-green-800"
+                      ? "bg-blue-100 text-blue-800"
                       : "bg-red-100 text-red-800"
                   }`}
                 >
@@ -172,21 +172,21 @@ const ProjectDebug: React.FC = () => {
                 <div
                   className={`p-4 rounded-lg ${
                     apiTest.success
-                      ? "bg-green-50 border border-green-200"
+                      ? "bg-blue-50 border border-blue-200"
                       : "bg-red-50 border border-red-200"
                   }`}
                 >
                   <div className="flex items-center mb-2">
                     <span
                       className={`text-2xl mr-2 ${
-                        apiTest.success ? "text-green-600" : "text-red-600"
+                        apiTest.success ? "text-blue-600" : "text-red-600"
                       }`}
                     >
                       {apiTest.success ? "✅" : "❌"}
                     </span>
                     <span
                       className={`font-medium ${
-                        apiTest.success ? "text-green-800" : "text-red-800"
+                        apiTest.success ? "text-blue-800" : "text-red-800"
                       }`}
                     >
                       {apiTest.success
@@ -196,7 +196,7 @@ const ProjectDebug: React.FC = () => {
                   </div>
 
                   {apiTest.success ? (
-                    <div className="text-sm text-green-700">
+                    <div className="text-sm text-blue-700">
                       <p>
                         <strong>Total Projects:</strong> {apiTest.totalCount}
                       </p>
@@ -341,7 +341,7 @@ const ProjectDebug: React.FC = () => {
                     testProjectById(input.value.trim());
                   }
                 }}
-                className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors"
+                className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
               >
                 Test Project ID
               </button>

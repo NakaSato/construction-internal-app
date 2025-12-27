@@ -31,7 +31,7 @@ export const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
   const getStatusColor = (status: string) => {
     switch (status) {
       case "healthy":
-        return "bg-green-50 border-green-200 text-green-800";
+        return "bg-blue-50 border-blue-200 text-blue-800";
       case "warning":
         return "bg-yellow-50 border-yellow-200 text-yellow-800";
       case "critical":
@@ -61,7 +61,7 @@ export const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
               ? "bg-red-50 border-red-200 text-red-800"
               : scheduleHealth.criticalTasks > 0
               ? "bg-yellow-50 border-yellow-200 text-yellow-800"
-              : "bg-green-50 border-green-200 text-green-800"
+              : "bg-blue-50 border-blue-200 text-blue-800"
           }`}
         >
           <div className="font-medium">Critical Tasks</div>
@@ -72,7 +72,7 @@ export const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
         <div
           className={`border rounded-lg p-4 ${
             scheduleHealth.completion >= 80
-              ? "bg-green-50 border-green-200 text-green-800"
+              ? "bg-blue-50 border-blue-200 text-blue-800"
               : scheduleHealth.completion >= 40
               ? "bg-yellow-50 border-yellow-200 text-yellow-800"
               : "bg-red-50 border-red-200 text-red-800"
@@ -216,7 +216,7 @@ export const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
                   <div
                     className={`flex-shrink-0 w-3 h-3 rounded-full ${
                       milestone.status === "completed"
-                        ? "bg-green-500"
+                        ? "bg-blue-500"
                         : milestone.status === "in_progress"
                         ? "bg-yellow-500"
                         : "bg-gray-300"
@@ -233,7 +233,7 @@ export const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
                   <div
                     className={`text-xs px-2 py-1 rounded-full ${
                       milestone.status === "completed"
-                        ? "bg-green-100 text-green-800"
+                        ? "bg-blue-100 text-blue-800"
                         : milestone.status === "in_progress"
                         ? "bg-yellow-100 text-yellow-800"
                         : "bg-gray-100 text-gray-600"

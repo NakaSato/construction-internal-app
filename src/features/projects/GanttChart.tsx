@@ -27,6 +27,13 @@ interface GanttChartState {
   criticalPath: string[];
 }
 
+const getWeekNumber = (date: Date): number => {
+  const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+  const pastDaysOfYear =
+    (date.getTime() - firstDayOfYear.getTime()) / 86400000;
+  return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+};
+
 export default function GanttChart({
   project,
   showBaseline = true,
@@ -51,7 +58,7 @@ export default function GanttChart({
         totalDays: Math.ceil(
           (ganttData.timeline.end.getTime() -
             ganttData.timeline.start.getTime()) /
-            (1000 * 60 * 60 * 24)
+          (1000 * 60 * 60 * 24)
         ),
       },
       criticalPath,
@@ -190,12 +197,7 @@ export default function GanttChart({
     return scale;
   }, [ganttState, viewMode]);
 
-  const getWeekNumber = (date: Date): number => {
-    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-    const pastDaysOfYear =
-      (date.getTime() - firstDayOfYear.getTime()) / 86400000;
-    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
-  };
+
 
   // Calculate task position and width
   const getTaskPosition = (task: GanttTask) => {
@@ -290,10 +292,9 @@ export default function GanttChart({
               style={{
                 left: `${predecessorPos.left + predecessorPos.width}%`,
                 top: "50%",
-                width: `${
-                  successorPos.left -
+                width: `${successorPos.left -
                   (predecessorPos.left + predecessorPos.width)
-                }%`,
+                  }%`,
                 zIndex: 1,
               }}
             />
@@ -370,15 +371,13 @@ export default function GanttChart({
             {ganttState.tasks.map((task) => (
               <div
                 key={task.id}
-                className={`px-4 py-3 border-b border-gray-100 cursor-pointer hover:bg-gray-50 ${
-                  selectedTask === task.id ? "bg-blue-50 border-blue-200" : ""
-                } ${
-                  task.type === "phase"
+                className={`px-4 py-3 border-b border-gray-100 cursor-pointer hover:bg-gray-50 ${selectedTask === task.id ? "bg-blue-50 border-blue-200" : ""
+                  } ${task.type === "phase"
                     ? "pl-8"
                     : task.type === "activity"
-                    ? "pl-12"
-                    : ""
-                }`}
+                      ? "pl-12"
+                      : ""
+                  }`}
                 onClick={() => setSelectedTask(task.id)}
               >
                 <div className="flex items-center justify-between">
@@ -415,9 +414,8 @@ export default function GanttChart({
             {generateTimeScale.map((timeUnit, index) => (
               <div
                 key={index}
-                className={`flex-shrink-0 w-16 text-center text-xs py-3 border-r border-gray-200 ${
-                  timeUnit.isWeekend ? "bg-gray-200" : ""
-                }`}
+                className={`flex-shrink-0 w-16 text-center text-xs py-3 border-r border-gray-200 ${timeUnit.isWeekend ? "bg-gray-200" : ""
+                  }`}
               >
                 {timeUnit.label}
               </div>
@@ -440,9 +438,8 @@ export default function GanttChart({
                   {generateTimeScale.map((timeUnit, index) => (
                     <div
                       key={index}
-                      className={`absolute w-16 h-full ${
-                        timeUnit.isWeekend ? "bg-gray-50" : ""
-                      }`}
+                      className={`absolute w-16 h-full ${timeUnit.isWeekend ? "bg-gray-50" : ""
+                        }`}
                       style={{ left: `${index * 64}px` }}
                     />
                   ))}
@@ -461,9 +458,8 @@ export default function GanttChart({
 
                   {/* Main task bar */}
                   <div
-                    className={`absolute h-6 rounded shadow-sm cursor-pointer transition-all duration-200 hover:shadow-md ${
-                      selectedTask === task.id ? "ring-2 ring-blue-400" : ""
-                    }`}
+                    className={`absolute h-6 rounded shadow-sm cursor-pointer transition-all duration-200 hover:shadow-md ${selectedTask === task.id ? "ring-2 ring-blue-400" : ""
+                      }`}
                     style={{
                       left: `${position.left}%`,
                       width: `${position.width}%`,
@@ -516,7 +512,7 @@ export default function GanttChart({
               <span>Project</span>
             </div>
             <div className="flex items-center">
-              <div className="w-4 h-4 bg-green-500 rounded mr-2"></div>
+              <div className="w-4 h-4 bg-blue-500 rounded mr-2"></div>
               <span>Phase</span>
             </div>
             <div className="flex items-center">

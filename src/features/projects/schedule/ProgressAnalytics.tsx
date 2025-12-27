@@ -38,7 +38,7 @@ export const ProgressAnalytics: React.FC<ProgressAnalyticsProps> = ({
   ];
 
   const getProgressColor = (progress: number) => {
-    if (progress >= 80) return "bg-green-500";
+    if (progress >= 80) return "bg-blue-500";
     if (progress >= 60) return "bg-blue-500";
     if (progress >= 40) return "bg-yellow-500";
     return "bg-red-500";
@@ -47,7 +47,7 @@ export const ProgressAnalytics: React.FC<ProgressAnalyticsProps> = ({
   const getVarianceStatus = (planned: number, actual: number) => {
     const variance = actual - planned;
     if (variance >= 0)
-      return { status: "ahead", color: "text-green-600", icon: "📈" };
+      return { status: "ahead", color: "text-blue-600", icon: "📈" };
     if (variance > -5)
       return { status: "on_track", color: "text-blue-600", icon: "📊" };
     return { status: "behind", color: "text-red-600", icon: "📉" };

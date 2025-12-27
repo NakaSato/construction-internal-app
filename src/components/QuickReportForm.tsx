@@ -270,7 +270,7 @@ export default function QuickReportForm({
             />
             <div className="flex justify-between text-xs text-gray-500 mt-1">
               <span>1</span>
-              <span className="font-semibold text-green-600">
+              <span className="font-semibold text-blue-600">
                 {formData.safetyScore}
               </span>
               <span>10</span>
@@ -429,7 +429,7 @@ export default function QuickReportForm({
                 className={`px-6 py-2 rounded-lg font-medium ${
                   isSubmitting
                     ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-                    : "bg-green-600 text-white hover:bg-green-700"
+                    : "bg-blue-600 text-white hover:bg-blue-700"
                 }`}
               >
                 {isSubmitting ? (

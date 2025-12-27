@@ -105,7 +105,7 @@ const ProjectsTab: React.FC<ProjectsTabProps> = ({
 
                 <div className="flex justify-between items-center pt-4 border-t border-gray-200">
                   <div className="text-center">
-                    <div className="text-lg font-bold text-green-600">
+                    <div className="text-lg font-bold text-blue-600">
                       $
                       {project.revenueValue
                         ? (project.revenueValue / 1000).toFixed(0)
@@ -126,7 +126,7 @@ const ProjectsTab: React.FC<ProjectsTabProps> = ({
                     </span>
                   )}
                   {project.projectManager && (
-                    <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                    <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
                       PM:{" "}
                       {project.projectManager.fullName ||
                         project.projectManager.email}

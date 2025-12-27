@@ -192,7 +192,7 @@ const ReportsTab: React.FC<ReportsTabProps> = ({ projects }) => {
                 <button
                   onClick={() => handleGeneratePdf("detailed")}
                   disabled={isGeneratingPdf}
-                  className="w-full flex items-center justify-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="w-full flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {isGeneratingPdf ? (
                     <>
@@ -252,8 +252,8 @@ const ReportsTab: React.FC<ReportsTabProps> = ({ projects }) => {
         </div>
         <div className="p-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-2xl">
-              <div className="text-4xl font-bold text-green-600">
+            <div className="text-center bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-2xl">
+              <div className="text-4xl font-bold text-blue-600">
                 ${(totalBudget / 1000000).toFixed(1)}M
               </div>
               <div className="text-lg text-gray-600 font-medium mt-2">

@@ -17,7 +17,7 @@ const PerformanceMetrics = ({ performance }: PerformanceMetricsProps) => {
           <div
             className={`px-3 py-1 rounded-full text-sm font-medium ${
               performance.riskAssessment.riskLevel === "Low"
-                ? "bg-green-100 text-green-800"
+                ? "bg-blue-100 text-blue-800"
                 : performance.riskAssessment.riskLevel === "Medium"
                 ? "bg-yellow-100 text-yellow-800"
                 : "bg-red-100 text-red-800"
@@ -55,11 +55,11 @@ const PerformanceMetrics = ({ performance }: PerformanceMetricsProps) => {
           <div className="text-xs text-blue-600">Adherence</div>
         </div>
 
-        <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4">
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-green-700">Budget</span>
+            <span className="text-sm font-medium text-blue-700">Budget</span>
             <svg
-              className="w-5 h-5 text-green-600"
+              className="w-5 h-5 text-blue-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -72,10 +72,10 @@ const PerformanceMetrics = ({ performance }: PerformanceMetricsProps) => {
               />
             </svg>
           </div>
-          <div className="text-2xl font-bold text-green-900">
+          <div className="text-2xl font-bold text-blue-900">
             {performance.kpis.budgetEfficiency}%
           </div>
-          <div className="text-xs text-green-600">Efficiency</div>
+          <div className="text-xs text-blue-600">Efficiency</div>
         </div>
 
         <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-4">

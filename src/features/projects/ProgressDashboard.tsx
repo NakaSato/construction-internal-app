@@ -37,7 +37,7 @@ const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
   const getHealthStatusColor = (status: ProjectHealth["status"]) => {
     switch (status) {
       case "healthy":
-        return "text-green-600 bg-green-100";
+        return "text-blue-600 bg-blue-100";
       case "at_risk":
         return "text-yellow-600 bg-yellow-100";
       case "critical":
@@ -50,7 +50,7 @@ const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
   const getActivityStatusColor = (status: ActivityStatus) => {
     switch (status) {
       case ActivityStatus.COMPLETED:
-        return "bg-green-500";
+        return "bg-blue-500";
       case ActivityStatus.IN_PROGRESS:
         return "bg-blue-500";
       case ActivityStatus.OVERDUE:
@@ -233,7 +233,7 @@ const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                 <span
                   className={`text-xs px-2 py-1 rounded ${
                     phaseCompletion.onSchedule
-                      ? "bg-green-100 text-green-600"
+                      ? "bg-blue-100 text-blue-600"
                       : "bg-red-100 text-red-600"
                   }`}
                 >
@@ -328,7 +328,7 @@ const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                               <div
                                 className={`h-2 rounded-full transition-all duration-300 ${
                                   activity.status === ActivityStatus.COMPLETED
-                                    ? "bg-green-500"
+                                    ? "bg-blue-500"
                                     : activity.status === ActivityStatus.OVERDUE
                                     ? "bg-red-500"
                                     : "bg-blue-500"

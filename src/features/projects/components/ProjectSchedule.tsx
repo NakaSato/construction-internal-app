@@ -47,7 +47,7 @@ const ProjectSchedule = ({
         name: "Planning & Design",
         duration: 15,
         status: "completed",
-        color: "bg-green-500",
+        color: "bg-blue-500",
       },
       {
         name: "Procurement",
@@ -105,9 +105,9 @@ const ProjectSchedule = ({
           </div>
         </div>
 
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <div className="text-green-600 text-sm font-medium">Start Date</div>
-          <div className="text-lg font-bold text-green-900">
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="text-blue-600 text-sm font-medium">Start Date</div>
+          <div className="text-lg font-bold text-blue-900">
             {startDate.toLocaleDateString()}
           </div>
         </div>
@@ -155,7 +155,7 @@ const ProjectSchedule = ({
                 <span
                   className={`capitalize px-2 py-1 rounded text-xs font-medium ${
                     phase.status === "completed"
-                      ? "bg-green-100 text-green-800"
+                      ? "bg-blue-100 text-blue-800"
                       : phase.status === "in-progress"
                       ? "bg-blue-100 text-blue-800"
                       : "bg-gray-100 text-gray-800"
@@ -269,7 +269,7 @@ const ProjectSchedule = ({
                   <span
                     className={`px-2 py-1 rounded text-xs font-medium ${
                       i < project.completedTaskCount
-                        ? "bg-green-100 text-green-800"
+                        ? "bg-blue-100 text-blue-800"
                         : "bg-yellow-100 text-yellow-800"
                     }`}
                   >

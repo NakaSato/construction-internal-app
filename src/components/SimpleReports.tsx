@@ -32,9 +32,9 @@ const SimpleReports: React.FC<SimpleReportsProps> = ({ onGenerateReport }) => {
       title: "Weekly Progress",
       description: "Weekly team performance and milestones",
       icon: "📈",
-      bgColor: "bg-green-50",
-      borderColor: "border-green-200",
-      iconColor: "text-green-600",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-200",
+      iconColor: "text-blue-600",
     },
     {
       id: "safety-quality",
@@ -129,7 +129,7 @@ const SimpleReports: React.FC<SimpleReportsProps> = ({ onGenerateReport }) => {
             </p>
           </div>
           <div className="flex items-center space-x-2">
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
               {isAdmin ? "Admin" : isManager ? "Manager" : "User"} Access
             </span>
           </div>
@@ -296,7 +296,7 @@ const SimpleReports: React.FC<SimpleReportsProps> = ({ onGenerateReport }) => {
                     );
                   }
                 }}
-                className="inline-flex items-center px-4 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors"
+                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
               >
                 <svg
                   className="w-4 h-4 mr-2"

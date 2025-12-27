@@ -38,7 +38,7 @@ const KPICard: React.FC<KPICardProps> = ({
   const getStatusColor = () => {
     const performance = value / target;
     if (performance >= 1.0)
-      return "text-green-600 bg-green-50 border-green-200";
+      return "text-blue-600 bg-blue-50 border-blue-200";
     if (performance >= 0.8) return "text-blue-600 bg-blue-50 border-blue-200";
     if (performance >= 0.6)
       return "text-yellow-600 bg-yellow-50 border-yellow-200";
@@ -144,7 +144,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ project }) => {
       case "medium":
         return "bg-yellow-100 text-yellow-800";
       case "low":
-        return "bg-green-100 text-green-800";
+        return "bg-blue-100 text-blue-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -190,7 +190,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ project }) => {
                 <div className="text-right">
                   <div
                     className={`text-lg font-bold ${
-                      item.variance >= 0 ? "text-green-600" : "text-red-600"
+                      item.variance >= 0 ? "text-blue-600" : "text-red-600"
                     }`}
                   >
                     {item.variance > 0 ? "+" : ""}
@@ -200,7 +200,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ project }) => {
                     <div
                       className={`h-2 rounded-full ${
                         item.current >= item.target
-                          ? "bg-green-500"
+                          ? "bg-blue-500"
                           : "bg-red-500"
                       }`}
                       style={{ width: `${Math.min(item.current, 100)}%` }}

@@ -19,8 +19,8 @@ function AppRoutesContent() {
   const { isLoading } = useAuth();
   const location = useLocation();
 
-  // Check if we're on the index page
-  const isIndexPage = location.pathname === "/";
+  // Check if we're on a public page where we want the legacy navigation
+  const isPublicPage = ["/", "/about", "/login", "/register", "/home"].includes(location.pathname);
 
   // Show loading spinner while checking authentication
   if (isLoading) {
@@ -36,7 +36,7 @@ function AppRoutesContent() {
 
   return (
     <div className="App min-h-screen bg-gray-50 flex flex-col">
-      {!isIndexPage && <Navigation />}
+      {isPublicPage && <Navigation />}
       <main className="flex-grow">
         <Routes>
           {/* Public Routes */}
@@ -118,7 +118,7 @@ function AppRoutesContent() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      {!isIndexPage && <Footer />}
+      {isPublicPage && <Footer />}
     </div>
   );
 }

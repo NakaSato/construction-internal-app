@@ -70,7 +70,7 @@ const ProjectDetail = () => {
         name: "Planning & Design",
         duration: 15,
         status: "completed",
-        color: "bg-green-500",
+        color: "bg-blue-500",
       },
       {
         name: "Procurement",
@@ -467,7 +467,7 @@ const ProjectDetail = () => {
                           <span
                             className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                               project.status === "Active"
-                                ? "bg-green-100 text-green-800"
+                                ? "bg-blue-100 text-blue-800"
                                 : project.status === "Completed"
                                 ? "bg-blue-100 text-blue-800"
                                 : "bg-gray-100 text-gray-800"
@@ -618,11 +618,11 @@ const ProjectDetail = () => {
                                     {project?.taskCount || 0} tasks
                                   </div>
                                 </div>
-                                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                                  <div className="text-green-600 text-sm font-medium">
+                                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                  <div className="text-blue-600 text-sm font-medium">
                                     Start Date
                                   </div>
-                                  <div className="text-lg font-bold text-green-900">
+                                  <div className="text-lg font-bold text-blue-900">
                                     {startDate.toLocaleDateString()}
                                   </div>
                                 </div>
@@ -676,7 +676,7 @@ const ProjectDetail = () => {
                                         <span
                                           className={`capitalize px-2 py-1 rounded text-xs font-medium ${
                                             phase.status === "completed"
-                                              ? "bg-green-100 text-green-800"
+                                              ? "bg-blue-100 text-blue-800"
                                               : phase.status === "in-progress"
                                               ? "bg-blue-100 text-blue-800"
                                               : "bg-gray-100 text-gray-800"
@@ -816,7 +816,7 @@ const ProjectDetail = () => {
                                               <span
                                                 className={`px-2 py-1 rounded text-xs font-medium ${
                                                   i < project.completedTaskCount
-                                                    ? "bg-green-100 text-green-800"
+                                                    ? "bg-blue-100 text-blue-800"
                                                     : "bg-yellow-100 text-yellow-800"
                                                 }`}
                                               >
@@ -1001,7 +1001,7 @@ const ProjectDetail = () => {
                             <div
                               className={`px-3 py-1 rounded-full text-sm font-medium ${
                                 performance.riskAssessment.riskLevel === "Low"
-                                  ? "bg-green-100 text-green-800"
+                                  ? "bg-blue-100 text-blue-800"
                                   : performance.riskAssessment.riskLevel ===
                                     "Medium"
                                   ? "bg-yellow-100 text-yellow-800"
@@ -1044,13 +1044,13 @@ const ProjectDetail = () => {
                             </div>
                           </div>
 
-                          <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4">
+                          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4">
                             <div className="flex items-center justify-between mb-2">
-                              <span className="text-sm font-medium text-green-700">
+                              <span className="text-sm font-medium text-blue-700">
                                 Budget
                               </span>
                               <svg
-                                className="w-5 h-5 text-green-600"
+                                className="w-5 h-5 text-blue-600"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -1063,10 +1063,10 @@ const ProjectDetail = () => {
                                 />
                               </svg>
                             </div>
-                            <div className="text-2xl font-bold text-green-900">
+                            <div className="text-2xl font-bold text-blue-900">
                               {performance.kpis.budgetEfficiency}%
                             </div>
-                            <div className="text-xs text-green-600">
+                            <div className="text-xs text-blue-600">
                               Efficiency
                             </div>
                           </div>

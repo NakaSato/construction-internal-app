@@ -77,7 +77,7 @@ export default function NetworkError({
                 <span>Internet:</span>
                 <span
                   className={`font-medium ${
-                    navigator.onLine ? "text-green-600" : "text-red-600"
+                    navigator.onLine ? "text-blue-600" : "text-red-600"
                   }`}
                 >
                   {navigator.onLine ? "✓ Connected" : "✗ Disconnected"}

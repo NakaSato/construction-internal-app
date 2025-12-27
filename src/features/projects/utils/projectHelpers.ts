@@ -1,7 +1,7 @@
 export const getStatusBadgeColor = (status: string | null) => {
   switch (status?.toLowerCase()) {
     case "completed":
-      return "bg-green-100 text-green-800";
+      return "bg-blue-100 text-blue-800";
     case "inprogress":
       return "bg-blue-100 text-blue-800";
     case "planning":

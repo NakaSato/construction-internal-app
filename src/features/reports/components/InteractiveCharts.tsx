@@ -474,12 +474,12 @@ const InteractiveCharts: React.FC<InteractiveChartsProps> = ({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500"
+              className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500"
             >
-              <h4 className="font-medium text-green-900 mb-2">
+              <h4 className="font-medium text-blue-900 mb-2">
                 🛡️ Safety Trend
               </h4>
-              <p className="text-green-700 text-sm">
+              <p className="text-blue-700 text-sm">
                 Safety scores remain consistently high with minimal variance.
               </p>
             </motion.div>
@@ -505,12 +505,12 @@ const InteractiveCharts: React.FC<InteractiveChartsProps> = ({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500"
+              className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500"
             >
-              <h4 className="font-medium text-green-900 mb-2">
+              <h4 className="font-medium text-blue-900 mb-2">
                 🏆 Top Performer
               </h4>
-              <p className="text-green-700 text-sm">
+              <p className="text-blue-700 text-sm">
                 {analytics.topPerformers?.[0]?.name || "Team Lead"} leads with
                 exceptional productivity.
               </p>
@@ -576,12 +576,12 @@ const InteractiveCharts: React.FC<InteractiveChartsProps> = ({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500"
+              className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500"
             >
-              <h4 className="font-medium text-green-900 mb-2">
+              <h4 className="font-medium text-blue-900 mb-2">
                 📈 Overall Rating
               </h4>
-              <p className="text-green-700 text-sm">
+              <p className="text-blue-700 text-sm">
                 Balanced performance profile with strong foundation metrics.
               </p>
             </motion.div>

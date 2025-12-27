@@ -87,7 +87,7 @@ const RealTimeNotifications: React.FC<RealTimeNotificationsProps> = ({
   const getNotificationColor = (type: ProjectUpdateNotification["type"]) => {
     switch (type) {
       case "PROJECT_CREATED":
-        return "bg-green-50 border-green-200 text-green-800";
+        return "bg-blue-50 border-blue-200 text-blue-800";
       case "PROJECT_UPDATED":
         return "bg-blue-50 border-blue-200 text-blue-800";
       case "PROJECT_DELETED":
@@ -112,7 +112,7 @@ const RealTimeNotifications: React.FC<RealTimeNotificationsProps> = ({
             <div className="flex items-center space-x-2">
               <div
                 className={`w-2 h-2 rounded-full ${
-                  connected ? "bg-green-500" : "bg-red-500"
+                  connected ? "bg-blue-500" : "bg-red-500"
                 }`}
               ></div>
               <span className="text-sm font-medium text-gray-700">

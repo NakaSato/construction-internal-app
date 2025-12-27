@@ -206,7 +206,7 @@ const DailyReportsManagement: React.FC<DailyReportsManagementProps> = ({
               <>
                 <button
                   onClick={handleExport}
-                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                 >
                   Export Reports
                 </button>
@@ -486,7 +486,7 @@ const DailyReportsManagement: React.FC<DailyReportsManagementProps> = ({
                               className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                                 report.approvalStatus ===
                                 DailyReportApprovalStatus.APPROVED
-                                  ? "bg-green-100 text-green-800"
+                                  ? "bg-blue-100 text-blue-800"
                                   : report.approvalStatus ===
                                     DailyReportApprovalStatus.REJECTED
                                   ? "bg-red-100 text-red-800"
@@ -511,7 +511,7 @@ const DailyReportsManagement: React.FC<DailyReportsManagementProps> = ({
                               </span>
                               <div className="ml-2 w-16 bg-gray-200 rounded-full h-2">
                                 <div
-                                  className="bg-green-600 h-2 rounded-full"
+                                  className="bg-blue-600 h-2 rounded-full"
                                   style={{
                                     width: `${
                                       (report.safetyScore / 10) * 100
@@ -568,7 +568,7 @@ const DailyReportsManagement: React.FC<DailyReportsManagementProps> = ({
                                   <>
                                     <button
                                       onClick={() => approveReport(report.id)}
-                                      className="text-green-600 hover:text-green-900"
+                                      className="text-blue-600 hover:text-blue-900"
                                     >
                                       Approve
                                     </button>

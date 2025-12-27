@@ -237,7 +237,7 @@ const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({ analytics }) => {
                 </div>
                 <div className="text-right">
                   <div className="flex space-x-2 text-sm">
-                    <span className="px-2 py-1 bg-green-100 text-green-800 rounded">
+                    <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">
                       Safety: {(performer.averageSafetyScore || 0).toFixed(1)}
                     </span>
                     <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">

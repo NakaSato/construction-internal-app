@@ -113,7 +113,7 @@ const RealTimeProjectDashboard: React.FC<RealTimeProjectDashboardProps> = ({
               <div className="flex items-center">
                 <div
                   className={`w-3 h-3 rounded-full mr-2 ${
-                    connected ? "bg-green-500" : "bg-red-500"
+                    connected ? "bg-blue-500" : "bg-red-500"
                   }`}
                 ></div>
                 <span className="text-sm text-gray-600">
@@ -342,7 +342,7 @@ const ProjectsTab: React.FC<ProjectsTabProps> = ({
               <button
                 onClick={() => onBulkStatusUpdate(ProjectStatus.IN_PROGRESS)}
                 disabled={bulkLoading}
-                className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 disabled:opacity-50"
+                className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 disabled:opacity-50"
               >
                 Start Projects
               </button>
@@ -400,7 +400,7 @@ const ProjectsTab: React.FC<ProjectsTabProps> = ({
                       <span
                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                           project.status === ProjectStatus.COMPLETED
-                            ? "bg-green-100 text-green-800"
+                            ? "bg-blue-100 text-blue-800"
                             : project.status === ProjectStatus.IN_PROGRESS
                             ? "bg-blue-100 text-blue-800"
                             : project.status === ProjectStatus.ON_HOLD
@@ -547,7 +547,7 @@ const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ analytics, loading }) => {
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center">
+                <div className="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
                   <span className="text-white text-sm font-medium">A</span>
                 </div>
               </div>
@@ -645,7 +645,7 @@ const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ analytics, loading }) => {
                 <div className="text-sm font-medium text-gray-500">
                   Quality Score
                 </div>
-                <div className="text-2xl font-bold text-green-600">
+                <div className="text-2xl font-bold text-blue-600">
                   {analytics.performanceMetrics.qualityScore?.toFixed(1) || 0}%
                 </div>
               </div>
@@ -676,7 +676,7 @@ const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ analytics, loading }) => {
                 <div
                   className={`text-2xl font-bold ${
                     (analytics.performanceMetrics.budgetVariance || 0) < 0
-                      ? "text-green-600"
+                      ? "text-blue-600"
                       : "text-red-600"
                   }`}
                 >
