@@ -2,6 +2,31 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProjectDto } from "../../shared/types/project";
 import { useAuth, useRole } from "../../shared/hooks/useAuth";
+import {
+  MapPin,
+  User,
+  Zap,
+  Calendar,
+  Briefcase,
+  Search,
+  LayoutGrid,
+  List,
+  Edit2,
+  Eye,
+  CheckCircle2,
+  AlertCircle,
+  XCircle,
+  HelpCircle,
+  Clock,
+  PlayCircle,
+  Construction,
+  Filter,
+  ArrowUpDown,
+  RefreshCw,
+  Plus,
+  FolderOpen,
+  Target
+} from "lucide-react";
 
 interface ProjectsDisplayProps {
   projects: ProjectDto[];
@@ -104,17 +129,17 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
   const getStatusIcon = (status: string | null) => {
     switch (status) {
       case "Planning":
-        return "📋";
+        return <List className="w-3.5 h-3.5 inline mr-1.5" />;
       case "InProgress":
-        return "⚡";
+        return <PlayCircle className="w-3.5 h-3.5 inline mr-1.5" />;
       case "Completed":
-        return "✅";
+        return <CheckCircle2 className="w-3.5 h-3.5 inline mr-1.5" />;
       case "OnHold":
-        return "⏸️";
+        return <Clock className="w-3.5 h-3.5 inline mr-1.5" />;
       case "Cancelled":
-        return "❌";
+        return <XCircle className="w-3.5 h-3.5 inline mr-1.5" />;
       default:
-        return "❓";
+        return <HelpCircle className="w-3.5 h-3.5 inline mr-1.5" />;
     }
   };
 
@@ -264,16 +289,14 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
               className="p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200"
               title="Refresh Projects"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
+              <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
             </button>
             {(isAdmin || isManager) && onCreateProject && (
               <button
                 onClick={onCreateProject}
                 className="flex items-center gap-2 bg-gray-900 hover:bg-black text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
               >
-                <span className="text-xl leading-none">+</span>
+                <Plus className="w-5 h-5" />
                 <span>New Project</span>
               </button>
             )}
@@ -285,9 +308,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
           {/* Search Bar */}
           <div className="relative w-full lg:w-96 group">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg className="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+              <Search className="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
             </div>
             <input
               type="text"
@@ -337,11 +358,11 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                   onChange={(e) => setSortBy(e.target.value)}
                   className="appearance-none bg-white py-2.5 pl-4 pr-10 rounded-xl shadow-sm ring-1 ring-gray-200 text-sm font-medium text-gray-700 hover:ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer transition-all"
                 >
-                  <option value="name">Sort: Name</option>
-                  <option value="status">Sort: Status</option>
-                  <option value="capacity">Sort: Capacity</option>
-                  <option value="startDate">Sort: Date</option>
-                  <option value="progress">Sort: Progress</option>
+                  <option value="name">Name</option>
+                  <option value="status">Status</option>
+                  <option value="capacity">Capacity</option>
+                  <option value="startDate">Start Date</option>
+                  <option value="progress">Progress</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -363,9 +384,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                   }`}
                 title="Grid View"
               >
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
+                <LayoutGrid className="h-5 w-5" />
               </button>
               <button
                 onClick={() => setViewMode("list")}
@@ -375,9 +394,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                   }`}
                 title="List View"
               >
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+                <List className="h-5 w-5" />
               </button>
             </div>
           </div>
@@ -389,7 +406,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
         {sortedProjects.length === 0 ? (
           <div className="text-center py-20 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
             <div className="bg-white p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-sm ring-4 ring-gray-100">
-              <span className="text-4xl">🔍</span>
+              <FolderOpen className="h-10 w-10 text-gray-400" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">
               No projects found
@@ -478,7 +495,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                         {/* Address */}
                         {project.address && (
                           <div className="flex items-center text-sm text-gray-600">
-                            <span className="w-4 h-4 mr-2">📍</span>
+                            <MapPin className="w-4 h-4 mr-2" />
                             <span className="truncate">{project.address}</span>
                           </div>
                         )}
@@ -486,7 +503,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                         {/* Client Info */}
                         {project.clientInfo && (
                           <div className="flex items-center text-sm text-gray-600">
-                            <span className="w-4 h-4 mr-2">👤</span>
+                            <User className="w-4 h-4 mr-2" />
                             <span className="truncate">{project.clientInfo}</span>
                           </div>
                         )}
@@ -494,7 +511,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                         {/* Capacity */}
                         {project.totalCapacityKw && (
                           <div className="flex items-center text-sm text-gray-600">
-                            <span className="w-4 h-4 mr-2">⚡</span>
+                            <Zap className="w-4 h-4 mr-2" />
                             <span className="font-medium">
                               {project.totalCapacityKw.toLocaleString()} kW
                             </span>
@@ -503,7 +520,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
 
                         {/* Start Date */}
                         <div className="flex items-center text-sm text-gray-600">
-                          <span className="w-4 h-4 mr-2">📅</span>
+                          <Calendar className="w-4 h-4 mr-2" />
                           Started: {formatDate(project.startDate)}
                         </div>
 
@@ -535,7 +552,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                         {/* Project Manager */}
                         {project.projectManager && (
                           <div className="flex items-center text-sm text-gray-600 mt-4">
-                            <span className="w-4 h-4 mr-2">👨‍💼</span>
+                            <Briefcase className="w-4 h-4 mr-2" />
                             <span className="truncate">
                               {project.projectManager.fullName ||
                                 project.projectManager.username}
@@ -555,8 +572,8 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                           View Details
                         </button>
                         {(isAdmin || isManager) && (
-                          <button className="w-full bg-white text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium border border-gray-200">
-                            ✏️ Edit
+                          <button className="w-full bg-white text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium border border-gray-200 flex items-center justify-center">
+                            <Edit2 className="w-4 h-4 mr-2" /> Edit
                           </button>
                         )}
                       </div>
@@ -596,7 +613,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                         <div className="flex items-center space-x-4 text-sm text-gray-600">
                           {project.address && (
                             <span className="flex items-center">
-                              <span className="mr-1">📍</span>
+                              <MapPin className="w-4 h-4 mr-1" />
                               {project.address.length > 30
                                 ? `${project.address.substring(0, 30)}...`
                                 : project.address}
@@ -604,13 +621,13 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                           )}
                           {project.clientInfo && (
                             <span className="flex items-center">
-                              <span className="mr-1">👤</span>
+                              <User className="w-4 h-4 mr-1" />
                               {project.clientInfo}
                             </span>
                           )}
                           {project.totalCapacityKw && (
                             <span className="flex items-center">
-                              <span className="mr-1">⚡</span>
+                              <Zap className="w-4 h-4 mr-1" />
                               {project.totalCapacityKw.toLocaleString()} kW
                             </span>
                           )}
@@ -637,13 +654,13 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                           onClick={() =>
                             navigate(`/projects/${project.projectId}`)
                           }
-                          className="bg-blue-50 text-blue-700 py-2 px-3 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium"
+                          className="bg-blue-50 text-blue-700 py-2 px-3 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium flex items-center"
                         >
-                          👁️ View
+                          <Eye className="w-4 h-4 mr-2" /> View
                         </button>
                         {(isAdmin || isManager) && (
-                          <button className="bg-blue-50 text-blue-700 py-2 px-3 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium">
-                            ✏️ Edit
+                          <button className="bg-blue-50 text-blue-700 py-2 px-3 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium flex items-center">
+                            <Edit2 className="w-4 h-4 mr-2" /> Edit
                           </button>
                         )}
                       </div>

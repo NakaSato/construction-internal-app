@@ -17,6 +17,18 @@ import {
   projectDtoToProjectEntity,
 } from "../../shared/utils/projectTypeAdapter";
 import { AppShell } from "../../components/layout/AppShell";
+import {
+  LayoutDashboard,
+  Briefcase,
+  HardHat,
+  Calendar,
+  FileBarChart,
+  BarChart3,
+  Info,
+  Clock,
+  Zap,
+  Target
+} from "lucide-react";
 
 // Tab definitions for internal navigation
 const tabs: {
@@ -28,48 +40,101 @@ const tabs: {
   | "reports"
   | "analytics";
   label: string;
-  icon: string;
+  icon: any;
   description: string;
   requiredRole?: string[];
 }[] = [
     {
       id: "overview",
       label: "Overview",
-      icon: "📊",
+      icon: LayoutDashboard,
       description: "Project statistics and key metrics",
     },
     {
       id: "projects",
       label: "Projects",
-      icon: "🏗️",
+      icon: Briefcase,
       description: "Manage all solar projects",
     },
     {
       id: "construction",
       label: "Construction",
-      icon: "🔧",
+      icon: HardHat,
       description: "Construction progress and activities",
     },
     {
       id: "planning",
       label: "Planning",
-      icon: "📅",
+      icon: Calendar,
       description: "Gantt charts and project timelines",
     },
     {
       id: "reports",
       label: "Reports",
-      icon: "📈",
+      icon: FileBarChart,
       description: "Generate and view project reports",
     },
     {
       id: "analytics",
       label: "Analytics",
-      icon: "📊",
+      icon: BarChart3,
       description: "Data analysis and insights",
       requiredRole: ["Admin", "Manager"],
     },
   ];
+
+// ... (component code)
+
+{/* Analytics Charts Placeholder */ }
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div className="bg-gray-50 rounded-lg p-6 h-64 flex items-center justify-center">
+    <div className="text-center">
+      <div className="bg-white p-4 rounded-full inline-flex mb-4 shadow-sm">
+        <BarChart3 className="w-8 h-8 text-blue-600" />
+      </div>
+      <h4 className="text-lg font-semibold text-gray-700">
+        Budget Analysis
+      </h4>
+      <p className="text-gray-500">Budget vs Actual Spending</p>
+    </div>
+  </div>
+
+  <div className="bg-gray-50 rounded-lg p-6 h-64 flex items-center justify-center">
+    <div className="text-center">
+      <div className="bg-white p-4 rounded-full inline-flex mb-4 shadow-sm">
+        <Clock className="w-8 h-8 text-blue-600" />
+      </div>
+      <h4 className="text-lg font-semibold text-gray-700">
+        Timeline Analysis
+      </h4>
+      <p className="text-gray-500">Schedule Performance</p>
+    </div>
+  </div>
+
+  <div className="bg-gray-50 rounded-lg p-6 h-64 flex items-center justify-center">
+    <div className="text-center">
+      <div className="bg-white p-4 rounded-full inline-flex mb-4 shadow-sm">
+        <Zap className="w-8 h-8 text-blue-600" />
+      </div>
+      <h4 className="text-lg font-semibold text-gray-700">
+        Performance Metrics
+      </h4>
+      <p className="text-gray-500">KPI Dashboard</p>
+    </div>
+  </div>
+
+  <div className="bg-gray-50 rounded-lg p-6 h-64 flex items-center justify-center">
+    <div className="text-center">
+      <div className="bg-white p-4 rounded-full inline-flex mb-4 shadow-sm">
+        <Target className="w-8 h-8 text-blue-600" />
+      </div>
+      <h4 className="text-lg font-semibold text-gray-700">
+        Risk Analysis
+      </h4>
+      <p className="text-gray-500">Project Risk Assessment</p>
+    </div>
+  </div>
+</div>
 
 const ProjectManagement: React.FC = () => {
   const { user } = useAuth();
@@ -231,7 +296,9 @@ const ProjectManagement: React.FC = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="bg-gray-50 rounded-lg p-6 h-64 flex items-center justify-center">
                   <div className="text-center">
-                    <div className="text-4xl mb-2">📊</div>
+                    <div className="bg-white p-4 rounded-full inline-flex mb-4 shadow-sm">
+                      <BarChart3 className="w-8 h-8 text-blue-600" />
+                    </div>
                     <h4 className="text-lg font-semibold text-gray-700">
                       Budget Analysis
                     </h4>
@@ -241,7 +308,9 @@ const ProjectManagement: React.FC = () => {
 
                 <div className="bg-gray-50 rounded-lg p-6 h-64 flex items-center justify-center">
                   <div className="text-center">
-                    <div className="text-4xl mb-2">⏱️</div>
+                    <div className="bg-white p-4 rounded-full inline-flex mb-4 shadow-sm">
+                      <Clock className="w-8 h-8 text-blue-600" />
+                    </div>
                     <h4 className="text-lg font-semibold text-gray-700">
                       Timeline Analysis
                     </h4>
@@ -251,7 +320,9 @@ const ProjectManagement: React.FC = () => {
 
                 <div className="bg-gray-50 rounded-lg p-6 h-64 flex items-center justify-center">
                   <div className="text-center">
-                    <div className="text-4xl mb-2">⚡</div>
+                    <div className="bg-white p-4 rounded-full inline-flex mb-4 shadow-sm">
+                      <Zap className="w-8 h-8 text-blue-600" />
+                    </div>
                     <h4 className="text-lg font-semibold text-gray-700">
                       Performance Metrics
                     </h4>
@@ -261,7 +332,9 @@ const ProjectManagement: React.FC = () => {
 
                 <div className="bg-gray-50 rounded-lg p-6 h-64 flex items-center justify-center">
                   <div className="text-center">
-                    <div className="text-4xl mb-2">🎯</div>
+                    <div className="bg-white p-4 rounded-full inline-flex mb-4 shadow-sm">
+                      <Target className="w-8 h-8 text-blue-600" />
+                    </div>
                     <h4 className="text-lg font-semibold text-gray-700">
                       Risk Analysis
                     </h4>
@@ -310,8 +383,8 @@ const ProjectManagement: React.FC = () => {
               </p>
             </div>
 
-            <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6 text-blue-800 text-sm">
-              ℹ️ This feature is currently simulating API integration.
+            <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6 text-blue-800 text-sm flex items-center">
+              <Info className="w-5 h-5 mr-3 flex-shrink-0" /> This feature is currently simulating API integration.
             </div>
 
             <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
