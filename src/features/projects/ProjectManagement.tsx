@@ -94,11 +94,6 @@ const ProjectManagement: React.FC = () => {
   >("overview");
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [useEnhancedModal, setUseEnhancedModal] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [sortBy, setSortBy] = useState<string>("name");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
 
   // Convert API project data to ProjectEntity format for internal components
   const projectEntities = useMemo(() => {
@@ -130,54 +125,8 @@ const ProjectManagement: React.FC = () => {
     } as ProjectEntity;
   }, [projectEntities]);
 
-  // Filter and search logic
-  const filteredProjects = projects.filter((project) => {
-    const matchesSearch =
-      (project.projectName?.toLowerCase() || "").includes(
-        searchTerm.toLowerCase()
-      ) ||
-      (project.address?.toLowerCase() || "").includes(
-        searchTerm.toLowerCase()
-      ) ||
-      (project.clientInfo?.toLowerCase() || "").includes(
-        searchTerm.toLowerCase()
-      );
-
-    const matchesStatus =
-      statusFilter === "all" || project.status === statusFilter;
-
-    return matchesSearch && matchesStatus;
-  });
-
-  // Sort projects
-  const sortedProjects = [...filteredProjects].sort((a, b) => {
-    switch (sortBy) {
-      case "name":
-        return (a.projectName || "").localeCompare(b.projectName || "");
-      case "status":
-        return (a.status || "").localeCompare(b.status || "");
-      case "budget":
-        // Using totalCapacityKw as a proxy for budget since budget isn't in the current schema
-        return (b.totalCapacityKw || 0) - (a.totalCapacityKw || 0);
-      case "progress": {
-        // Calculate progress from task completion
-        const aProgress =
-          a.taskCount > 0 ? (a.completedTaskCount / a.taskCount) * 100 : 0;
-        const bProgress =
-          b.taskCount > 0 ? (b.completedTaskCount / b.taskCount) * 100 : 0;
-        return bProgress - aProgress;
-      }
-      default:
-        return 0;
-    }
-  });
-
-  // Pagination
-  const totalPages = Math.ceil(sortedProjects.length / itemsPerPage);
-  const paginatedProjects = sortedProjects.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  // Sort projects - Logic moved to ProjectsDisplay
+  // Pagination - Logic moved to ProjectsDisplay
 
   // Project statistics
   const projectStats = {
@@ -226,6 +175,7 @@ const ProjectManagement: React.FC = () => {
             projects={projects}
             stats={projectStats}
             statsLoading={loading}
+            onViewAllProjects={() => setActiveTab("projects")}
           />
         );
 

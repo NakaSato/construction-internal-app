@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { ProjectDto } from "../../shared/types/project";
 import {
   getStatusColor,
@@ -29,13 +30,16 @@ interface OverviewTabProps {
   projects: ProjectDto[];
   stats?: ProjectStats | null;
   statsLoading?: boolean;
+  onViewAllProjects?: () => void;
 }
 
 const OverviewTab: React.FC<OverviewTabProps> = ({
   projects,
   stats,
   statsLoading = false,
+  onViewAllProjects,
 }) => {
+  const navigate = useNavigate();
   // State for active projects count
   const [activeProjectsCount, setActiveProjectsCount] = useState<number>(0);
 
@@ -105,6 +109,10 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
       bgClass: "bg-amber-50",
     },
   ];
+
+  const handleProjectClick = (projectId: string) => {
+    navigate(`/projects/${projectId}`);
+  };
 
   return (
     <div className="space-y-6">
@@ -204,8 +212,18 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
       {/* 4. Simple Table */}
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-          <h3 className="font-semibold text-gray-800">Priority Projects</h3>
-          <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">View All Projects</button>
+          <h3
+            className={`font-semibold text-gray-800 ${onViewAllProjects ? 'cursor-pointer hover:text-blue-600 transition-colors' : ''}`}
+            onClick={onViewAllProjects}
+          >
+            Priority Projects
+          </h3>
+          <button
+            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            onClick={onViewAllProjects}
+          >
+            View All Projects
+          </button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
@@ -219,7 +237,11 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
             </thead>
             <tbody className="divide-y divide-gray-50">
               {projects.slice(0, 5).map((project) => (
-                <tr key={project.projectId} className="hover:bg-gray-50/80 transition-colors">
+                <tr
+                  key={project.projectId}
+                  className="hover:bg-gray-50/80 transition-colors cursor-pointer"
+                  onClick={() => handleProjectClick(project.projectId || "")}
+                >
                   <td className="px-6 py-4">
                     <div className="flex items-center">
                       <div className="h-8 w-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mr-3 font-bold text-xs">
@@ -251,6 +273,10 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
                   <td className="px-6 py-4 text-right">
                     <button
                       className="text-gray-400 hover:text-blue-600 transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleProjectClick(project.projectId || "");
+                      }}
                     >
                       <ChevronRight className="h-5 w-5" />
                     </button>

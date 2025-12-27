@@ -63,7 +63,7 @@ export const useProjects = (): UseProjectsReturn => {
       setLoading(true);
       setError(null);
 
-      const fetchedProjects = await projectsApi.getAllProjects();
+      const fetchedProjects = await projectsApi.getAllProjects({ pageSize: 1000 });
 
       console.log("[Get All Projects] API Response:", {
         success: !!fetchedProjects,
