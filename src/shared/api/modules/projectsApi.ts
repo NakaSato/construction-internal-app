@@ -20,6 +20,9 @@ import {
   BulkProjectOperation,
   BulkProjectOperationResult,
   RealTimeProjectUpdate,
+  CreateProjectMilestoneRequest,
+  UpdateProjectMilestoneRequest,
+  ProjectMilestone,
 } from "../../types/project";
 
 /**
@@ -27,7 +30,7 @@ import {
  * Handles all project management endpoints
  */
 export class ProjectsApi {
-  constructor(private apiClient: ApiClient) {}
+  constructor(private apiClient: ApiClient) { }
 
   /**
    * Get all projects with enhanced filtering and pagination
@@ -162,6 +165,56 @@ export class ProjectsApi {
   }
 
   /**
+   * Get project milestones
+   */
+  async getProjectMilestones(
+    id: string
+  ): Promise<ApiResponse<ProjectMilestone[]>> {
+    return this.apiClient.get<ApiResponse<ProjectMilestone[]>>(
+      `/api/v1/projects/${id}/milestones`
+    );
+  }
+
+  /**
+   * Add milestone to project
+   */
+  async addMilestone(
+    id: string,
+    milestone: CreateProjectMilestoneRequest
+  ): Promise<ApiResponse<ProjectMilestone>> {
+    return this.apiClient.post<ApiResponse<ProjectMilestone>>(
+      `/api/v1/projects/${id}/milestones`,
+      milestone
+    );
+  }
+
+  /**
+   * Update milestone
+   */
+  async updateMilestone(
+    id: string,
+    milestoneId: string,
+    milestone: UpdateProjectMilestoneRequest
+  ): Promise<ApiResponse<ProjectMilestone>> {
+    return this.apiClient.put<ApiResponse<ProjectMilestone>>(
+      `/api/v1/projects/${id}/milestones/${milestoneId}`,
+      milestone
+    );
+  }
+
+  /**
+   * Delete milestone
+   */
+  async deleteMilestone(
+    id: string,
+    milestoneId: string
+  ): Promise<ApiResponse<boolean>> {
+    return this.apiClient.delete<ApiResponse<boolean>>(
+      `/api/v1/projects/${id}/milestones/${milestoneId}`
+    );
+  }
+
+  /**
    * Get available project templates
    */
   async getProjectTemplates(): Promise<
@@ -247,8 +300,7 @@ export class ProjectsApi {
       params.append("since", since);
     }
     return this.apiClient.get<ApiResponse<RealTimeProjectUpdate[]>>(
-      `/api/v1/projects/updates${
-        params.toString() ? `?${params.toString()}` : ""
+      `/api/v1/projects/updates${params.toString() ? `?${params.toString()}` : ""
       }`
     );
   }

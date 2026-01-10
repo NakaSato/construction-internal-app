@@ -1,5 +1,21 @@
 import React, { useState } from "react";
 import { CreateDailyReportRequest } from "../shared/types/reports";
+import {
+  Calendar,
+  CloudSun,
+  ClipboardList,
+  BarChart3,
+  Send,
+  Sun,
+  Cloud,
+  CloudRain,
+  CloudLightning,
+  CloudFog,
+  Snowflake,
+  Wind,
+  ArrowLeft,
+  ArrowRight
+} from "lucide-react";
 
 interface QuickReportFormProps {
   projectId: string;
@@ -84,8 +100,8 @@ export default function QuickReportForm({
 
   const renderStep1 = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
-        📅 Basic Information
+      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <Calendar className="h-5 w-5 text-blue-600" /> Basic Information
       </h3>
 
       <div>
@@ -136,8 +152,8 @@ export default function QuickReportForm({
 
   const renderStep2 = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
-        🌤️ Weather & Conditions
+      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <CloudSun className="h-5 w-5 text-blue-600" /> Weather & Conditions
       </h3>
 
       <div>
@@ -151,14 +167,14 @@ export default function QuickReportForm({
           }
           className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
-          <option value="Sunny">☀️ Sunny</option>
-          <option value="PartlyCloudy">⛅ Partly Cloudy</option>
-          <option value="Cloudy">☁️ Cloudy</option>
-          <option value="Rainy">🌧️ Rainy</option>
-          <option value="Stormy">⛈️ Stormy</option>
-          <option value="Foggy">🌫️ Foggy</option>
-          <option value="Snow">❄️ Snow</option>
-          <option value="Windy">💨 Windy</option>
+          <option value="Sunny">Sunny</option>
+          <option value="PartlyCloudy">Partly Cloudy</option>
+          <option value="Cloudy">Cloudy</option>
+          <option value="Rainy">Rainy</option>
+          <option value="Stormy">Stormy</option>
+          <option value="Foggy">Foggy</option>
+          <option value="Snow">Snow</option>
+          <option value="Windy">Windy</option>
         </select>
       </div>
 
@@ -197,8 +213,8 @@ export default function QuickReportForm({
 
   const renderStep3 = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
-        📝 Work Summary
+      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <ClipboardList className="h-5 w-5 text-blue-600" /> Work Summary
       </h3>
 
       <div>
@@ -248,8 +264,8 @@ export default function QuickReportForm({
 
   const renderStep4 = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
-        📊 Scores & Final Notes
+      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <BarChart3 className="h-5 w-5 text-blue-600" /> Scores & Final Notes
       </h3>
 
       <div className="grid grid-cols-2 gap-4">
@@ -380,8 +396,8 @@ export default function QuickReportForm({
   return (
     <div className="bg-white rounded-lg shadow-xl max-w-lg mx-auto">
       <div className="px-6 py-4 border-b border-gray-200">
-        <h2 className="text-xl font-bold text-gray-900">
-          📝 Quick Daily Report
+        <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <ClipboardList className="h-5 w-5 text-blue-600" /> Quick Daily Report
         </h2>
         <p className="text-sm text-gray-600 mt-1">
           Create a report in 4 easy steps
@@ -398,9 +414,9 @@ export default function QuickReportForm({
               <button
                 type="button"
                 onClick={handlePrevious}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium"
+                className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium flex items-center gap-1"
               >
-                ← Previous
+                <ArrowLeft className="h-4 w-4" /> Previous
               </button>
             )}
           </div>
@@ -418,19 +434,18 @@ export default function QuickReportForm({
               <button
                 type="button"
                 onClick={handleNext}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium flex items-center gap-1"
               >
-                Next →
+                Next <ArrowRight className="h-4 w-4" />
               </button>
             ) : (
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`px-6 py-2 rounded-lg font-medium ${
-                  isSubmitting
-                    ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-                    : "bg-blue-600 text-white hover:bg-blue-700"
-                }`}
+                className={`px-6 py-2 rounded-lg font-medium ${isSubmitting
+                  ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                  : "bg-blue-600 text-white hover:bg-blue-700"
+                  }`}
               >
                 {isSubmitting ? (
                   <>
@@ -438,7 +453,9 @@ export default function QuickReportForm({
                     Submitting...
                   </>
                 ) : (
-                  "✅ Submit Report"
+                  <span className="flex items-center gap-2">
+                    <Send className="h-4 w-4" /> Submit Report
+                  </span>
                 )}
               </button>
             )}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { AlertTriangle, TrendingUp, Target, Settings, CloudSun } from "lucide-react";
 import { Line, Scatter, Bar } from "react-chartjs-2";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
@@ -116,10 +117,10 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
       (analytics.averageSafetyScore || 0) < 7
         ? "Critical"
         : (analytics.averageSafetyScore || 0) < 8
-        ? "High"
-        : (analytics.averageSafetyScore || 0) < 9
-        ? "Medium"
-        : "Low";
+          ? "High"
+          : (analytics.averageSafetyScore || 0) < 9
+            ? "Medium"
+            : "Low";
 
     const riskFactors: RiskFactor[] = [
       {
@@ -245,7 +246,7 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
             const progress =
               (analytics.totalProgressContribution || 0) +
               (i / daysToCompletion) *
-                (100 - (analytics.totalProgressContribution || 0));
+              (100 - (analytics.totalProgressContribution || 0));
             return Math.min(progress, 100);
           }),
           borderColor: "rgb(59, 130, 246)",
@@ -258,7 +259,7 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
             const baseProgress =
               (analytics.totalProgressContribution || 0) +
               (i / daysToCompletion) *
-                (100 - (analytics.totalProgressContribution || 0));
+              (100 - (analytics.totalProgressContribution || 0));
             return Math.min(baseProgress * 0.9, 100);
           }),
           borderColor: "rgba(59, 130, 246, 0.3)",
@@ -286,15 +287,15 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
             factor.severity > 7
               ? "rgba(239, 68, 68, 0.8)"
               : factor.severity > 5
-              ? "rgba(245, 158, 11, 0.8)"
-              : "rgba(34, 197, 94, 0.8)"
+                ? "rgba(245, 158, 11, 0.8)"
+                : "rgba(34, 197, 94, 0.8)"
           ),
           borderColor: insights.riskAssessment.riskFactors.map((factor) =>
             factor.severity > 7
               ? "rgb(239, 68, 68)"
               : factor.severity > 5
-              ? "rgb(245, 158, 11)"
-              : "rgb(34, 197, 94)"
+                ? "rgb(245, 158, 11)"
+                : "rgb(34, 197, 94)"
           ),
           pointRadius: 8,
         },
@@ -338,21 +339,25 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
       <div className="border-b border-gray-200">
         <nav className="-mb-px flex space-x-8">
           {[
-            { key: "completion", label: "📈 Completion", icon: "📈" },
-            { key: "risk", label: "⚠️ Risk Assessment", icon: "⚠️" },
-            { key: "resources", label: "🔧 Resources", icon: "🔧" },
-            { key: "weather", label: "🌤️ Weather Impact", icon: "🌤️" },
+            { key: "completion", label: "Completion", icon: <TrendingUp className="h-4 w-4" /> },
+            { key: "risk", label: "Risk Assessment", icon: <AlertTriangle className="h-4 w-4" /> },
+            { key: "resources", label: "Resources", icon: <Settings className="h-4 w-4" /> },
+            { key: "weather", label: "Weather Impact", icon: <CloudSun className="h-4 w-4" /> },
           ].map((tab) => (
             <button
               key={tab.key}
               onClick={() => setActiveView(tab.key as any)}
-              className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeView === tab.key
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
+              className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${activeView === tab.key
+                ? "border-blue-500 text-blue-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                } flex items-center space-x-2`}
             >
-              {tab.label}
+              {typeof tab.icon === 'string' ? (
+                <span>{tab.icon}</span>
+              ) : (
+                <span className="text-blue-600">{tab.icon}</span>
+              )}
+              <span>{tab.label}</span>
             </button>
           ))}
         </nav>
@@ -386,7 +391,7 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
                       insights.completionPrediction.estimatedDate
                     ).getTime() -
                       new Date().getTime()) /
-                      (1000 * 60 * 60 * 24)
+                    (1000 * 60 * 60 * 24)
                   )}{" "}
                   days remaining
                 </p>
@@ -485,15 +490,14 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
                   Overall Risk Level
                 </h3>
                 <span
-                  className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    insights.riskAssessment.riskLevel === "Critical"
-                      ? "bg-red-100 text-red-800"
-                      : insights.riskAssessment.riskLevel === "High"
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${insights.riskAssessment.riskLevel === "Critical"
+                    ? "bg-red-100 text-red-800"
+                    : insights.riskAssessment.riskLevel === "High"
                       ? "bg-orange-100 text-orange-800"
                       : insights.riskAssessment.riskLevel === "Medium"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : "bg-blue-100 text-blue-800"
-                  }`}
+                        ? "bg-yellow-100 text-yellow-800"
+                        : "bg-blue-100 text-blue-800"
+                    }`}
                 >
                   {insights.riskAssessment.riskLevel}
                 </span>
@@ -655,13 +659,12 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
-                      className={`p-4 rounded-lg border-l-4 ${
-                        rec.action === "increase"
-                          ? "bg-blue-50 border-blue-500"
-                          : rec.action === "decrease"
+                      className={`p-4 rounded-lg border-l-4 ${rec.action === "increase"
+                        ? "bg-blue-50 border-blue-500"
+                        : rec.action === "decrease"
                           ? "bg-red-50 border-red-500"
                           : "bg-blue-50 border-blue-500"
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center justify-between mb-2">
                         <h4 className="font-medium text-gray-900">
@@ -669,13 +672,12 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
                         </h4>
                         <div className="flex items-center space-x-2">
                           <span
-                            className={`px-2 py-1 rounded text-xs font-medium ${
-                              rec.action === "increase"
-                                ? "bg-blue-100 text-blue-800"
-                                : rec.action === "decrease"
+                            className={`px-2 py-1 rounded text-xs font-medium ${rec.action === "increase"
+                              ? "bg-blue-100 text-blue-800"
+                              : rec.action === "decrease"
                                 ? "bg-red-100 text-red-800"
                                 : "bg-blue-100 text-blue-800"
-                            }`}
+                              }`}
                           >
                             {rec.action.toUpperCase()}
                           </span>
@@ -727,9 +729,8 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
                       <div
                         className="bg-blue-600 h-3 rounded-full"
                         style={{
-                          width: `${
-                            insights.weatherImpact.productivityCorrelation * 100
-                          }%`,
+                          width: `${insights.weatherImpact.productivityCorrelation * 100
+                            }%`,
                         }}
                       ></div>
                     </div>
@@ -774,13 +775,12 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className={`p-4 rounded-lg border-2 ${
-                      day.productivityImpact > 90
-                        ? "border-blue-200 bg-blue-50"
-                        : day.productivityImpact > 70
+                    className={`p-4 rounded-lg border-2 ${day.productivityImpact > 90
+                      ? "border-blue-200 bg-blue-50"
+                      : day.productivityImpact > 70
                         ? "border-yellow-200 bg-yellow-50"
                         : "border-red-200 bg-red-50"
-                    }`}
+                      }`}
                   >
                     <div className="text-center mb-3">
                       <p className="font-medium text-gray-900">
@@ -794,8 +794,8 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
                         {day.condition === "Sunny"
                           ? "☀️"
                           : day.condition === "Cloudy"
-                          ? "☁️"
-                          : "🌧️"}
+                            ? "☁️"
+                            : "🌧️"}
                       </p>
                       <p className="text-sm text-gray-600">{day.condition}</p>
                     </div>
@@ -805,13 +805,12 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
                           Productivity:
                         </span>
                         <span
-                          className={`font-medium ${
-                            day.productivityImpact > 90
-                              ? "text-blue-600"
-                              : day.productivityImpact > 70
+                          className={`font-medium ${day.productivityImpact > 90
+                            ? "text-blue-600"
+                            : day.productivityImpact > 70
                               ? "text-yellow-600"
                               : "text-red-600"
-                          }`}
+                            }`}
                         >
                           {day.productivityImpact}%
                         </span>

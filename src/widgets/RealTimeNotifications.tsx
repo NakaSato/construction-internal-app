@@ -4,6 +4,15 @@ import {
   ProjectUpdateNotification,
   RealTimeProjectUpdate,
 } from "../shared/types/project";
+import {
+  Sparkles,
+  FileText,
+  Trash2,
+  RefreshCw,
+  ClipboardList,
+  ChevronUp,
+  ChevronDown
+} from "lucide-react";
 
 interface RealTimeNotificationsProps {
   maxNotifications?: number;
@@ -72,15 +81,15 @@ const RealTimeNotifications: React.FC<RealTimeNotificationsProps> = ({
   const getNotificationIcon = (type: ProjectUpdateNotification["type"]) => {
     switch (type) {
       case "PROJECT_CREATED":
-        return "🆕";
+        return <Sparkles className="h-5 w-5" />;
       case "PROJECT_UPDATED":
-        return "📝";
+        return <FileText className="h-5 w-5" />;
       case "PROJECT_DELETED":
-        return "🗑️";
+        return <Trash2 className="h-5 w-5" />;
       case "PROJECT_STATUS_CHANGED":
-        return "🔄";
+        return <RefreshCw className="h-5 w-5" />;
       default:
-        return "📋";
+        return <ClipboardList className="h-5 w-5" />;
     }
   };
 
@@ -111,9 +120,8 @@ const RealTimeNotifications: React.FC<RealTimeNotificationsProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <div
-                className={`w-2 h-2 rounded-full ${
-                  connected ? "bg-blue-500" : "bg-red-500"
-                }`}
+                className={`w-2 h-2 rounded-full ${connected ? "bg-blue-500" : "bg-red-500"
+                  }`}
               ></div>
               <span className="text-sm font-medium text-gray-700">
                 Live Updates ({notifications.length})
@@ -121,9 +129,9 @@ const RealTimeNotifications: React.FC<RealTimeNotificationsProps> = ({
             </div>
             <button
               onClick={() => setIsMinimized(!isMinimized)}
-              className="text-gray-400 hover:text-gray-600 text-sm"
+              className="text-gray-400 hover:text-gray-600 p-1 rounded-full transition-colors"
             >
-              {isMinimized ? "▲" : "▼"}
+              {isMinimized ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
             </button>
           </div>
         </div>
@@ -138,14 +146,14 @@ const RealTimeNotifications: React.FC<RealTimeNotificationsProps> = ({
                   key={`${notification.projectId}-${notification.timestamp}-${index}`}
                   className={`
                   border rounded-lg p-3 shadow-sm transition-all duration-300 ease-out
-                  transform hover:scale-105
+                  hover:scale-105
                   ${getNotificationColor(notification.type)}
                 `}
                 >
                   <div className="flex items-start space-x-2">
-                    <span className="text-lg">
+                    <div className="flex-shrink-0 mt-0.5">
                       {getNotificationIcon(notification.type)}
-                    </span>
+                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-medium truncate">

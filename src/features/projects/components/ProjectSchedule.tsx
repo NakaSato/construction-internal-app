@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ProjectDto } from "../../../shared/types/project";
+import { BarChart3, TrendingUp, CheckCircle2 } from "lucide-react";
 
 interface ProjectScheduleProps {
   project: ProjectDto;
@@ -35,9 +36,9 @@ const ProjectSchedule = ({
       : 0;
 
   const viewTabs = [
-    { id: "overview", label: "Overview", icon: "📊" },
-    { id: "gantt", label: "Timeline", icon: "📈" },
-    { id: "tasks", label: "Tasks", icon: "✅" },
+    { id: "overview", label: "Overview", icon: <BarChart3 className="w-4 h-4" /> },
+    { id: "gantt", label: "Timeline", icon: <TrendingUp className="w-4 h-4" /> },
+    { id: "tasks", label: "Tasks", icon: <CheckCircle2 className="w-4 h-4" /> },
   ];
 
   // Generate mock timeline data for display
@@ -83,8 +84,8 @@ const ProjectSchedule = ({
           phase.status === "completed"
             ? 100
             : phase.status === "in-progress"
-            ? 60
-            : 0,
+              ? 60
+              : 0,
       };
     });
   };
@@ -153,13 +154,12 @@ const ProjectSchedule = ({
               </div>
               <div className="flex justify-between items-center text-sm">
                 <span
-                  className={`capitalize px-2 py-1 rounded text-xs font-medium ${
-                    phase.status === "completed"
+                  className={`capitalize px-2 py-1 rounded text-xs font-medium ${phase.status === "completed"
                       ? "bg-blue-100 text-blue-800"
                       : phase.status === "in-progress"
-                      ? "bg-blue-100 text-blue-800"
-                      : "bg-gray-100 text-gray-800"
-                  }`}
+                        ? "bg-blue-100 text-blue-800"
+                        : "bg-gray-100 text-gray-800"
+                    }`}
                 >
                   {phase.status.replace("-", " ")}
                 </span>
@@ -267,11 +267,10 @@ const ProjectSchedule = ({
                 </div>
                 <div>
                   <span
-                    className={`px-2 py-1 rounded text-xs font-medium ${
-                      i < project.completedTaskCount
+                    className={`px-2 py-1 rounded text-xs font-medium ${i < project.completedTaskCount
                         ? "bg-blue-100 text-blue-800"
                         : "bg-yellow-100 text-yellow-800"
-                    }`}
+                      }`}
                   >
                     {i < project.completedTaskCount
                       ? "Completed"
@@ -350,11 +349,10 @@ const ProjectSchedule = ({
             <button
               key={tab.id}
               onClick={() => setActiveView(tab.id as any)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
-                activeView === tab.id
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${activeView === tab.id
                   ? "bg-blue-100 text-blue-700 border border-blue-200"
                   : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-              }`}
+                }`}
             >
               <span>{tab.icon}</span>
               {tab.label}

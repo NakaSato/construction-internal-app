@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FileText, Zap, Download, BarChart3, TrendingUp, CloudSun, Calendar, ClipboardList } from "lucide-react";
 import { useRole } from "../shared/hooks";
 import { SimpleReportsService } from "../shared/utils/simpleReportsService";
 
@@ -22,7 +24,7 @@ const SimpleReports: React.FC<SimpleReportsProps> = ({ onGenerateReport }) => {
       id: "daily-summary",
       title: "Daily Summary",
       description: "Overview of daily reports and productivity",
-      icon: "📊",
+      icon: <BarChart3 className="h-6 w-6" />,
       bgColor: "bg-blue-50",
       borderColor: "border-blue-200",
       iconColor: "text-blue-600",
@@ -31,7 +33,7 @@ const SimpleReports: React.FC<SimpleReportsProps> = ({ onGenerateReport }) => {
       id: "weekly-progress",
       title: "Weekly Progress",
       description: "Weekly team performance and milestones",
-      icon: "📈",
+      icon: <TrendingUp className="h-6 w-6" />,
       bgColor: "bg-blue-50",
       borderColor: "border-blue-200",
       iconColor: "text-blue-600",
@@ -40,7 +42,7 @@ const SimpleReports: React.FC<SimpleReportsProps> = ({ onGenerateReport }) => {
       id: "safety-quality",
       title: "Safety & Quality",
       description: "Safety scores and quality metrics analysis",
-      icon: "🛡️",
+      icon: <ClipboardList className="h-6 w-6" />,
       bgColor: "bg-yellow-50",
       borderColor: "border-yellow-200",
       iconColor: "text-yellow-600",
@@ -49,7 +51,7 @@ const SimpleReports: React.FC<SimpleReportsProps> = ({ onGenerateReport }) => {
       id: "weather-impact",
       title: "Weather Impact",
       description: "Weather conditions effect on productivity",
-      icon: "🌤️",
+      icon: <CloudSun className="h-6 w-6" />,
       bgColor: "bg-indigo-50",
       borderColor: "border-indigo-200",
       iconColor: "text-indigo-600",
@@ -121,9 +123,9 @@ const SimpleReports: React.FC<SimpleReportsProps> = ({ onGenerateReport }) => {
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-xl font-semibold text-gray-900">
-              📄 Simple Reports
-            </h3>
+            <h2 className="text-xl font-bold flex items-center gap-2">
+              <FileText className="h-5 w-5 text-blue-600" /> Simple Reports
+            </h2>
             <p className="text-gray-600 mt-1">
               Generate quick reports for your daily work activities
             </p>
@@ -140,7 +142,7 @@ const SimpleReports: React.FC<SimpleReportsProps> = ({ onGenerateReport }) => {
         {/* Date Range Selection */}
         <div className="mb-6">
           <h4 className="text-lg font-medium text-gray-900 mb-4">
-            📅 Select Date Range
+            <Calendar className="h-5 w-5 inline-block mr-2 text-blue-600" /> Select Date Range
           </h4>
 
           {/* Quick Date Buttons */}
@@ -199,7 +201,7 @@ const SimpleReports: React.FC<SimpleReportsProps> = ({ onGenerateReport }) => {
         {/* Report Types Grid */}
         <div className="mb-6">
           <h4 className="text-lg font-medium text-gray-900 mb-4">
-            📋 Available Reports
+            <ClipboardList className="h-5 w-5 inline-block mr-2 text-gray-900" /> Available Reports
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {reportTypes.map((report) => (
@@ -226,11 +228,10 @@ const SimpleReports: React.FC<SimpleReportsProps> = ({ onGenerateReport }) => {
                     disabled={
                       isGenerating || !dateRange.start || !dateRange.end
                     }
-                    className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                      isGenerating || !dateRange.start || !dateRange.end
-                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                        : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
-                    }`}
+                    className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${isGenerating || !dateRange.start || !dateRange.end
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
+                      }`}
                   >
                     {isGenerating ? (
                       <div className="flex items-center space-x-1">
@@ -249,8 +250,8 @@ const SimpleReports: React.FC<SimpleReportsProps> = ({ onGenerateReport }) => {
 
         {/* Quick Actions */}
         <div className="border-t border-gray-200 pt-6">
-          <h4 className="text-lg font-medium text-gray-900 mb-4">
-            ⚡ Quick Actions
+          <h4 className="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2">
+            <Zap className="h-4 w-4 text-blue-600" /> Quick Actions
           </h4>
           <div className="flex flex-wrap gap-3">
             <button

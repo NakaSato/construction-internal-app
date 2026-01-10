@@ -13,6 +13,15 @@ import {
   BulkRejectionRequest,
   BulkOperationResult,
   DailyReportUpdateNotification,
+  EnhancedDailyReportDto,
+  CreateEnhancedDailyReportRequest,
+  CreateWorkProgressItemRequest,
+  UpdateWorkProgressItemRequest,
+  WeeklySummaryDto,
+  DailyReportInsightsDto,
+  WorkProgressItemDto,
+  BulkOperationResultDto,
+  DailyReportAttachmentDto,
 } from "../../types/project";
 
 /**
@@ -20,7 +29,7 @@ import {
  * Handles all daily report management endpoints
  */
 export class DailyReportsApi {
-  constructor(private apiClient: ApiClient) {}
+  constructor(private apiClient: ApiClient) { }
 
   /**
    * Get daily reports with filtering and pagination
@@ -79,7 +88,7 @@ export class DailyReportsApi {
    */
   async updateDailyReport(
     id: string,
-    report: Partial<CreateDailyReportRequest>
+    report: UpdateDailyReportRequest
   ): Promise<ApiResponse<DailyReportDto>> {
     return this.apiClient.put<ApiResponse<DailyReportDto>>(
       `/api/v1/daily-reports/${id}`,
@@ -149,8 +158,7 @@ export class DailyReportsApi {
       ? new URLSearchParams(params as any).toString()
       : "";
     return this.apiClient.get<ApiResponse<EnhancedPagedResult<DailyReportDto>>>(
-      `/api/v1/daily-reports/projects/${projectId}${
-        queryString ? `?${queryString}` : ""
+      `/api/v1/daily-reports/projects/${projectId}${queryString ? `?${queryString}` : ""
       }`
     );
   }
@@ -167,8 +175,7 @@ export class DailyReportsApi {
       ? new URLSearchParams(params as any).toString()
       : "";
     return this.apiClient.get<ApiResponse<EnhancedPagedResult<DailyReportDto>>>(
-      `/api/v1/daily-reports/pending-approval${
-        queryString ? `?${queryString}` : ""
+      `/api/v1/daily-reports/pending-approval${queryString ? `?${queryString}` : ""
       }`
     );
   }
@@ -182,7 +189,7 @@ export class DailyReportsApi {
     endDate: string
   ): Promise<ApiResponse<DailyReportAnalytics>> {
     return this.apiClient.get<ApiResponse<DailyReportAnalytics>>(
-      `/api/v1/daily-reports/analytics/${projectId}?startDate=${startDate}&endDate=${endDate}`
+      `/api/v1/daily-reports/projects/${projectId}/analytics?startDate=${startDate}&endDate=${endDate}`
     );
   }
 
@@ -293,7 +300,129 @@ export class DailyReportsApi {
   }
 
   /**
-   * Get daily reports with enhanced search
+   * Add attachment to daily report
+   */
+  async addAttachment(
+    id: string,
+    file: File
+  ): Promise<ApiResponse<DailyReportAttachmentDto>> {
+    const formData = new FormData();
+    formData.append("file", file);
+    return this.apiClient.post<ApiResponse<DailyReportAttachmentDto>>(
+      `/api/v1/daily-reports/${id}/attachments`,
+      formData
+    );
+  }
+
+  /**
+   * Get weekly summary report
+   */
+  async getWeeklySummary(
+    projectId?: string,
+    weekStartDate?: string
+  ): Promise<ApiResponse<WeeklySummaryDto>> {
+    const params = new URLSearchParams();
+    if (projectId) params.append("projectId", projectId);
+    if (weekStartDate) params.append("weekStartDate", weekStartDate);
+    return this.apiClient.get<ApiResponse<WeeklySummaryDto>>(
+      `/api/v1/daily-reports/weekly-summary?${params.toString()}`
+    );
+  }
+
+  /**
+   * Add work progress item
+   */
+  async addWorkProgressItem(
+    reportId: string,
+    item: CreateWorkProgressItemRequest
+  ): Promise<ApiResponse<WorkProgressItemDto>> {
+    return this.apiClient.post<ApiResponse<WorkProgressItemDto>>(
+      `/api/v1/daily-reports/${reportId}/work-progress`,
+      item
+    );
+  }
+
+  /**
+   * Update work progress item
+   */
+  async updateWorkProgressItem(
+    reportId: string,
+    itemId: string,
+    item: UpdateWorkProgressItemRequest
+  ): Promise<ApiResponse<WorkProgressItemDto>> {
+    return this.apiClient.put<ApiResponse<WorkProgressItemDto>>(
+      `/api/v1/daily-reports/${reportId}/work-progress/${itemId}`,
+      item
+    );
+  }
+
+  /**
+   * Delete work progress item
+   */
+  async deleteWorkProgressItem(
+    reportId: string,
+    itemId: string
+  ): Promise<ApiResponse<boolean>> {
+    return this.apiClient.delete<ApiResponse<boolean>>(
+      `/api/v1/daily-reports/${reportId}/work-progress/${itemId}`
+    );
+  }
+
+  /**
+   * Create enhanced daily report
+   */
+  async createEnhancedDailyReport(
+    request: CreateEnhancedDailyReportRequest
+  ): Promise<ApiResponse<EnhancedDailyReportDto>> {
+    return this.apiClient.post<ApiResponse<EnhancedDailyReportDto>>(
+      "/api/v1/daily-reports/enhanced",
+      request
+    );
+  }
+
+  /**
+   * Get weekly progress report for project
+   */
+  async getWeeklyProgressReport(
+    projectId: string,
+    weekStartDate?: string
+  ): Promise<ApiResponse<WeeklySummaryDto>> {
+    const params = weekStartDate ? `?weekStartDate=${weekStartDate}` : "";
+    return this.apiClient.get<ApiResponse<WeeklySummaryDto>>(
+      `/api/v1/daily-reports/projects/${projectId}/weekly-report${params}`
+    );
+  }
+
+  /**
+   * Export enhanced daily reports
+   */
+  async exportEnhancedDailyReports(
+    request: DailyReportExportRequest
+  ): Promise<ApiResponse<Blob>> {
+    return this.apiClient.post<ApiResponse<Blob>>(
+      "/api/v1/daily-reports/export-enhanced",
+      request,
+      {
+        responseType: "blob",
+      }
+    );
+  }
+
+  /**
+   * Get daily report insights
+   */
+  async getDailyReportInsights(
+    projectId: string,
+    reportId?: string
+  ): Promise<ApiResponse<DailyReportInsightsDto>> {
+    const params = reportId ? `?reportId=${reportId}` : "";
+    return this.apiClient.get<ApiResponse<DailyReportInsightsDto>>(
+      `/api/v1/daily-reports/projects/${projectId}/insights${params}`
+    );
+  }
+
+  /**
+   * Search daily reports
    */
   async searchDailyReports(
     params: GetDailyReportsParams

@@ -1,5 +1,6 @@
 import React from "react";
 import { ProjectEntity } from "../../../shared/types/project-management";
+import { BarChart3, CheckCircle2 } from "lucide-react";
 
 interface ScheduleOverviewProps {
   project: ProjectEntity;
@@ -18,13 +19,13 @@ export const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
       project.overallCompletion > 0.8
         ? "healthy"
         : project.overallCompletion > 0.4
-        ? "warning"
-        : "critical",
+          ? "warning"
+          : "critical",
     criticalTasks: criticalPath.length,
     completion: Math.round(project.overallCompletion * 100),
     daysRemaining: Math.ceil(
       (project.plannedEndDate.getTime() - new Date().getTime()) /
-        (1000 * 60 * 60 * 24)
+      (1000 * 60 * 60 * 24)
     ),
   };
 
@@ -56,13 +57,12 @@ export const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
           </div>
         </div>
         <div
-          className={`border rounded-lg p-4 ${
-            scheduleHealth.criticalTasks > 5
+          className={`border rounded-lg p-4 ${scheduleHealth.criticalTasks > 5
               ? "bg-red-50 border-red-200 text-red-800"
               : scheduleHealth.criticalTasks > 0
-              ? "bg-yellow-50 border-yellow-200 text-yellow-800"
-              : "bg-blue-50 border-blue-200 text-blue-800"
-          }`}
+                ? "bg-yellow-50 border-yellow-200 text-yellow-800"
+                : "bg-blue-50 border-blue-200 text-blue-800"
+            }`}
         >
           <div className="font-medium">Critical Tasks</div>
           <div className="text-2xl font-bold">
@@ -70,13 +70,12 @@ export const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
           </div>
         </div>
         <div
-          className={`border rounded-lg p-4 ${
-            scheduleHealth.completion >= 80
+          className={`border rounded-lg p-4 ${scheduleHealth.completion >= 80
               ? "bg-blue-50 border-blue-200 text-blue-800"
               : scheduleHealth.completion >= 40
-              ? "bg-yellow-50 border-yellow-200 text-yellow-800"
-              : "bg-red-50 border-red-200 text-red-800"
-          }`}
+                ? "bg-yellow-50 border-yellow-200 text-yellow-800"
+                : "bg-red-50 border-red-200 text-red-800"
+            }`}
         >
           <div className="font-medium">Completion</div>
           <div className="text-2xl font-bold">{scheduleHealth.completion}%</div>
@@ -111,7 +110,9 @@ export const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
         </div>
         <div className="p-6">
           <div className="text-center py-12 text-gray-500">
-            <div className="text-4xl mb-4">📊</div>
+            <div className="flex justify-center mb-4">
+              <BarChart3 className="h-12 w-12 text-gray-300" />
+            </div>
             <h4 className="text-lg font-medium text-gray-900 mb-2">
               Gantt Chart Coming Soon
             </h4>
@@ -163,7 +164,9 @@ export const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
               </div>
             ) : (
               <div className="text-center py-6 text-gray-500">
-                <div className="text-2xl mb-2">✅</div>
+                <div className="flex justify-center mb-2">
+                  <CheckCircle2 className="h-8 w-8 text-green-500" />
+                </div>
                 <p className="text-sm">No critical path issues detected</p>
               </div>
             )}
@@ -187,7 +190,7 @@ export const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
                   name: "Design Phase Complete",
                   date: new Date(
                     project.plannedStartDate.getTime() +
-                      30 * 24 * 60 * 60 * 1000
+                    30 * 24 * 60 * 60 * 1000
                   ),
                   status: "completed",
                 },
@@ -195,7 +198,7 @@ export const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
                   name: "Construction Start",
                   date: new Date(
                     project.plannedStartDate.getTime() +
-                      60 * 24 * 60 * 60 * 1000
+                    60 * 24 * 60 * 60 * 1000
                   ),
                   status: "in_progress",
                 },
@@ -214,13 +217,12 @@ export const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
               ].map((milestone, index) => (
                 <div key={index} className="flex items-center space-x-3">
                   <div
-                    className={`flex-shrink-0 w-3 h-3 rounded-full ${
-                      milestone.status === "completed"
+                    className={`flex-shrink-0 w-3 h-3 rounded-full ${milestone.status === "completed"
                         ? "bg-blue-500"
                         : milestone.status === "in_progress"
-                        ? "bg-yellow-500"
-                        : "bg-gray-300"
-                    }`}
+                          ? "bg-yellow-500"
+                          : "bg-gray-300"
+                      }`}
                   ></div>
                   <div className="flex-1">
                     <div className="text-sm font-medium text-gray-900">
@@ -231,13 +233,12 @@ export const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
                     </div>
                   </div>
                   <div
-                    className={`text-xs px-2 py-1 rounded-full ${
-                      milestone.status === "completed"
+                    className={`text-xs px-2 py-1 rounded-full ${milestone.status === "completed"
                         ? "bg-blue-100 text-blue-800"
                         : milestone.status === "in_progress"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-gray-100 text-gray-600"
-                    }`}
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-gray-100 text-gray-600"
+                      }`}
                   >
                     {milestone.status.replace("_", " ")}
                   </div>

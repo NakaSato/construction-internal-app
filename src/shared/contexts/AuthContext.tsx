@@ -29,12 +29,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const isAuthenticated = Boolean(user && token);
 
-  // Initialize authentication on mount
-  useEffect(() => {
-    const initializeAuth = async () => {
+  const [initializationPromise] = useState(() => {
+    return (async () => {
       try {
-        setIsLoading(true);
-
         // Initialize auth service
         AuthService.initializeAuth();
 
@@ -63,22 +60,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
               "Token refresh failed (API might be unavailable):",
               refreshError
             );
-            // Don't throw error, just continue without auth
           }
         }
       } catch (error) {
         console.error("Auth initialization failed:", error);
-        // In production, don't logout if it's just an API issue
         if (import.meta.env.DEV) {
           AuthService.logout();
         }
       } finally {
         setIsLoading(false);
       }
-    };
-
-    initializeAuth();
-  }, []);
+    })();
+  });
 
   // Auto-refresh token before expiration
   useEffect(() => {
@@ -264,6 +257,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     logout,
     register,
     refreshToken,
+    initializationPromise,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

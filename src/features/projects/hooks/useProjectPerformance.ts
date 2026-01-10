@@ -10,7 +10,6 @@ export const useProjectPerformance = () => {
 
     try {
       setLoadingPerformance(true);
-      console.log(`📊 [ProjectDetail] Fetching performance data: ${projectId}`);
 
       // Use real API for performance data
       const performanceData = await projectsApi.getProjectPerformance(
@@ -22,9 +21,13 @@ export const useProjectPerformance = () => {
         `✅ [ProjectDetail] Performance data loaded:`,
         performanceData
       );
-    } catch (err) {
-      console.error(`❌ [ProjectDetail] Error fetching performance:`, err);
-      // Set performance to null instead of mock data when API fails
+    } catch (err: any) {
+      // Silently handle 404 - the performance endpoint may not exist
+      // Only log non-404 errors for debugging
+      if (err?.message && !err.message.includes('not found')) {
+        console.warn(`[ProjectDetail] Performance API unavailable:`, err.message);
+      }
+      // Set performance to null when API fails
       setPerformance(null);
     } finally {
       setLoadingPerformance(false);

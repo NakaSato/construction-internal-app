@@ -1,5 +1,6 @@
 import React from "react";
 import { ProjectDto } from "../../shared/types/project";
+import { Building2, MapPin, Zap } from "lucide-react";
 import {
   getStatusColor,
   getPriorityColor,
@@ -25,7 +26,7 @@ const ProjectsTab: React.FC<ProjectsTabProps> = ({
         {(isAdmin || isManager) && (
           <button
             onClick={onCreateProject}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-bold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:scale-105"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-bold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-2xl hover:shadow-3xl hover:scale-105"
           >
             + New Project
           </button>
@@ -36,7 +37,7 @@ const ProjectsTab: React.FC<ProjectsTabProps> = ({
           {projects.map((project) => (
             <div
               key={project.projectId}
-              className="bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+              className="bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 hover:scale-105"
             >
               <div className="flex justify-between items-start mb-6">
                 <h4 className="text-xl font-bold text-gray-900 line-clamp-2">
@@ -53,21 +54,21 @@ const ProjectsTab: React.FC<ProjectsTabProps> = ({
 
               <div className="space-y-4">
                 <div className="flex items-center text-sm text-gray-600">
-                  <span className="mr-2">🏢</span>
+                  <Building2 className="w-4 h-4 mr-2 text-gray-400" />
                   <span className="font-medium">
                     {project.clientInfo || "No client info"}
                   </span>
                 </div>
 
                 <div className="flex items-center text-sm text-gray-600">
-                  <span className="mr-2">📍</span>
+                  <MapPin className="w-4 h-4 mr-2 text-gray-400" />
                   <span className="font-medium">
                     {project.address || "No address"}
                   </span>
                 </div>
 
                 <div className="flex items-center text-sm text-gray-600">
-                  <span className="mr-2">⚡</span>
+                  <Zap className="w-4 h-4 mr-2 text-gray-400" />
                   <span className="font-medium">
                     {project.totalCapacityKw
                       ? `${project.totalCapacityKw} kW`
@@ -80,8 +81,8 @@ const ProjectsTab: React.FC<ProjectsTabProps> = ({
                   <span className="text-sm font-bold text-gray-900">
                     {project.taskCount > 0
                       ? Math.round(
-                          (project.completedTaskCount / project.taskCount) * 100
-                        )
+                        (project.completedTaskCount / project.taskCount) * 100
+                      )
                       : 0}
                     %
                   </span>
@@ -91,14 +92,13 @@ const ProjectsTab: React.FC<ProjectsTabProps> = ({
                   <div
                     className="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-500"
                     style={{
-                      width: `${
-                        project.taskCount > 0
+                      width: `${project.taskCount > 0
                           ? Math.round(
-                              (project.completedTaskCount / project.taskCount) *
-                                100
-                            )
+                            (project.completedTaskCount / project.taskCount) *
+                            100
+                          )
                           : 0
-                      }%`,
+                        }%`,
                     }}
                   ></div>
                 </div>

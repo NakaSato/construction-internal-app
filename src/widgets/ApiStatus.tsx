@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { apiClient } from "../shared/utils/apiClient";
+import { CheckCircle2, AlertCircle, Clock, Circle } from "lucide-react";
 
 interface ApiStatusProps {
   className?: string;
@@ -46,13 +47,13 @@ export default function ApiStatus({ className = "" }: ApiStatusProps) {
   const getStatusIcon = () => {
     switch (status) {
       case "online":
-        return "🟢";
+        return <CheckCircle2 className="h-4 w-4" />;
       case "offline":
-        return "🔴";
+        return <AlertCircle className="h-4 w-4" />;
       case "checking":
-        return "🟡";
+        return <Clock className="h-4 w-4 animate-spin-slow" />;
       default:
-        return "⚪";
+        return <Circle className="h-4 w-4" />;
     }
   };
 

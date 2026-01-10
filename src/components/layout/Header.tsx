@@ -30,11 +30,11 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, title }) => {
             <div className="flex-1 max-w-xl mx-4 hidden md:block">
                 <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Search className="h-4 w-4 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+                        <Search className="h-4 w-4 text-gray-400 group-focus-within:text-gray-500 transition-colors" />
                     </div>
                     <input
                         type="text"
-                        className="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all shadow-sm"
+                        className="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-gray-500 focus:border-gray-500 sm:text-sm transition-all shadow-sm"
                         placeholder="Search projects, tasks, or documents..."
                     />
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -46,7 +46,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, title }) => {
             {/* Right: Actions & Profile */}
             <div className="flex items-center space-x-3 lg:space-x-5">
                 {/* Notifications */}
-                <button className="relative p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-blue-600 transition-colors">
+                <button className="relative p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-600 transition-colors">
                     <Bell className="h-5 w-5" />
                     <span className="absolute top-1 right-1 block h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white"></span>
                 </button>
@@ -63,7 +63,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, title }) => {
                             {roleName || "User"}
                         </div>
                     </div>
-                    <div className="h-9 w-9 rounded-full bg-slate-800 flex items-center justify-center text-white ring-2 ring-gray-100 shadow-sm cursor-pointer hover:ring-blue-100 transition-all">
+                    <div className="h-9 w-9 rounded-full bg-slate-800 flex items-center justify-center text-white ring-2 ring-gray-100 shadow-sm cursor-pointer hover:ring-gray-200 transition-all">
                         <User className="h-5 w-5" />
                     </div>
                 </div>

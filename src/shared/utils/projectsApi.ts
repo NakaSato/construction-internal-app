@@ -21,6 +21,9 @@ import {
   BulkProjectOperation,
   BulkProjectOperationResult,
   RealTimeProjectUpdate,
+  CreateProjectMilestoneRequest,
+  UpdateProjectMilestoneRequest,
+  ProjectMilestone,
 } from "../types/project";
 import { ApiResponse, EnhancedPagedResult } from "../types/api";
 
@@ -103,7 +106,7 @@ export class ProjectsApiService {
         },
       };
 
-      console.log("✅ [ProjectsApiService.getAllProjects] Returning result:", {
+      console.log("[SUCCESS] ✅ [ProjectsApiService.getAllProjects] Returning result:", {
         itemsCount: result.items?.length || 0,
         totalCount: result.totalCount,
         pageNumber: result.pageNumber,
@@ -114,7 +117,7 @@ export class ProjectsApiService {
 
       return result;
     } catch (error) {
-      console.error("❌ [ProjectsApiService.getAllProjects] Error:", {
+      console.error("[ERROR] ❌ [ProjectsApiService.getAllProjects] Error:", {
         error,
         message: error instanceof Error ? error.message : "Unknown error",
         stack: error instanceof Error ? error.stack : undefined,
@@ -130,7 +133,7 @@ export class ProjectsApiService {
    */
   async getProjectById(id: string): Promise<ProjectDto> {
     try {
-      console.log(`🔍 [ProjectsAPI] Fetching project by ID: ${id}`);
+      console.log(`[FETCH] 🔍 [ProjectsAPI] Fetching project by ID: ${id}`);
       console.log(`🔗 [ProjectsAPI] Full URL will be: ${this.endpoint}/${id}`);
       console.log(
         `📏 [ProjectsAPI] Project ID length: ${id.length} characters`
@@ -163,7 +166,7 @@ export class ProjectsApiService {
         const errors = response.errors?.join(", ") || "";
         const fullError = errors ? `${errorMsg}: ${errors}` : errorMsg;
 
-        console.error(`🚨 [ProjectsAPI] API Error Details:`, {
+        console.error(`[ERROR] 🚨 [ProjectsAPI] API Error Details:`, {
           message: errorMsg,
           errors: response.errors,
           projectId: trimmedId,
@@ -180,11 +183,11 @@ export class ProjectsApiService {
       }
 
       console.log(
-        `✅ [ProjectsAPI] Project fetched successfully: ${response.data.projectName}`
+        `[SUCCESS] ✅ [ProjectsAPI] Project fetched successfully: ${response.data.projectName}`
       );
       return response.data;
     } catch (error) {
-      console.error(`❌ [ProjectsAPI] Failed to fetch project ${id}:`, error);
+      console.error(`[ERROR] ❌ [ProjectsAPI] Failed to fetch project ${id}:`, error);
 
       // Enhanced error information
       console.error(`🔧 [ProjectsAPI] Debug info:`, {
@@ -504,6 +507,84 @@ export class ProjectsApiService {
     } catch (error) {
       console.error(`Failed to fetch project performance ${id}:`, error);
       throw new Error(`Failed to fetch project performance ${id}`);
+    }
+  }
+
+  /**
+   * Get project milestones
+   * GET /api/v1/projects/{id}/milestones
+   */
+  async getProjectMilestones(id: string): Promise<ProjectMilestone[]> {
+    try {
+      const response = await apiClient.get<ApiResponse<ProjectMilestone[]>>(
+        `${this.endpoint}/${id}/milestones`
+      );
+      return response.data || [];
+    } catch (error) {
+      console.error(`Failed to fetch project milestones ${id}:`, error);
+      throw new Error(`Failed to fetch project milestones ${id}`);
+    }
+  }
+
+  /**
+   * Add milestone to project
+   * POST /api/v1/projects/{id}/milestones
+   */
+  async addMilestone(
+    id: string,
+    milestone: CreateProjectMilestoneRequest
+  ): Promise<ProjectMilestone> {
+    try {
+      const response = await apiClient.post<ApiResponse<ProjectMilestone>>(
+        `${this.endpoint}/${id}/milestones`,
+        milestone
+      );
+      if (!response.data) {
+        throw new Error("Failed to add milestone");
+      }
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to add milestone to project ${id}:`, error);
+      throw new Error(`Failed to add milestone to project ${id}`);
+    }
+  }
+
+  /**
+   * Update milestone
+   * PUT /api/v1/projects/{id}/milestones/{milestoneId}
+   */
+  async updateMilestone(
+    id: string,
+    milestoneId: string,
+    milestone: UpdateProjectMilestoneRequest
+  ): Promise<ProjectMilestone> {
+    try {
+      const response = await apiClient.put<ApiResponse<ProjectMilestone>>(
+        `${this.endpoint}/${id}/milestones/${milestoneId}`,
+        milestone
+      );
+      if (!response.data) {
+        throw new Error("Failed to update milestone");
+      }
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to update milestone ${milestoneId}:`, error);
+      throw new Error(`Failed to update milestone ${milestoneId}`);
+    }
+  }
+
+  /**
+   * Delete milestone
+   * DELETE /api/v1/projects/{id}/milestones/{milestoneId}
+   */
+  async deleteMilestone(id: string, milestoneId: string): Promise<void> {
+    try {
+      await apiClient.delete<ApiResponse<void>>(
+        `${this.endpoint}/${id}/milestones/${milestoneId}`
+      );
+    } catch (error) {
+      console.error(`Failed to delete milestone ${milestoneId}:`, error);
+      throw new Error(`Failed to delete milestone ${milestoneId}`);
     }
   }
 

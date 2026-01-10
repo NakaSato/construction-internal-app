@@ -1,6 +1,16 @@
 import React, { useState } from "react";
 import { DailyReportAnalyticsDto } from "../../../shared/types/reports";
 import AnalyticsChartLoader from "./AnalyticsChartLoader";
+import {
+  BarChart3,
+  ClipboardList,
+  TrendingUp,
+  Clock,
+  Target,
+  Zap,
+  CloudSun,
+  AlertTriangle
+} from "lucide-react";
 
 interface AnalyticsProps {
   analytics: DailyReportAnalyticsDto;
@@ -15,8 +25,8 @@ const Analytics: React.FC<AnalyticsProps> = ({ analytics, projectId }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            📊 Daily Reports Analytics
+          <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-3">
+            <BarChart3 className="h-8 w-8 text-blue-600" /> Daily Reports Analytics
           </h1>
           <p className="text-gray-600">
             Comprehensive insights and performance metrics for project{" "}
@@ -35,23 +45,25 @@ const Analytics: React.FC<AnalyticsProps> = ({ analytics, projectId }) => {
             <nav className="-mb-px flex space-x-8">
               <button
                 onClick={() => setActiveTab("summary")}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "summary"
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === "summary"
                     ? "border-blue-500 text-blue-600"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
+                  }`}
               >
-                📋 Summary
+                <span className="flex items-center gap-2">
+                  <ClipboardList className="h-4 w-4" /> Summary
+                </span>
               </button>
               <button
                 onClick={() => setActiveTab("charts")}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "charts"
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === "charts"
                     ? "border-blue-500 text-blue-600"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
+                  }`}
               >
-                📈 Charts
+                <span className="flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4" /> Charts
+                </span>
               </button>
             </nav>
           </div>
@@ -66,7 +78,7 @@ const Analytics: React.FC<AnalyticsProps> = ({ analytics, projectId }) => {
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                      📊
+                      <BarChart3 className="h-5 w-5 text-blue-600" />
                     </div>
                   </div>
                   <div className="ml-4">
@@ -84,7 +96,7 @@ const Analytics: React.FC<AnalyticsProps> = ({ analytics, projectId }) => {
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                      ⏱️
+                      <Clock className="h-5 w-5 text-blue-600" />
                     </div>
                   </div>
                   <div className="ml-4">
@@ -102,7 +114,7 @@ const Analytics: React.FC<AnalyticsProps> = ({ analytics, projectId }) => {
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
-                      🎯
+                      <Target className="h-5 w-5 text-yellow-600" />
                     </div>
                   </div>
                   <div className="ml-4">
@@ -120,7 +132,7 @@ const Analytics: React.FC<AnalyticsProps> = ({ analytics, projectId }) => {
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                      ⚡
+                      <Zap className="h-5 w-5 text-purple-600" />
                     </div>
                   </div>
                   <div className="ml-4">
@@ -138,8 +150,8 @@ const Analytics: React.FC<AnalyticsProps> = ({ analytics, projectId }) => {
             {/* Detailed Metrics */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  📈 Progress Metrics
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-blue-600" /> Progress Metrics
                 </h3>
                 <dl className="space-y-3">
                   <div className="flex justify-between">
@@ -168,11 +180,10 @@ const Analytics: React.FC<AnalyticsProps> = ({ analytics, projectId }) => {
                   <div className="flex justify-between">
                     <dt className="text-sm text-gray-500">Schedule Variance</dt>
                     <dd
-                      className={`text-sm font-medium ${
-                        (analytics.daysAheadBehindSchedule || 0) >= 0
+                      className={`text-sm font-medium ${(analytics.daysAheadBehindSchedule || 0) >= 0
                           ? "text-blue-600"
                           : "text-red-600"
-                      }`}
+                        }`}
                     >
                       {analytics.daysAheadBehindSchedule > 0 && "+"}
                       {analytics.daysAheadBehindSchedule || 0} days
@@ -182,8 +193,8 @@ const Analytics: React.FC<AnalyticsProps> = ({ analytics, projectId }) => {
               </div>
 
               <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  🌤️ Weather & Issues
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <CloudSun className="h-5 w-5 text-blue-600" /> Weather & Issues
                 </h3>
                 <dl className="space-y-3">
                   <div className="flex justify-between">
@@ -222,8 +233,8 @@ const Analytics: React.FC<AnalyticsProps> = ({ analytics, projectId }) => {
             {analytics.topIssueCategories &&
               analytics.topIssueCategories.length > 0 && (
                 <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                    ⚠️ Top Issue Categories
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <AlertTriangle className="h-5 w-5 text-red-600" /> Top Issue Categories
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {analytics.topIssueCategories.map((issue, index) => (

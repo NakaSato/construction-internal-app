@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../shared/hooks/useAuth";
+import { CheckCircle2, XCircle, AlertCircle } from "lucide-react";
 
 interface NetworkErrorProps {
   message?: string;
@@ -64,7 +65,7 @@ export default function NetworkError({
             {isOffline
               ? "Please check your internet connection and try again."
               : message ||
-                "Unable to connect to our servers. Please check your connection and try again."}
+              "Unable to connect to our servers. Please check your connection and try again."}
           </p>
 
           {/* Network Status */}
@@ -76,17 +77,21 @@ export default function NetworkError({
               <div className="flex items-center justify-between">
                 <span>Internet:</span>
                 <span
-                  className={`font-medium ${
-                    navigator.onLine ? "text-blue-600" : "text-red-600"
-                  }`}
+                  className={`font-medium flex items-center gap-1 ${navigator.onLine ? "text-blue-600" : "text-red-600"
+                    }`}
                 >
-                  {navigator.onLine ? "✓ Connected" : "✗ Disconnected"}
+                  {navigator.onLine ? (
+                    <CheckCircle2 className="h-4 w-4" />
+                  ) : (
+                    <XCircle className="h-4 w-4" />
+                  )}
+                  {navigator.onLine ? "Connected" : "Disconnected"}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span>Server:</span>
-                <span className="font-medium text-orange-600">
-                  ⚠ Checking...
+                <span className="font-medium text-orange-600 flex items-center gap-1">
+                  <AlertCircle className="h-4 w-4 animate-pulse" /> Checking...
                 </span>
               </div>
             </div>

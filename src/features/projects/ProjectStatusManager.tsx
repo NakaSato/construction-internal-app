@@ -1,4 +1,12 @@
 import React, { useState, useCallback } from "react";
+import {
+  ClipboardList,
+  Rocket,
+  PauseCircle,
+  CheckCircle2,
+  XCircle,
+  AlertTriangle
+} from "lucide-react";
 import { useProjectStatusWorkflow } from "../../shared/hooks/useProjectManagement";
 import {
   ProjectStatus,
@@ -87,17 +95,17 @@ const ProjectStatusManager: React.FC<ProjectStatusManagerProps> = ({
   const getStatusIcon = (status: ProjectStatus) => {
     switch (status) {
       case ProjectStatus.PLANNING:
-        return "📋";
+        return <ClipboardList className="h-4 w-4" />;
       case ProjectStatus.IN_PROGRESS:
-        return "🚀";
+        return <Rocket className="h-4 w-4 text-blue-500" />;
       case ProjectStatus.ON_HOLD:
-        return "⏸️";
+        return <PauseCircle className="h-4 w-4 text-amber-500" />;
       case ProjectStatus.COMPLETED:
-        return "✅";
+        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
       case ProjectStatus.CANCELLED:
-        return "❌";
+        return <XCircle className="h-4 w-4 text-red-500" />;
       default:
-        return "📋";
+        return <ClipboardList className="h-4 w-4" />;
     }
   };
 
@@ -192,8 +200,9 @@ const ProjectStatusManager: React.FC<ProjectStatusManagerProps> = ({
 
       {/* Approval Requirements */}
       {workflow?.requiresApproval && (
-        <div className="mt-2 text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded p-2">
-          ⚠️ Status changes require {workflow.approvalLevel} approval
+        <div className="mt-2 text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded p-2 flex items-center">
+          <AlertTriangle className="h-3 w-3 mr-1.5" />
+          Status changes require {workflow.approvalLevel} approval
         </div>
       )}
 

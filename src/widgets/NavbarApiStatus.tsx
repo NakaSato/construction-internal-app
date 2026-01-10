@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { apiClient } from "../shared/utils/apiClient";
 import { useAuth } from "../shared/hooks/useAuth";
+import { Activity, Loader2 } from "lucide-react";
 
 interface NavbarApiStatusProps {
   className?: string;
@@ -55,13 +56,13 @@ const NavbarApiStatus: React.FC<NavbarApiStatusProps> = ({
   const getStatusIcon = () => {
     switch (status) {
       case "online":
-        return "●";
+        return <Activity className="h-3 w-3" />;
       case "offline":
-        return "●";
+        return <Activity className="h-3 w-3" />;
       case "checking":
-        return "⏳";
+        return <Loader2 className="h-3 w-3 animate-spin" />;
       default:
-        return "●";
+        return <Activity className="h-3 w-3" />;
     }
   };
 
@@ -82,20 +83,20 @@ const NavbarApiStatus: React.FC<NavbarApiStatusProps> = ({
     let tooltip = `Backend API Status: ${getStatusText()}`;
 
     if (status === "online") {
-      tooltip += `\n✅ Connection established`;
+      tooltip += `\nConnection established`;
       if (responseTime) {
-        tooltip += `\n⚡ Response time: ${responseTime}ms`;
+        tooltip += `\nResponse time: ${responseTime}ms`;
       }
       if (isAuthenticated) {
-        tooltip += `\n🔐 Authenticated session active`;
+        tooltip += `\nAuthenticated session active`;
       }
     } else if (status === "offline") {
-      tooltip += `\n❌ Cannot connect to backend`;
-      tooltip += `\n🔧 Check if API server is running`;
+      tooltip += `\nCannot connect to backend`;
+      tooltip += `\nCheck if API server is running`;
     }
 
     if (lastCheck) {
-      tooltip += `\n🕒 Last checked: ${lastCheck.toLocaleTimeString()}`;
+      tooltip += `\nLast checked: ${lastCheck.toLocaleTimeString()}`;
     }
 
     return tooltip;

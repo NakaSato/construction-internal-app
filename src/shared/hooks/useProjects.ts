@@ -281,7 +281,7 @@ export const useProjects = (): UseProjectsReturn => {
   // Initial data fetch
   useEffect(() => {
     console.log(
-      "🔄 [useProjects] Initial useEffect triggered - fetching projects and stats"
+      "[SYNC] 🔄 [useProjects] Initial useEffect triggered - fetching projects and stats"
     );
     fetchProjects();
     fetchStats();

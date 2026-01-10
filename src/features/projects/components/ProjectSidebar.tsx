@@ -1,207 +1,326 @@
-import React from "react";
+import React, { useState } from "react";
 import { ProjectDto } from "../../../shared/types/project";
 import { formatCurrency } from "../utils/projectHelpers";
+import {
+  Box,
+  Paper,
+  Typography,
+  Stack,
+  Collapse,
+  IconButton,
+  Avatar,
+  Chip,
+  Divider,
+  useTheme,
+  alpha,
+} from "@mui/material";
+import {
+  ChevronDown,
+  ChevronUp,
+  User,
+  DollarSign,
+  Cpu,
+  Info,
+  MapPin,
+} from "lucide-react";
 
 interface ProjectSidebarProps {
   project: ProjectDto;
 }
 
-const ProjectSidebar = ({ project }: ProjectSidebarProps) => {
+interface CollapsibleCardProps {
+  title: string;
+  icon: React.ReactNode;
+  summary: React.ReactNode;
+  children: React.ReactNode;
+  defaultExpanded?: boolean;
+}
+
+const CollapsibleCard = ({
+  title,
+  icon,
+  summary,
+  children,
+  defaultExpanded = false,
+}: CollapsibleCardProps) => {
+  const [expanded, setExpanded] = useState(defaultExpanded);
+  const theme = useTheme();
+
   return (
-    <div className="space-y-6">
+    <Paper
+      variant="outlined"
+      sx={{
+        borderRadius: 2,
+        overflow: "hidden",
+        cursor: "pointer",
+        transition: "all 0.2s",
+        "&:hover": {
+          borderColor: theme.palette.primary.main,
+          boxShadow: `0 0 0 1px ${alpha(theme.palette.primary.main, 0.2)}`,
+        },
+      }}
+      onClick={() => setExpanded(!expanded)}
+    >
+      {/* Header - Always visible */}
+      <Box sx={{ p: 2 }}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Stack direction="row" alignItems="center" spacing={1.5}>
+            <Box
+              sx={{
+                width: 32,
+                height: 32,
+                borderRadius: 1,
+                bgcolor: alpha(theme.palette.primary.main, 0.1),
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: theme.palette.primary.main,
+              }}
+            >
+              {icon}
+            </Box>
+            <Box>
+              <Typography variant="subtitle2" fontWeight="bold">
+                {title}
+              </Typography>
+              <Typography variant="caption" color="text.secondary" component="div">
+                {summary}
+              </Typography>
+            </Box>
+          </Stack>
+          <IconButton size="small" sx={{ pointerEvents: "none" }}>
+            {expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+          </IconButton>
+        </Stack>
+      </Box>
+
+      {/* Expandable Content */}
+      <Collapse in={expanded}>
+        <Divider />
+        <Box sx={{ p: 2 }} onClick={(e) => e.stopPropagation()}>
+          {children}
+        </Box>
+      </Collapse>
+    </Paper>
+  );
+};
+
+const ProjectSidebar = ({ project }: ProjectSidebarProps) => {
+  const theme = useTheme();
+
+  return (
+    <Stack spacing={2}>
       {/* Project Manager */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          Project Manager
-        </h3>
+      <CollapsibleCard
+        title="Project Manager"
+        icon={<User size={16} />}
+        summary={project.projectManager?.fullName || "Not assigned"}
+      >
         {project.projectManager ? (
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-              <span className="text-blue-600 font-medium">
-                {project.projectManager.fullName?.charAt(0) || "?"}
-              </span>
-            </div>
-            <div>
-              <div className="font-medium text-gray-900">
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Avatar
+              sx={{
+                bgcolor: theme.palette.primary.main,
+                width: 40,
+                height: 40,
+              }}
+            >
+              {project.projectManager.fullName?.charAt(0) || "?"}
+            </Avatar>
+            <Box>
+              <Typography variant="body2" fontWeight="medium">
                 {project.projectManager.fullName || "Unknown"}
-              </div>
-              <div className="text-sm text-gray-500">
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
                 {project.projectManager.email || "No email"}
-              </div>
-            </div>
-          </div>
+              </Typography>
+            </Box>
+          </Stack>
         ) : (
-          <div className="text-gray-500 text-center py-4">
-            <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-2">
-              <span className="text-gray-400">?</span>
-            </div>
-            <div className="text-sm">No manager assigned</div>
-          </div>
+          <Typography variant="body2" color="text.secondary">
+            No manager assigned to this project
+          </Typography>
         )}
-      </div>
+      </CollapsibleCard>
 
       {/* Financial Information */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          Financial Information
-        </h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+      <CollapsibleCard
+        title="Financial"
+        icon={<DollarSign size={16} />}
+        summary={
+          project.revenueValue
+            ? formatCurrency(project.revenueValue)
+            : "View details"
+        }
+      >
+        <Stack spacing={2}>
+          <Box>
+            <Typography variant="caption" color="text.secondary">
               Revenue Value
-            </label>
-            <p className="text-gray-900">
+            </Typography>
+            <Typography variant="body2" fontWeight="medium">
               {project.revenueValue !== null && project.revenueValue !== 0
                 ? formatCurrency(project.revenueValue)
                 : project.totalCapacityKw
-                ? formatCurrency(project.totalCapacityKw * 5000) +
-                  " (estimated)"
-                : "Not specified"}
-            </p>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ? formatCurrency(project.totalCapacityKw * 5000) + " (est.)"
+                  : "Not specified"}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="caption" color="text.secondary">
               FTS Value
-            </label>
-            <p className="text-gray-900">
+            </Typography>
+            <Typography variant="body2" fontWeight="medium">
               {project.ftsValue !== null && project.ftsValue !== 0
                 ? formatCurrency(project.ftsValue)
                 : "Not specified"}
-            </p>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="caption" color="text.secondary">
               PQM Value
-            </label>
-            <p className="text-gray-900">
+            </Typography>
+            <Typography variant="body2" fontWeight="medium">
               {project.pqmValue !== null && project.pqmValue !== 0
                 ? formatCurrency(project.pqmValue)
                 : "Not specified"}
-            </p>
-          </div>
-        </div>
-      </div>
+            </Typography>
+          </Box>
+        </Stack>
+      </CollapsibleCard>
 
       {/* Technical Details */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          Technical Details
-        </h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+      <CollapsibleCard
+        title="Technical"
+        icon={<Cpu size={16} />}
+        summary={
+          project.totalCapacityKw
+            ? `${project.totalCapacityKw} kW`
+            : "View details"
+        }
+      >
+        <Stack spacing={2}>
+          <Box>
+            <Typography variant="caption" color="text.secondary">
               Connection Type
-            </label>
-            <p className="text-gray-900">
-              {project.connectionType || "Not specified"}
+            </Typography>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <Typography variant="body2" fontWeight="medium">
+                {project.connectionType || "Not specified"}
+              </Typography>
               {project.connectionType === "MV" && (
-                <span className="ml-2 text-sm text-blue-600">
-                  (Medium Voltage)
-                </span>
+                <Chip
+                  label="Medium Voltage"
+                  size="small"
+                  color="primary"
+                  sx={{ height: 20, fontSize: "0.65rem" }}
+                />
               )}
-            </p>
-          </div>
-
+            </Stack>
+          </Box>
           {project.connectionNotes && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <Box>
+              <Typography variant="caption" color="text.secondary">
                 Connection Notes
-              </label>
-              <p className="text-gray-900 text-sm">{project.connectionNotes}</p>
-            </div>
+              </Typography>
+              <Typography variant="body2">
+                {project.connectionNotes}
+              </Typography>
+            </Box>
           )}
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+          <Box>
+            <Typography variant="caption" color="text.secondary">
               Total Capacity
-            </label>
-            <p className="text-gray-900">
+            </Typography>
+            <Typography variant="body2" fontWeight="medium">
               {project.totalCapacityKw
                 ? `${project.totalCapacityKw} kW`
                 : "Not specified"}
-            </p>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="caption" color="text.secondary">
               PV Modules
-            </label>
-            <p className="text-gray-900">
+            </Typography>
+            <Typography variant="body2" fontWeight="medium">
               {project.pvModuleCount || "Not specified"}
               {project.pvModuleCount && project.totalCapacityKw && (
-                <span className="ml-2 text-sm text-gray-500">
-                  (~
-                  {(
-                    (project.totalCapacityKw / project.pvModuleCount) *
-                    1000
-                  ).toFixed(0)}
-                  W each)
-                </span>
+                <Typography component="span" variant="caption" color="text.secondary" sx={{ ml: 1 }}>
+                  (~{((project.totalCapacityKw / project.pvModuleCount) * 1000).toFixed(0)}W each)
+                </Typography>
               )}
-            </p>
-          </div>
-        </div>
-      </div>
+            </Typography>
+          </Box>
+        </Stack>
+      </CollapsibleCard>
 
       {/* Project Info */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          Project Information
-        </h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+      <CollapsibleCard
+        title="Project Info"
+        icon={<Info size={16} />}
+        summary={project.status || "View details"}
+      >
+        <Stack spacing={2}>
+          <Box>
+            <Typography variant="caption" color="text.secondary">
               Team Assignment
-            </label>
-            <p className="text-gray-900">{project.team || "Not assigned"}</p>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            </Typography>
+            <Typography variant="body2" fontWeight="medium">
+              {project.team || "Not assigned"}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="caption" color="text.secondary">
               Current Status
-            </label>
-            <p className="text-gray-900">{project.status || "Unknown"}</p>
-          </div>
-
+            </Typography>
+            <Typography variant="body2" fontWeight="medium">
+              {project.status || "Unknown"}
+            </Typography>
+          </Box>
           {project.estimatedEndDate && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <Box>
+              <Typography variant="caption" color="text.secondary">
                 Estimated End Date
-              </label>
-              <p className="text-gray-900">
+              </Typography>
+              <Typography variant="body2" fontWeight="medium">
                 {new Date(project.estimatedEndDate).toLocaleDateString()}
-              </p>
-            </div>
+              </Typography>
+            </Box>
           )}
-        </div>
-      </div>
+        </Stack>
+      </CollapsibleCard>
 
       {/* Location Information */}
       {project.locationCoordinates && (
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Location</h3>
-          <div className="space-y-2">
-            <div className="text-sm">
-              <span className="font-medium text-gray-700">Coordinates:</span>
-              <br />
-              <span className="text-gray-900 font-mono text-xs">
+        <CollapsibleCard
+          title="Location"
+          icon={<MapPin size={16} />}
+          summary={project.address ? "Has address" : "View coordinates"}
+        >
+          <Stack spacing={2}>
+            <Box>
+              <Typography variant="caption" color="text.secondary">
+                Coordinates
+              </Typography>
+              <Typography variant="body2" fontFamily="monospace" fontSize="0.75rem">
                 {project.locationCoordinates.latitude.toFixed(6)},{" "}
                 {project.locationCoordinates.longitude.toFixed(6)}
-              </span>
-            </div>
+              </Typography>
+            </Box>
             {project.address && (
-              <div className="text-sm">
-                <span className="font-medium text-gray-700">Address:</span>
-                <br />
-                <span className="text-gray-900">{project.address}</span>
-              </div>
+              <Box>
+                <Typography variant="caption" color="text.secondary">
+                  Address
+                </Typography>
+                <Typography variant="body2">
+                  {project.address}
+                </Typography>
+              </Box>
             )}
-          </div>
-        </div>
+          </Stack>
+        </CollapsibleCard>
       )}
-    </div>
+    </Stack>
   );
 };
 

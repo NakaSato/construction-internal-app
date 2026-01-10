@@ -297,7 +297,7 @@ const ProjectManagement: React.FC = () => {
                 <div className="bg-gray-50 rounded-lg p-6 h-64 flex items-center justify-center">
                   <div className="text-center">
                     <div className="bg-white p-4 rounded-full inline-flex mb-4 shadow-sm">
-                      <BarChart3 className="w-8 h-8 text-blue-600" />
+                      <BarChart3 className="w-8 h-8 text-gray-600" />
                     </div>
                     <h4 className="text-lg font-semibold text-gray-700">
                       Budget Analysis
@@ -309,7 +309,7 @@ const ProjectManagement: React.FC = () => {
                 <div className="bg-gray-50 rounded-lg p-6 h-64 flex items-center justify-center">
                   <div className="text-center">
                     <div className="bg-white p-4 rounded-full inline-flex mb-4 shadow-sm">
-                      <Clock className="w-8 h-8 text-blue-600" />
+                      <Clock className="w-8 h-8 text-gray-600" />
                     </div>
                     <h4 className="text-lg font-semibold text-gray-700">
                       Timeline Analysis
@@ -321,7 +321,7 @@ const ProjectManagement: React.FC = () => {
                 <div className="bg-gray-50 rounded-lg p-6 h-64 flex items-center justify-center">
                   <div className="text-center">
                     <div className="bg-white p-4 rounded-full inline-flex mb-4 shadow-sm">
-                      <Zap className="w-8 h-8 text-blue-600" />
+                      <Zap className="w-8 h-8 text-gray-600" />
                     </div>
                     <h4 className="text-lg font-semibold text-gray-700">
                       Performance Metrics
@@ -333,7 +333,7 @@ const ProjectManagement: React.FC = () => {
                 <div className="bg-gray-50 rounded-lg p-6 h-64 flex items-center justify-center">
                   <div className="text-center">
                     <div className="bg-white p-4 rounded-full inline-flex mb-4 shadow-sm">
-                      <Target className="w-8 h-8 text-blue-600" />
+                      <Target className="w-8 h-8 text-gray-600" />
                     </div>
                     <h4 className="text-lg font-semibold text-gray-700">
                       Risk Analysis
@@ -354,7 +354,7 @@ const ProjectManagement: React.FC = () => {
   return (
     <AppShell
       activeTab={activeTab}
-      onTabChange={setActiveTab}
+      onTabChange={(tabId) => setActiveTab(tabId as any)}
       title="Project Dashboard"
     >
       {/* Loading State */}
@@ -375,7 +375,7 @@ const ProjectManagement: React.FC = () => {
       {/* Create Project Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-2xl p-8 max-w-lg w-full mx-4 transform transition-all scale-100">
+          <div className="bg-white rounded-xl shadow-2xl p-8 max-w-lg w-full mx-4 transition-all scale-100">
             <div className="mb-6">
               <h3 className="text-2xl font-bold text-gray-900">Create New Project</h3>
               <p className="text-gray-500 mt-1">
@@ -396,7 +396,7 @@ const ProjectManagement: React.FC = () => {
               </button>
               <button
                 onClick={handleProjectCreated}
-                className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium shadow-sm transition-colors"
+                className="px-5 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 font-medium shadow-sm transition-colors"
               >
                 Create Project
               </button>

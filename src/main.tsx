@@ -1,6 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { ThemeProvider, CssBaseline, StyledEngineProvider } from "@mui/material";
 import App from "./app/App";
+import theme from "./shared/theme";
 import "./index.css";
 
 const container = document.getElementById("root");
@@ -15,6 +17,12 @@ const root = createRoot(container);
 
 root.render(
   <StrictMode>
-    <App />
+    {/* StyledEngineProvider with injectFirst ensures Tailwind CSS can override MUI styles */}
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <App />
+      </ThemeProvider>
+    </StyledEngineProvider>
   </StrictMode>
 );

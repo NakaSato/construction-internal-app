@@ -1,4 +1,27 @@
 import React, { useState, useEffect } from "react";
+import { XCircle, Plus, Trash2 } from "lucide-react";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Slider,
+  Stack,
+  TextField,
+  Typography,
+  Grid,
+  InputAdornment,
+  Alert,
+  IconButton,
+  Paper,
+  Tooltip,
+} from "@mui/material";
 import {
   useDailyReports,
   useDailyReportTemplates,
@@ -26,19 +49,19 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
   onCancel,
 }) => {
   const { isAdmin, isManager } = useRole();
-  const { createReport, updateReport, validateReport } =
+  const { createReport, updateReport, validateReport, error: apiError } =
     useDailyReports(projectId);
   const { templates } = useDailyReportTemplates(projectId);
 
   const [formData, setFormData] = useState<CreateDailyReportRequest>({
     projectId,
     reportDate: new Date().toISOString().split("T")[0],
-    hoursWorked: 8,
+    totalWorkHours: 8,
     personnelOnSite: 1,
-    weatherConditions: "Sunny",
+    weatherCondition: "Sunny",
     temperature: 72,
     humidity: 50,
-    summary: "",
+    workSummary: "",
     workAccomplished: "",
     workPlannedNextDay: "",
     issues: "",
@@ -46,8 +69,8 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
     qualityScore: 10,
     dailyProgressContribution: 0,
     additionalNotes: "",
-    tasksCompleted: [],
-    materialsUsed: [],
+    workProgressItems: [],
+    materialUsages: [],
   });
 
   const [validation, setValidation] = useState<any>(null);
@@ -91,9 +114,9 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
     field: keyof DailyReportTaskProgress,
     value: any
   ) => {
-    const updatedTasks = [...(formData.tasksCompleted || [])];
+    const updatedTasks = [...(formData.workProgressItems || [])];
     updatedTasks[index] = { ...updatedTasks[index], [field]: value };
-    setFormData((prev) => ({ ...prev, tasksCompleted: updatedTasks }));
+    setFormData((prev) => ({ ...prev, workProgressItems: updatedTasks }));
   };
 
   const addTask = () => {
@@ -105,14 +128,14 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
     };
     setFormData((prev) => ({
       ...prev,
-      tasksCompleted: [...(prev.tasksCompleted || []), newTask],
+      workProgressItems: [...(prev.workProgressItems || []), newTask],
     }));
   };
 
   const removeTask = (index: number) => {
     const updatedTasks =
-      formData.tasksCompleted?.filter((_, i) => i !== index) || [];
-    setFormData((prev) => ({ ...prev, tasksCompleted: updatedTasks }));
+      formData.workProgressItems?.filter((_, i) => i !== index) || [];
+    setFormData((prev) => ({ ...prev, workProgressItems: updatedTasks }));
   };
 
   const handleMaterialChange = (
@@ -120,9 +143,9 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
     field: keyof DailyReportMaterialUsage,
     value: any
   ) => {
-    const updatedMaterials = [...(formData.materialsUsed || [])];
+    const updatedMaterials = [...(formData.materialUsages || [])];
     updatedMaterials[index] = { ...updatedMaterials[index], [field]: value };
-    setFormData((prev) => ({ ...prev, materialsUsed: updatedMaterials }));
+    setFormData((prev) => ({ ...prev, materialUsages: updatedMaterials }));
   };
 
   const addMaterial = () => {
@@ -137,14 +160,14 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
     };
     setFormData((prev) => ({
       ...prev,
-      materialsUsed: [...(prev.materialsUsed || []), newMaterial],
+      materialUsages: [...(prev.materialUsages || []), newMaterial],
     }));
   };
 
   const removeMaterial = (index: number) => {
     const updatedMaterials =
-      formData.materialsUsed?.filter((_, i) => i !== index) || [];
-    setFormData((prev) => ({ ...prev, materialsUsed: updatedMaterials }));
+      formData.materialUsages?.filter((_, i) => i !== index) || [];
+    setFormData((prev) => ({ ...prev, materialUsages: updatedMaterials }));
   };
 
   const validateForm = async () => {
@@ -177,11 +200,27 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
         return;
       }
 
+      // Sanitize payload to remove invalid IDs (temporary frontend IDs)
+      const sanitizedData = {
+        ...formData,
+        workProgressItems: formData.workProgressItems?.filter(t =>
+          /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(t.taskId)
+        ),
+        materialUsages: formData.materialUsages?.filter(m =>
+          /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(m.materialId || "")
+        ),
+        // Ensure numeric types are valid
+        safetyScore: Number(formData.safetyScore) || 10,
+        qualityScore: Number(formData.qualityScore) || 10,
+        totalWorkHours: Number(formData.totalWorkHours) || 0,
+        personnelOnSite: Number(formData.personnelOnSite) || 0
+      };
+
       let result;
       if (reportId) {
-        result = await updateReport(reportId, formData);
+        result = await updateReport(reportId, sanitizedData);
       } else {
-        result = await createReport(formData);
+        result = await createReport(sanitizedData);
       }
 
       if (result && onSave) {
@@ -195,540 +234,409 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
   };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <h2 className="text-xl font-semibold text-gray-900">
+    <Box sx={{ maxWidth: 800, mx: "auto", p: 2 }}>
+      <Paper elevation={0} sx={{ p: 4, borderRadius: 2, border: "1px solid", borderColor: "divider" }}>
+        <Typography variant="h5" sx={{ mb: 4, fontWeight: "bold", color: "text.primary" }}>
           {reportId ? "Edit Daily Report" : "Create Daily Report"}
-        </h2>
-      </div>
+        </Typography>
 
-      <form onSubmit={handleSubmit} className="p-6 space-y-6">
-        {/* Basic Information */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Report Date *
-            </label>
-            <input
-              type="date"
-              value={formData.reportDate}
-              onChange={(e) => handleInputChange("reportDate", e.target.value)}
-              className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm ${
-                errors.reportDate ? "border-red-300" : ""
-              }`}
-              required
-            />
-            {errors.reportDate && (
-              <p className="mt-1 text-sm text-red-600">{errors.reportDate}</p>
+        <Box component="form" onSubmit={handleSubmit} noValidate>
+          <Stack spacing={4}>
+            {/* API Error Box */}
+            {apiError && (
+              <Alert severity="error" icon={<XCircle size={20} />}>
+                {apiError}
+              </Alert>
             )}
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Hours Worked *
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="24"
-              step="0.5"
-              value={formData.hoursWorked}
-              onChange={(e) =>
-                handleInputChange("hoursWorked", parseFloat(e.target.value))
-              }
-              className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm ${
-                errors.hoursWorked ? "border-red-300" : ""
-              }`}
-              required
-            />
-            {errors.hoursWorked && (
-              <p className="mt-1 text-sm text-red-600">{errors.hoursWorked}</p>
-            )}
-          </div>
+            {/* Basic Information */}
+            <Box>
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600, color: "primary.main" }}>
+                Basic Information
+              </Typography>
+              <Grid container spacing={3}>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <TextField
+                    fullWidth
+                    label="Report Date"
+                    type="date"
+                    value={formData.reportDate}
+                    onChange={(e) => handleInputChange("reportDate", e.target.value)}
+                    error={!!errors.reportDate}
+                    helperText={errors.reportDate}
+                    InputLabelProps={{ shrink: true }}
+                    required
+                    size="small"
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <TextField
+                    fullWidth
+                    label="Hours Worked"
+                    type="number"
+                    value={formData.totalWorkHours}
+                    onChange={(e) => handleInputChange("totalWorkHours", parseFloat(e.target.value))}
+                    error={!!errors.totalWorkHours}
+                    helperText={errors.totalWorkHours}
+                    inputProps={{ min: 0, max: 24, step: 0.5 }}
+                    required
+                    size="small"
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <TextField
+                    fullWidth
+                    label="Personnel on Site"
+                    type="number"
+                    value={formData.personnelOnSite}
+                    onChange={(e) => handleInputChange("personnelOnSite", parseInt(e.target.value))}
+                    inputProps={{ min: 1 }}
+                    size="small"
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <TextField
+                    fullWidth
+                    label="Daily Progress Contribution"
+                    type="number"
+                    value={formData.dailyProgressContribution}
+                    onChange={(e) => handleInputChange("dailyProgressContribution", parseFloat(e.target.value))}
+                    inputProps={{ min: 0, max: 100, step: 0.1 }}
+                    InputProps={{
+                      endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                    }}
+                    size="small"
+                  />
+                </Grid>
+              </Grid>
+            </Box>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Personnel on Site
-            </label>
-            <input
-              type="number"
-              min="1"
-              value={formData.personnelOnSite}
-              onChange={(e) =>
-                handleInputChange("personnelOnSite", parseInt(e.target.value))
-              }
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-            />
-          </div>
+            <Divider />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Daily Progress Contribution (%)
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              step="0.1"
-              value={formData.dailyProgressContribution}
-              onChange={(e) =>
-                handleInputChange(
-                  "dailyProgressContribution",
-                  parseFloat(e.target.value)
-                )
-              }
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-            />
-          </div>
-        </div>
+            {/* Weather Information */}
+            <Box>
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600, color: "primary.main" }}>
+                Weather Conditions
+              </Typography>
+              <Grid container spacing={3}>
+                <Grid size={{ xs: 12, md: 4 }}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel>Weather</InputLabel>
+                    <Select
+                      value={formData.weatherCondition}
+                      label="Weather"
+                      onChange={(e) => handleInputChange("weatherCondition", e.target.value)}
+                    >
+                      {Object.values(WeatherCondition).map((condition) => (
+                        <MenuItem key={condition} value={condition}>
+                          {condition.replace(/([A-Z])/g, " $1").trim()}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid size={{ xs: 12, md: 4 }}>
+                  <TextField
+                    fullWidth
+                    label="Temperature"
+                    type="number"
+                    value={formData.temperature || ""}
+                    onChange={(e) => handleInputChange("temperature", parseFloat(e.target.value) || undefined)}
+                    InputProps={{
+                      endAdornment: <InputAdornment position="end">°F</InputAdornment>,
+                    }}
+                    size="small"
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, md: 4 }}>
+                  <TextField
+                    fullWidth
+                    label="Humidity"
+                    type="number"
+                    value={formData.humidity || ""}
+                    onChange={(e) => handleInputChange("humidity", parseInt(e.target.value) || undefined)}
+                    inputProps={{ min: 0, max: 100 }}
+                    InputProps={{
+                      endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                    }}
+                    size="small"
+                  />
+                </Grid>
+              </Grid>
+            </Box>
 
-        {/* Weather Information */}
-        <div className="border-t border-gray-200 pt-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
-            Weather Conditions
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Weather
-              </label>
-              <select
-                value={formData.weatherConditions}
-                onChange={(e) =>
-                  handleInputChange("weatherConditions", e.target.value)
-                }
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-              >
-                {Object.values(WeatherCondition).map((condition) => (
-                  <option key={condition} value={condition}>
-                    {condition.replace(/([A-Z])/g, " $1").trim()}
-                  </option>
+            <Divider />
+
+            {/* Work Summary */}
+            <Box>
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600, color: "primary.main" }}>
+                Work Summary
+              </Typography>
+              <Stack spacing={3}>
+                <TextField
+                  fullWidth
+                  label="Daily Summary"
+                  multiline
+                  rows={2}
+                  value={formData.workSummary}
+                  onChange={(e) => handleInputChange("workSummary", e.target.value)}
+                  placeholder="Brief summary of work completed today..."
+                  error={!!errors.workSummary}
+                  helperText={errors.workSummary}
+                  required
+                />
+                <TextField
+                  fullWidth
+                  label="Work Accomplished"
+                  multiline
+                  rows={2}
+                  value={formData.workAccomplished || ""}
+                  onChange={(e) => handleInputChange("workAccomplished", e.target.value)}
+                  placeholder="Detailed description of work accomplished..."
+                />
+                <TextField
+                  fullWidth
+                  label="Work Planned for Next Day"
+                  multiline
+                  rows={2}
+                  value={formData.workPlannedNextDay || ""}
+                  onChange={(e) => handleInputChange("workPlannedNextDay", e.target.value)}
+                  placeholder="Work planned for tomorrow..."
+                />
+                <TextField
+                  fullWidth
+                  label="Issues Encountered"
+                  multiline
+                  rows={2}
+                  value={formData.issues || ""}
+                  onChange={(e) => handleInputChange("issues", e.target.value)}
+                  placeholder="Any issues, problems, or delays encountered..."
+                />
+              </Stack>
+            </Box>
+
+            <Divider />
+
+            {/* Scores */}
+            <Box>
+              <Typography variant="subtitle1" sx={{ mb: 3, fontWeight: 600, color: "primary.main" }}>
+                Performance Scores
+              </Typography>
+              <Grid container spacing={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <Typography gutterBottom variant="body2" color="text.secondary">
+                    Safety Score: {formData.safetyScore}/10
+                  </Typography>
+                  <Slider
+                    value={formData.safetyScore}
+                    min={1}
+                    max={10}
+                    step={1}
+                    marks
+                    valueLabelDisplay="auto"
+                    onChange={(_, value) => handleInputChange("safetyScore", value)}
+                    sx={{ color: (formData?.safetyScore ?? 0) > 7 ? "success.main" : (formData?.safetyScore ?? 0) > 4 ? "warning.main" : "error.main" }}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <Typography gutterBottom variant="body2" color="text.secondary">
+                    Quality Score: {formData.qualityScore}/10
+                  </Typography>
+                  <Slider
+                    value={formData.qualityScore}
+                    min={1}
+                    max={10}
+                    step={1}
+                    marks
+                    valueLabelDisplay="auto"
+                    onChange={(_, value) => handleInputChange("qualityScore", value)}
+                    sx={{ color: (formData?.qualityScore ?? 0) > 7 ? "success.main" : (formData?.qualityScore ?? 0) > 4 ? "warning.main" : "error.main" }}
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+
+            <Divider />
+
+            {/* Tasks Completed */}
+            <Box>
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "primary.main" }}>
+                  Tasks Completed
+                </Typography>
+                <Button startIcon={<Plus size={18} />} size="small" variant="outlined" onClick={addTask}>
+                  Add Task
+                </Button>
+              </Box>
+
+              <Stack spacing={2}>
+                {formData.workProgressItems?.map((task, index) => (
+                  <Card key={index} variant="outlined" sx={{ borderRadius: 1 }}>
+                    <CardHeader
+                      title={`Task ${index + 1}`}
+                      titleTypographyProps={{ variant: "body2", fontWeight: 600 }}
+                      action={
+                        <IconButton size="small" color="error" onClick={() => removeTask(index)}>
+                          <Trash2 size={16} />
+                        </IconButton>
+                      }
+                      sx={{ py: 1, px: 2, bgcolor: "grey.50" }}
+                    />
+                    <CardContent sx={{ pt: 2, pb: "16px !important" }}>
+                      <Grid container spacing={2}>
+                        <Grid size={{ xs: 12, md: 8 }}>
+                          <TextField
+                            fullWidth
+                            label="Task Title"
+                            value={task.title}
+                            onChange={(e) => handleTaskChange(index, "title", e.target.value)}
+                            size="small"
+                          />
+                        </Grid>
+                        <Grid size={{ xs: 12, md: 4 }}>
+                          <TextField
+                            fullWidth
+                            label="Completion"
+                            type="number"
+                            value={task.completionPercentage}
+                            onChange={(e) => handleTaskChange(index, "completionPercentage", parseInt(e.target.value))}
+                            InputProps={{
+                              endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                            }}
+                            inputProps={{ min: 0, max: 100 }}
+                            size="small"
+                          />
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                  </Card>
                 ))}
-              </select>
-            </div>
+              </Stack>
+            </Box>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Temperature (°F)
-              </label>
-              <input
-                type="number"
-                value={formData.temperature || ""}
-                onChange={(e) =>
-                  handleInputChange(
-                    "temperature",
-                    parseFloat(e.target.value) || undefined
-                  )
-                }
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-              />
-            </div>
+            <Divider />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Humidity (%)
-              </label>
-              <input
-                type="number"
-                min="0"
-                max="100"
-                value={formData.humidity || ""}
-                onChange={(e) =>
-                  handleInputChange(
-                    "humidity",
-                    parseInt(e.target.value) || undefined
-                  )
-                }
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-              />
-            </div>
-          </div>
-        </div>
+            {/* Materials Used */}
+            <Box>
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "primary.main" }}>
+                  Materials Used
+                </Typography>
+                <Button startIcon={<Plus size={18} />} size="small" variant="outlined" onClick={addMaterial}>
+                  Add Material
+                </Button>
+              </Box>
 
-        {/* Work Summary */}
-        <div className="border-t border-gray-200 pt-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
-            Work Summary
-          </h3>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Summary *
-              </label>
-              <textarea
-                rows={3}
-                value={formData.summary}
-                onChange={(e) => handleInputChange("summary", e.target.value)}
-                placeholder="Brief summary of work completed today..."
-                className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm ${
-                  errors.summary ? "border-red-300" : ""
-                }`}
-                required
-              />
-              {errors.summary && (
-                <p className="mt-1 text-sm text-red-600">{errors.summary}</p>
-              )}
-            </div>
+              <Stack spacing={2}>
+                {formData.materialUsages?.map((material, index) => (
+                  <Card key={index} variant="outlined" sx={{ borderRadius: 1 }}>
+                    <CardHeader
+                      title={`Material ${index + 1}`}
+                      titleTypographyProps={{ variant: "body2", fontWeight: 600 }}
+                      action={
+                        <IconButton size="small" color="error" onClick={() => removeMaterial(index)}>
+                          <Trash2 size={16} />
+                        </IconButton>
+                      }
+                      sx={{ py: 1, px: 2, bgcolor: "grey.50" }}
+                    />
+                    <CardContent sx={{ pt: 2, pb: "16px !important" }}>
+                      <Grid container spacing={2}>
+                        <Grid size={{ xs: 12, md: 6 }}>
+                          <TextField
+                            fullWidth
+                            label="Material Name"
+                            value={material.name}
+                            onChange={(e) => handleMaterialChange(index, "name", e.target.value)}
+                            size="small"
+                          />
+                        </Grid>
+                        <Grid size={{ xs: 6, md: 3 }}>
+                          <TextField
+                            fullWidth
+                            label="Qty"
+                            type="number"
+                            value={material.quantity}
+                            onChange={(e) => handleMaterialChange(index, "quantity", parseFloat(e.target.value))}
+                            size="small"
+                          />
+                        </Grid>
+                        <Grid size={{ xs: 6, md: 3 }}>
+                          <TextField
+                            fullWidth
+                            label="Unit"
+                            value={material.unit}
+                            placeholder="pcs, ft"
+                            onChange={(e) => handleMaterialChange(index, "unit", e.target.value)}
+                            size="small"
+                          />
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                  </Card>
+                ))}
+              </Stack>
+            </Box>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Work Accomplished
-              </label>
-              <textarea
-                rows={3}
-                value={formData.workAccomplished || ""}
-                onChange={(e) =>
-                  handleInputChange("workAccomplished", e.target.value)
-                }
-                placeholder="Detailed description of work accomplished..."
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-              />
-            </div>
+            <Divider />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Work Planned for Next Day
-              </label>
-              <textarea
-                rows={3}
-                value={formData.workPlannedNextDay || ""}
-                onChange={(e) =>
-                  handleInputChange("workPlannedNextDay", e.target.value)
-                }
-                placeholder="Work planned for tomorrow..."
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Issues Encountered
-              </label>
-              <textarea
-                rows={3}
-                value={formData.issues || ""}
-                onChange={(e) => handleInputChange("issues", e.target.value)}
-                placeholder="Any issues, problems, or delays encountered..."
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Scores */}
-        <div className="border-t border-gray-200 pt-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
-            Performance Scores
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Safety Score (1-10) *
-              </label>
-              <input
-                type="number"
-                min="1"
-                max="10"
-                value={formData.safetyScore}
-                onChange={(e) =>
-                  handleInputChange("safetyScore", parseInt(e.target.value))
-                }
-                className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm ${
-                  errors.safetyScore ? "border-red-300" : ""
-                }`}
-                required
-              />
-              {errors.safetyScore && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.safetyScore}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Quality Score (1-10) *
-              </label>
-              <input
-                type="number"
-                min="1"
-                max="10"
-                value={formData.qualityScore}
-                onChange={(e) =>
-                  handleInputChange("qualityScore", parseInt(e.target.value))
-                }
-                className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm ${
-                  errors.qualityScore ? "border-red-300" : ""
-                }`}
-                required
-              />
-              {errors.qualityScore && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.qualityScore}
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Tasks Completed */}
-        <div className="border-t border-gray-200 pt-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-medium text-gray-900">
-              Tasks Completed
-            </h3>
-            <button
-              type="button"
-              onClick={addTask}
-              className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-            >
-              Add Task
-            </button>
-          </div>
-
-          {formData.tasksCompleted?.map((task, index) => (
-            <div
-              key={index}
-              className="border border-gray-200 rounded-lg p-4 mb-4"
-            >
-              <div className="flex items-start justify-between mb-3">
-                <h4 className="text-sm font-medium text-gray-900">
-                  Task {index + 1}
-                </h4>
-                <button
-                  type="button"
-                  onClick={() => removeTask(index)}
-                  className="text-red-600 hover:text-red-900"
-                >
-                  Remove
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Task Title
-                  </label>
-                  <input
-                    type="text"
-                    value={task.title}
-                    onChange={(e) =>
-                      handleTaskChange(index, "title", e.target.value)
-                    }
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Completion %
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    max="100"
-                    value={task.completionPercentage}
-                    onChange={(e) =>
-                      handleTaskChange(
-                        index,
-                        "completionPercentage",
-                        parseInt(e.target.value)
-                      )
-                    }
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                  />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Materials Used */}
-        <div className="border-t border-gray-200 pt-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-medium text-gray-900">
-              Materials Used
-            </h3>
-            <button
-              type="button"
-              onClick={addMaterial}
-              className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-            >
-              Add Material
-            </button>
-          </div>
-
-          {formData.materialsUsed?.map((material, index) => (
-            <div
-              key={index}
-              className="border border-gray-200 rounded-lg p-4 mb-4"
-            >
-              <div className="flex items-start justify-between mb-3">
-                <h4 className="text-sm font-medium text-gray-900">
-                  Material {index + 1}
-                </h4>
-                <button
-                  type="button"
-                  onClick={() => removeMaterial(index)}
-                  className="text-red-600 hover:text-red-900"
-                >
-                  Remove
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Material Name
-                  </label>
-                  <input
-                    type="text"
-                    value={material.name}
-                    onChange={(e) =>
-                      handleMaterialChange(index, "name", e.target.value)
-                    }
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Quantity
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={material.quantity}
-                    onChange={(e) =>
-                      handleMaterialChange(
-                        index,
-                        "quantity",
-                        parseFloat(e.target.value)
-                      )
-                    }
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Unit
-                  </label>
-                  <input
-                    type="text"
-                    value={material.unit}
-                    onChange={(e) =>
-                      handleMaterialChange(index, "unit", e.target.value)
-                    }
-                    placeholder="e.g., pieces, feet, lbs"
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Unit Cost ($)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={material.unitCost || 0}
-                    onChange={(e) =>
-                      handleMaterialChange(
-                        index,
-                        "unitCost",
-                        parseFloat(e.target.value)
-                      )
-                    }
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                  />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Additional Notes */}
-        <div className="border-t border-gray-200 pt-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Additional Notes
-            </label>
-            <textarea
-              rows={3}
+            {/* Additional Notes */}
+            <TextField
+              fullWidth
+              label="Additional Notes"
+              multiline
+              rows={2}
               value={formData.additionalNotes || ""}
-              onChange={(e) =>
-                handleInputChange("additionalNotes", e.target.value)
-              }
+              onChange={(e) => handleInputChange("additionalNotes", e.target.value)}
               placeholder="Any additional notes or observations..."
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             />
-          </div>
-        </div>
 
-        {/* Validation Results */}
-        {validation && (
-          <div className="border-t border-gray-200 pt-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
-              Validation Results
-            </h3>
-
-            {validation.warnings.length > 0 && (
-              <div className="mb-4 bg-yellow-50 border-l-4 border-yellow-400 p-4">
-                <h4 className="text-sm font-medium text-yellow-800">
-                  Warnings:
-                </h4>
-                <ul className="mt-2 list-disc list-inside text-sm text-yellow-700">
-                  {validation.warnings.map((warning: any, index: number) => (
-                    <li key={index}>{warning.message}</li>
-                  ))}
-                </ul>
-              </div>
+            {/* Validation Results */}
+            {validation && (
+              <Stack spacing={2}>
+                {validation.warnings.length > 0 && (
+                  <Alert severity="warning">
+                    <Typography variant="body2" fontWeight="bold">Warnings:</Typography>
+                    <ul style={{ margin: 0, paddingLeft: 20 }}>
+                      {validation.warnings.map((warning: any, index: number) => (
+                        <li key={index}><Typography variant="caption">{warning.message}</Typography></li>
+                      ))}
+                    </ul>
+                  </Alert>
+                )}
+                {validation.suggestions.length > 0 && (
+                  <Alert severity="info">
+                    <Typography variant="body2" fontWeight="bold">Suggestions:</Typography>
+                    <ul style={{ margin: 0, paddingLeft: 20 }}>
+                      {validation.suggestions.map((suggestion: string, index: number) => (
+                        <li key={index}><Typography variant="caption">{suggestion}</Typography></li>
+                      ))}
+                    </ul>
+                  </Alert>
+                )}
+              </Stack>
             )}
 
-            {validation.suggestions.length > 0 && (
-              <div className="mb-4 bg-blue-50 border-l-4 border-blue-400 p-4">
-                <h4 className="text-sm font-medium text-blue-800">
-                  Suggestions:
-                </h4>
-                <ul className="mt-2 list-disc list-inside text-sm text-blue-700">
-                  {validation.suggestions.map(
-                    (suggestion: string, index: number) => (
-                      <li key={index}>{suggestion}</li>
-                    )
-                  )}
-                </ul>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Form Actions */}
-        <div className="border-t border-gray-200 pt-6 flex items-center justify-end space-x-4">
-          {onCancel && (
-            <button
-              type="button"
-              onClick={onCancel}
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
-            >
-              Cancel
-            </button>
-          )}
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {isSubmitting
-              ? "Saving..."
-              : reportId
-              ? "Update Report"
-              : "Create Report"}
-          </button>
-        </div>
-      </form>
-    </div>
+            {/* Form Actions */}
+            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 2 }}>
+              {onCancel && (
+                <Button variant="outlined" onClick={onCancel} disabled={isSubmitting}>
+                  Cancel
+                </Button>
+              )}
+              <Button
+                variant="contained"
+                type="submit"
+                disabled={isSubmitting}
+                sx={{ px: 4, py: 1, fontWeight: "bold" }}
+              >
+                {isSubmitting ? "Saving..." : reportId ? "Update Report" : "Create Report"}
+              </Button>
+            </Box>
+          </Stack>
+        </Box>
+      </Paper>
+    </Box>
   );
 };
 

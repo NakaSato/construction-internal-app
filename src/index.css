@@ -1,5 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* 
+ * TailwindCSS + MUI Integration
+ * The StyledEngineProvider with injectFirst in main.tsx ensures 
+ * MUI styles are injected first, allowing Tailwind utilities to override them.
+ */
+
+/* Reset MUI's baseline styles that may conflict with Tailwind */
+.MuiBox-root {
+    box-sizing: border-box;
+}
 
 /* Additional global styles can be added below */

@@ -19,7 +19,7 @@ const Home: React.FC = () => {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white/5 rounded-full blur-2xl animate-bounce"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white/5 rounded-full blur-2xl animate-bounce"></div>
       </div>
 
       <div className="max-w-6xl mx-auto text-center relative z-10 animate-fade-in-up">
@@ -54,7 +54,7 @@ const Home: React.FC = () => {
                   <img
                     src="/images/pwa_logo.png"
                     alt="PWA - Solar Energy Partner"
-                    className="w-full h-full object-contain filter drop-shadow-lg transition-transform duration-500"
+                    className="w-full h-full object-contain drop-shadow-lg transition-transform duration-500"
                     loading="lazy"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
@@ -96,7 +96,7 @@ const Home: React.FC = () => {
             {isAuthenticated ? (
               <Link
                 to="/dashboard"
-                className="group relative inline-flex items-center px-10 py-4 text-lg font-semibold rounded-lg text-white bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 focus:outline-none focus:ring-4 focus:ring-slate-500/50 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl border border-slate-500/30"
+                className="group relative inline-flex items-center px-10 py-4 text-lg font-semibold rounded-lg text-white bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 focus:outline-none focus:ring-4 focus:ring-slate-500/50 transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-2xl border border-slate-500/30"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <span className="relative flex items-center gap-3">
@@ -120,7 +120,7 @@ const Home: React.FC = () => {
               <>
                 <Link
                   to="/login"
-                  className="group relative inline-flex items-center px-10 py-4 text-lg font-semibold rounded-lg text-white bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-500/50 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl border border-blue-500/30 hover:text-blue-200"
+                  className="group relative inline-flex items-center px-10 py-4 text-lg font-semibold rounded-lg text-white bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-500/50 transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-2xl border border-blue-500/30 hover:text-blue-200"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <span className="relative flex items-center gap-3">

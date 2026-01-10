@@ -45,7 +45,7 @@ export class ApiClient {
   // Get current auth token from localStorage (fallback)
   private getAuthToken(): string | null {
     try {
-      return localStorage.getItem("auth_token");
+      return localStorage.getItem("solar_auth_token");
     } catch (error) {
       console.warn("Could not retrieve auth token from localStorage:", error);
       return null;

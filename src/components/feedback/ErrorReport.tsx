@@ -1,5 +1,13 @@
 import React, { useState } from "react";
 import { EnhancedError } from "@utils/errorHandler";
+import {
+  Globe,
+  Unplug,
+  Lock,
+  FileText,
+  Settings,
+  AlertCircle
+} from "lucide-react";
 
 interface ErrorReportProps {
   error: EnhancedError;
@@ -34,17 +42,17 @@ const ErrorReport: React.FC<ErrorReportProps> = ({
   const getTypeIcon = (type: EnhancedError["type"]) => {
     switch (type) {
       case "network":
-        return "🌐";
+        return <Globe className="h-6 w-6" />;
       case "api":
-        return "🔌";
+        return <Unplug className="h-6 w-6" />;
       case "auth":
-        return "🔐";
+        return <Lock className="h-6 w-6" />;
       case "validation":
-        return "📝";
+        return <FileText className="h-6 w-6" />;
       case "runtime":
-        return "⚙️";
+        return <Settings className="h-6 w-6" />;
       default:
-        return "❗";
+        return <AlertCircle className="h-6 w-6" />;
     }
   };
 
@@ -55,7 +63,7 @@ const ErrorReport: React.FC<ErrorReportProps> = ({
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-start space-x-3">
-          <span className="text-2xl">{getTypeIcon(error.type)}</span>
+          <div className="mt-1">{getTypeIcon(error.type)}</div>
           <div>
             <h3 className="font-semibold text-lg">{error.userMessage}</h3>
             <p className="text-sm opacity-75 mt-1">

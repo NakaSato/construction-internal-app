@@ -1,4 +1,5 @@
 import React from "react";
+import { BarChart3 } from "lucide-react";
 
 interface GanttChartProps {
   projects: any[];
@@ -14,8 +15,8 @@ const GanttChart: React.FC<GanttChartProps> = ({
     <div
       className={`bg-white border border-gray-200 rounded-lg p-6 ${className}`}
     >
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
-        📊 Project Timeline (Gantt Chart)
+      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <BarChart3 className="h-5 w-5 text-blue-600" /> Project Timeline (Gantt Chart)
       </h3>
       <div className="space-y-4">
         {projects.slice(0, 5).map((project, index) => (

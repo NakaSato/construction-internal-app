@@ -18,7 +18,7 @@ export default function Login() {
         "Registration successful! Please log in with your new account."
       );
     }
-  }, [location]);
+  }, [location.search]);
 
   // Redirect if already authenticated
   if (isAuthenticated) {

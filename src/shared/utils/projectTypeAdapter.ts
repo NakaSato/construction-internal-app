@@ -94,8 +94,13 @@ export function projectToProjectDto(project: Project): ProjectDto {
     startDate: project.startDate,
     estimatedEndDate: project.expectedCompletion,
     actualEndDate: null,
+    projectManagerId: "unknown-id",
+    projectManagerName: "Unknown Manager",
+    currentUserId: null,
     updatedAt: null,
     projectManager: {
+      id: "unknown",
+      name: "Unknown Manager",
       userId: "unknown",
       username: "unknown",
       email: "",

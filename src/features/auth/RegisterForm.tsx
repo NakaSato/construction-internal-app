@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../../shared/hooks/useAuth";
 import { RegisterRequest, UserRole } from "../../shared/types/auth";
+import { Eye, EyeOff } from "lucide-react";
 
 interface RegisterFormProps {
   onSuccess?: () => void;
@@ -321,9 +322,11 @@ export default function RegisterForm({
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  <span className="text-gray-400 hover:text-gray-600">
-                    {showPassword ? "👁️" : "👁️‍🗨️"}
-                  </span>
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                  )}
                 </button>
               </div>
               {formData.password && (
@@ -364,9 +367,11 @@ export default function RegisterForm({
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
-                  <span className="text-gray-400 hover:text-gray-600">
-                    {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
-                  </span>
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                  )}
                 </button>
               </div>
               {errors.confirmPassword && (

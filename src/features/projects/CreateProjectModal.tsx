@@ -1,5 +1,12 @@
 import React from "react";
 import { CreateProjectRequest, ProjectDto } from "../../shared/types/project";
+import {
+  ClipboardList,
+  Calendar,
+  Zap,
+  Banknote,
+  MapPin
+} from "lucide-react";
 
 interface CreateProjectModalProps {
   showModal: boolean;
@@ -39,8 +46,9 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
           <form className="space-y-6">
             {/* Basic Information */}
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl border">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                📋 Basic Information
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <ClipboardList className="w-5 h-5 mr-2 text-blue-600" />
+                Basic Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -88,8 +96,9 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
 
             {/* Timeline */}
             <div className="bg-gradient-to-r from-blue-50 to-blue-50 p-6 rounded-xl border">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                📅 Timeline
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <Calendar className="w-5 h-5 mr-2 text-blue-600" />
+                Timeline
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -121,8 +130,9 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
 
             {/* Technical Specifications */}
             <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-xl border">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                ⚡ Technical Specifications
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <Zap className="w-5 h-5 mr-2 text-orange-600" />
+                Technical Specifications
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div>
@@ -181,8 +191,9 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
 
             {/* Financial Information */}
             <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl border">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                💰 Financial Information
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <Banknote className="w-5 h-5 mr-2 text-purple-600" />
+                Financial Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
@@ -235,8 +246,9 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
 
             {/* Location Information */}
             <div className="bg-gradient-to-r from-indigo-50 to-cyan-50 p-6 rounded-xl border">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                📍 Location & Connection
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <MapPin className="w-5 h-5 mr-2 text-indigo-600" />
+                Location & Connection
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>

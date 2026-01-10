@@ -16,17 +16,15 @@ const ErrorBanner = ({ error, onDismiss }: ErrorBannerProps) => {
 
   return (
     <div
-      className={`border rounded-lg p-4 ${
-        isWarning
+      className={`border rounded-lg p-4 ${isWarning
           ? "bg-yellow-50 border-yellow-200"
           : "bg-red-50 border-red-200"
-      }`}
+        }`}
     >
       <div className="flex items-center gap-3">
         <svg
-          className={`w-5 h-5 ${
-            isWarning ? "text-yellow-500" : "text-red-500"
-          }`}
+          className={`w-5 h-5 ${isWarning ? "text-yellow-500" : "text-red-500"
+            }`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -40,24 +38,22 @@ const ErrorBanner = ({ error, onDismiss }: ErrorBannerProps) => {
         </svg>
         <div className="flex-1">
           <h4
-            className={`font-medium ${
-              isWarning ? "text-yellow-900" : "text-red-900"
-            }`}
+            className={`font-medium ${isWarning ? "text-yellow-900" : "text-red-900"
+              }`}
           >
             {isWarning
               ? "Limited Data Warning"
               : isAuthError
-              ? "Authentication Required"
-              : isServerError
-              ? "Server Error"
-              : isNotFound
-              ? "Project Not Found"
-              : "API Error"}
+                ? "Authentication Required"
+                : isServerError
+                  ? "Server Error"
+                  : isNotFound
+                    ? "Project Not Found"
+                    : "API Error"}
           </h4>
           <p
-            className={`text-sm ${
-              isWarning ? "text-yellow-700" : "text-red-700"
-            }`}
+            className={`text-sm ${isWarning ? "text-yellow-700" : "text-red-700"
+              }`}
           >
             {error}
           </p>
@@ -79,22 +75,15 @@ const ErrorBanner = ({ error, onDismiss }: ErrorBannerProps) => {
               >
                 Retry
               </button>
-              <button
-                onClick={() => (window.location.href = "/dashboard")}
-                className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-              >
-                Back to Dashboard
-              </button>
             </div>
           )}
         </div>
         <button
           onClick={onDismiss}
-          className={`${
-            isWarning
+          className={`${isWarning
               ? "text-yellow-500 hover:text-yellow-700"
               : "text-red-500 hover:text-red-700"
-          }`}
+            }`}
         >
           <svg
             className="w-5 h-5"

@@ -37,11 +37,11 @@ export interface RegisterResponse {
   success: boolean;
   message: string;
   data:
-    | User
-    | {
-        user: User; // Support both formats from API documentation
-      }
-    | null;
+  | User
+  | {
+    user: User; // Support both formats from API documentation
+  }
+  | null;
   errors: string[];
 }
 
@@ -61,6 +61,7 @@ export interface AuthContextType {
   logout: () => void;
   register: (userData: RegisterRequest) => Promise<boolean>;
   refreshToken: () => Promise<boolean>;
+  initializationPromise?: Promise<void>;
 }
 
 // Role types

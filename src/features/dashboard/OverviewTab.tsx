@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Activity
 } from "lucide-react";
+import { ProjectMap } from "../../components/ui/ProjectMap";
 
 interface ProjectStats {
   totalProjects: number;
@@ -81,8 +82,8 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
       value: activeProjectsCount,
       subValue: "Currently running",
       icon: Building2,
-      iconColor: "text-blue-600",
-      bgClass: "bg-blue-50",
+      iconColor: "text-gray-600",
+      bgClass: "bg-gray-50",
     },
     {
       title: "Budget Utilization",
@@ -140,19 +141,10 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
               <MapPin className="h-4 w-4 mr-2 text-gray-400" />
               Project Locations
             </h3>
-            <button className="text-sm text-blue-600 font-medium hover:underline">View Map</button>
+            <button className="text-sm text-gray-600 font-medium hover:underline">View Map</button>
           </div>
-          <div className="flex-1 min-h-[350px] bg-slate-50 relative flex items-center justify-center">
-            {/* Simple Map Representation */}
-            <div className="absolute inset-0 opacity-5 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:16px_16px]"></div>
-
-            <div className="text-center relative z-10">
-              <div className="bg-white p-4 rounded-full shadow-sm inline-flex mb-3">
-                <MapPin className="h-8 w-8 text-slate-300" />
-              </div>
-              <p className="text-gray-500 font-medium">Interactive Map</p>
-              <p className="text-xs text-gray-400 mt-1">Showing location of {projects.length} sites</p>
-            </div>
+          <div className="flex-1 min-h-[350px] relative">
+            <ProjectMap projects={projects} />
           </div>
         </div>
 
@@ -170,7 +162,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
                 {recentReports.slice(0, 5).map((report, idx) => (
                   <div key={idx} className="p-3 hover:bg-gray-50 rounded-lg transition-colors group cursor-default">
                     <div className="flex gap-3">
-                      <div className="mt-1.5 h-2 w-2 rounded-full bg-blue-500 ring-2 ring-blue-50"></div>
+                      <div className="mt-1.5 h-2 w-2 rounded-full bg-gray-500 ring-2 ring-gray-50"></div>
                       <div>
                         <p className="text-sm text-gray-800">
                           <span className="font-medium">{report.userName || "User"}</span> submitted a report for <span className="font-medium text-gray-900">{report.projectName}</span>
@@ -213,13 +205,13 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
           <h3
-            className={`font-semibold text-gray-800 ${onViewAllProjects ? 'cursor-pointer hover:text-blue-600 transition-colors' : ''}`}
+            className={`font-semibold text-gray-800 ${onViewAllProjects ? 'cursor-pointer hover:text-gray-600 transition-colors' : ''}`}
             onClick={onViewAllProjects}
           >
             Priority Projects
           </h3>
           <button
-            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            className="text-sm text-gray-600 hover:text-gray-700 font-medium"
             onClick={onViewAllProjects}
           >
             View All Projects
@@ -244,7 +236,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center">
-                      <div className="h-8 w-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mr-3 font-bold text-xs">
+                      <div className="h-8 w-8 rounded-lg bg-gray-50 text-gray-600 flex items-center justify-center mr-3 font-bold text-xs">
                         {project.projectName?.substring(0, 2).toUpperCase()}
                       </div>
                       <span className="font-medium text-gray-900">{project.projectName}</span>
@@ -259,7 +251,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
                     <div className="flex items-center gap-3">
                       <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                         <div
-                          className="bg-blue-600 h-full rounded-full"
+                          className="bg-gray-600 h-full rounded-full"
                           style={{
                             width: `${project.taskCount > 0 ? (project.completedTaskCount / project.taskCount) * 100 : 0}%`,
                           }}
@@ -272,7 +264,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
                   </td>
                   <td className="px-6 py-4 text-right">
                     <button
-                      className="text-gray-400 hover:text-blue-600 transition-colors"
+                      className="text-gray-400 hover:text-gray-600 transition-colors"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleProjectClick(project.projectId || "");

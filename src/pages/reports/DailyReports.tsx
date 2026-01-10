@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { DailyReportsManagementLoader } from "@features/reports";
-import { useAuth, useRole } from "@shared/hooks";
+import { useAuth, useRole, useProjects } from "@shared/hooks";
 import { QuickReportForm, SimpleReports } from "@components";
 
 const DailyReports: React.FC = () => {
   const { user } = useAuth();
   const { isAdmin, isManager, isUser } = useRole();
+  const { projects, loading: projectsLoading } = useProjects();
   const [showQuickReport, setShowQuickReport] = useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState<string>("");
   const [currentTime, setCurrentTime] = useState(new Date());
 
   // Update time every minute
@@ -14,6 +16,13 @@ const DailyReports: React.FC = () => {
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     return () => clearInterval(timer);
   }, []);
+
+  // Set default selected project when projects are loaded
+  useEffect(() => {
+    if (projects.length > 0 && !selectedProjectId) {
+      setSelectedProjectId(projects[0].projectId);
+    }
+  }, [projects, selectedProjectId]);
 
   const getGreeting = () => {
     const hour = currentTime.getHours();
@@ -36,7 +45,7 @@ const DailyReports: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      {/* Enhanced Header Section */}
+      {/* Header Section */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-6">
@@ -301,15 +310,54 @@ const DailyReports: React.FC = () => {
               </div>
             </div>
             <div className="p-6">
-              <QuickReportForm
-                projectId="temp-project-id" // Placeholder - would be selected by user in real implementation
-                onSubmit={async (data) => {
-                  // Handle form submission
-                  console.log("Quick report submitted:", data);
-                  setShowQuickReport(false);
-                }}
-                onCancel={() => setShowQuickReport(false)}
-              />
+              {projectsLoading ? (
+                <div className="flex justify-center items-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                  <span className="ml-2 text-gray-600">Loading projects...</span>
+                </div>
+              ) : projects.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <p>No active projects found. Please create a project first.</p>
+                  <button
+                    onClick={() => setShowQuickReport(false)}
+                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  >
+                    Close
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="mb-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Select Project
+                    </label>
+                    <select
+                      value={selectedProjectId}
+                      onChange={(e) => setSelectedProjectId(e.target.value)}
+                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                    >
+                      <option value="" disabled>Select a project</option>
+                      {projects.map((project) => (
+                        <option key={project.projectId} value={project.projectId}>
+                          {project.projectName || "Unnamed Project"}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {selectedProjectId && (
+                    <QuickReportForm
+                      projectId={selectedProjectId}
+                      onSubmit={async (data) => {
+                        // Handle form submission
+                        console.log("Quick report submitted:", data);
+                        setShowQuickReport(false);
+                      }}
+                      onCancel={() => setShowQuickReport(false)}
+                    />
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>

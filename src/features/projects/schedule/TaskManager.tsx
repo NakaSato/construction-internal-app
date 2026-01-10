@@ -1,5 +1,13 @@
 import React, { useState } from "react";
 import { ProjectEntity } from "../../../shared/types/project-management";
+import {
+  Pencil,
+  Trash2,
+  ClipboardList,
+  Calendar,
+  Construction,
+  Plus
+} from "lucide-react";
 
 interface TaskManagerProps {
   project: ProjectEntity;
@@ -171,31 +179,28 @@ export const TaskManager: React.FC<TaskManagerProps> = ({
             <div className="flex border rounded-md">
               <button
                 onClick={() => setViewMode("list")}
-                className={`px-3 py-1 text-sm ${
-                  viewMode === "list"
+                className={`px-3 py-1 text-sm ${viewMode === "list"
                     ? "bg-blue-50 text-blue-600"
                     : "hover:bg-gray-50"
-                }`}
+                  }`}
               >
                 List
               </button>
               <button
                 onClick={() => setViewMode("kanban")}
-                className={`px-3 py-1 text-sm border-l ${
-                  viewMode === "kanban"
+                className={`px-3 py-1 text-sm border-l ${viewMode === "kanban"
                     ? "bg-blue-50 text-blue-600"
                     : "hover:bg-gray-50"
-                }`}
+                  }`}
               >
                 Kanban
               </button>
               <button
                 onClick={() => setViewMode("calendar")}
-                className={`px-3 py-1 text-sm border-l ${
-                  viewMode === "calendar"
+                className={`px-3 py-1 text-sm border-l ${viewMode === "calendar"
                     ? "bg-blue-50 text-blue-600"
                     : "hover:bg-gray-50"
-                }`}
+                  }`}
               >
                 Calendar
               </button>
@@ -292,12 +297,10 @@ export const TaskManager: React.FC<TaskManagerProps> = ({
 
                   <div className="flex space-x-1">
                     <button className="p-1 text-gray-400 hover:text-gray-600">
-                      <span className="sr-only">Edit</span>
-                      ✏️
+                      <Pencil className="h-4 w-4" />
                     </button>
                     <button className="p-1 text-gray-400 hover:text-red-600">
-                      <span className="sr-only">Delete</span>
-                      🗑️
+                      <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
@@ -306,7 +309,9 @@ export const TaskManager: React.FC<TaskManagerProps> = ({
 
             {filteredTasks.length === 0 && (
               <div className="p-8 text-center text-gray-500">
-                <div className="text-2xl mb-2">📋</div>
+                <div className="flex justify-center mb-2">
+                  <ClipboardList className="h-8 w-8 text-gray-300" />
+                </div>
                 <p>No tasks found matching your filters</p>
               </div>
             )}
@@ -316,7 +321,9 @@ export const TaskManager: React.FC<TaskManagerProps> = ({
         {viewMode === "kanban" && (
           <div className="p-4">
             <div className="text-center py-8 text-gray-500">
-              <div className="text-4xl mb-4">📋</div>
+              <div className="flex justify-center mb-4">
+                <ClipboardList className="h-12 w-12 text-gray-300" />
+              </div>
               <h4 className="text-lg font-medium text-gray-900 mb-2">
                 Kanban View Coming Soon
               </h4>
@@ -331,7 +338,9 @@ export const TaskManager: React.FC<TaskManagerProps> = ({
         {viewMode === "calendar" && (
           <div className="p-4">
             <div className="text-center py-8 text-gray-500">
-              <div className="text-4xl mb-4">📅</div>
+              <div className="flex justify-center mb-4">
+                <Calendar className="h-12 w-12 text-gray-300" />
+              </div>
               <h4 className="text-lg font-medium text-gray-900 mb-2">
                 Calendar View Coming Soon
               </h4>
@@ -360,7 +369,9 @@ export const TaskManager: React.FC<TaskManagerProps> = ({
                 </button>
               </div>
               <div className="text-center py-8 text-gray-500">
-                <div className="text-2xl mb-2">🚧</div>
+                <div className="flex justify-center mb-2">
+                  <Construction className="h-8 w-8 text-gray-300" />
+                </div>
                 <p>Task creation form will be implemented in Phase 3</p>
               </div>
               <div className="flex justify-end space-x-3 mt-6">

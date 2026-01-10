@@ -15,18 +15,17 @@ const PerformanceMetrics = ({ performance }: PerformanceMetricsProps) => {
         </h2>
         <div className="flex items-center gap-2">
           <div
-            className={`px-3 py-1 rounded-full text-sm font-medium ${
-              performance.riskAssessment.riskLevel === "Low"
+            className={`px-3 py-1 rounded-full text-sm font-medium ${performance?.riskAssessment?.riskLevel === "Low"
                 ? "bg-blue-100 text-blue-800"
-                : performance.riskAssessment.riskLevel === "Medium"
-                ? "bg-yellow-100 text-yellow-800"
-                : "bg-red-100 text-red-800"
-            }`}
+                : performance?.riskAssessment?.riskLevel === "Medium"
+                  ? "bg-yellow-100 text-yellow-800"
+                  : "bg-red-100 text-red-800"
+              }`}
           >
-            Risk: {performance.riskAssessment.riskLevel}
+            Risk: {performance?.riskAssessment?.riskLevel || "N/A"}
           </div>
           <div className="text-2xl font-bold text-blue-600">
-            {performance.overallScore}%
+            {performance?.overallScore || 0}%
           </div>
         </div>
       </div>
@@ -50,7 +49,7 @@ const PerformanceMetrics = ({ performance }: PerformanceMetricsProps) => {
             </svg>
           </div>
           <div className="text-2xl font-bold text-blue-900">
-            {performance.kpis.timelineAdherence}%
+            {performance?.kpis?.timelineAdherence || 0}%
           </div>
           <div className="text-xs text-blue-600">Adherence</div>
         </div>
@@ -73,7 +72,7 @@ const PerformanceMetrics = ({ performance }: PerformanceMetricsProps) => {
             </svg>
           </div>
           <div className="text-2xl font-bold text-blue-900">
-            {performance.kpis.budgetEfficiency}%
+            {performance?.kpis?.budgetEfficiency || 0}%
           </div>
           <div className="text-xs text-blue-600">Efficiency</div>
         </div>
@@ -83,7 +82,7 @@ const PerformanceMetrics = ({ performance }: PerformanceMetricsProps) => {
             <span className="text-sm font-medium text-purple-700">Quality</span>
           </div>
           <div className="text-2xl font-bold text-purple-900">
-            {performance.kpis.qualityScore}%
+            {performance?.kpis?.qualityScore || 0}%
           </div>
           <div className="text-xs text-purple-600">Score</div>
         </div>
@@ -93,7 +92,7 @@ const PerformanceMetrics = ({ performance }: PerformanceMetricsProps) => {
             <span className="text-sm font-medium text-orange-700">Safety</span>
           </div>
           <div className="text-2xl font-bold text-orange-900">
-            {performance.kpis.safetyRecord}%
+            {performance?.kpis?.safetyRecord || 0}%
           </div>
           <div className="text-xs text-orange-600">Record</div>
         </div>
@@ -105,7 +104,7 @@ const PerformanceMetrics = ({ performance }: PerformanceMetricsProps) => {
             </span>
           </div>
           <div className="text-2xl font-bold text-pink-900">
-            {performance.kpis.stakeholderSatisfaction}%
+            {performance?.kpis?.stakeholderSatisfaction || 0}%
           </div>
           <div className="text-xs text-pink-600">Satisfaction</div>
         </div>
@@ -115,7 +114,7 @@ const PerformanceMetrics = ({ performance }: PerformanceMetricsProps) => {
             <span className="text-sm font-medium text-red-700">Risks</span>
           </div>
           <div className="text-2xl font-bold text-red-900">
-            {performance.riskAssessment.activeRisks}
+            {performance?.riskAssessment?.activeRisks || 0}
           </div>
           <div className="text-xs text-red-600">Active</div>
         </div>

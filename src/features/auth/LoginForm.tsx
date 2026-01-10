@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../shared/hooks/useAuth";
 import { LoginRequest } from "../../shared/types/auth";
+import { Eye, EyeOff } from "lucide-react";
 
 interface LoginFormProps {
   onSuccess?: () => void;
@@ -41,7 +42,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
       } else {
         setError("Invalid username or password");
       }
-    } catch (err) {
+    } catch {
       setError("Login failed. Please try again.");
     }
   };
@@ -118,9 +119,11 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
                 className="absolute inset-y-0 right-0 pr-3 flex items-center"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                <span className="text-gray-400 text-sm">
-                  {showPassword ? "👁️" : "👁️‍🗨️"}
-                </span>
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5 text-gray-400" />
+                ) : (
+                  <Eye className="h-5 w-5 text-gray-400" />
+                )}
               </button>
             </div>
           </div>

@@ -1,5 +1,14 @@
 import React from "react";
 import { ProjectEntity } from "../../../shared/types/project-management";
+import {
+  TrendingUp,
+  TrendingDown,
+  MoveRight,
+  BarChart3,
+  PieChart,
+  Users,
+  FileText
+} from "lucide-react";
 
 interface KPIDashboardProps {
   project: ProjectEntity;
@@ -48,13 +57,13 @@ const KPICard: React.FC<KPICardProps> = ({
   const getTrendIcon = () => {
     switch (trend) {
       case "up":
-        return "📈";
+        return <TrendingUp className="h-4 w-4" />;
       case "down":
-        return "📉";
+        return <TrendingDown className="h-4 w-4" />;
       case "stable":
-        return "➡️";
+        return <MoveRight className="h-4 w-4" />;
       default:
-        return "📊";
+        return <BarChart3 className="h-4 w-4" />;
     }
   };
 
@@ -189,20 +198,18 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ project }) => {
                 </div>
                 <div className="text-right">
                   <div
-                    className={`text-lg font-bold ${
-                      item.variance >= 0 ? "text-blue-600" : "text-red-600"
-                    }`}
+                    className={`text-lg font-bold ${item.variance >= 0 ? "text-blue-600" : "text-red-600"
+                      }`}
                   >
                     {item.variance > 0 ? "+" : ""}
                     {item.variance}%
                   </div>
                   <div className="w-16 bg-gray-200 rounded-full h-2 mt-1">
                     <div
-                      className={`h-2 rounded-full ${
-                        item.current >= item.target
+                      className={`h-2 rounded-full ${item.current >= item.target
                           ? "bg-blue-500"
                           : "bg-red-500"
-                      }`}
+                        }`}
                       style={{ width: `${Math.min(item.current, 100)}%` }}
                     ></div>
                   </div>
@@ -224,7 +231,9 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ project }) => {
           </div>
           <div className="p-6">
             <div className="text-center py-8 text-gray-500">
-              <div className="text-4xl mb-4">📊</div>
+              <div className="flex justify-center mb-4">
+                <BarChart3 className="h-12 w-12 text-gray-300" />
+              </div>
               <h4 className="text-lg font-medium text-gray-900 mb-2">
                 Performance Chart
               </h4>
@@ -270,11 +279,13 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ project }) => {
                     </div>
                   </div>
                   <div className="text-sm text-gray-500">
-                    {risk.trend === "increasing"
-                      ? "📈"
-                      : risk.trend === "decreasing"
-                      ? "📉"
-                      : "➡️"}
+                    {risk.trend === "increasing" ? (
+                      <TrendingUp className="h-4 w-4 text-red-500" />
+                    ) : risk.trend === "decreasing" ? (
+                      <TrendingDown className="h-4 w-4 text-green-500" />
+                    ) : (
+                      <MoveRight className="h-4 w-4 text-gray-400" />
+                    )}
                   </div>
                 </div>
               ))}
@@ -294,7 +305,9 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ project }) => {
           </div>
           <div className="p-6">
             <div className="text-center py-8 text-gray-500">
-              <div className="text-4xl mb-4">📉</div>
+              <div className="flex justify-center mb-4">
+                <TrendingDown className="h-12 w-12 text-gray-300" />
+              </div>
               <h4 className="text-lg font-medium text-gray-900 mb-2">
                 Burndown Visualization
               </h4>
@@ -314,7 +327,9 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ project }) => {
           </div>
           <div className="p-6">
             <div className="text-center py-8 text-gray-500">
-              <div className="text-4xl mb-4">👥</div>
+              <div className="flex justify-center mb-4">
+                <Users className="h-12 w-12 text-gray-300" />
+              </div>
               <h4 className="text-lg font-medium text-gray-900 mb-2">
                 Resource Distribution
               </h4>
@@ -335,8 +350,8 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ project }) => {
               Reports & Export
             </h3>
             <div className="flex space-x-2">
-              <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                📊 Export to Excel
+              <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                <FileText className="h-4 w-4" /> Export to Excel
               </button>
               <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
                 📄 Generate PDF

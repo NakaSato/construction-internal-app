@@ -13,6 +13,15 @@ import {
 } from "chart.js";
 import { Line, Doughnut, Bar } from "react-chartjs-2";
 import { DailyReportAnalytics, TopPerformer } from "@shared/types/project";
+import {
+  Target,
+  BarChart3,
+  Sparkles,
+  TrendingUp,
+  TrendingDown,
+  AlertTriangle,
+  Lightbulb
+} from "lucide-react";
 
 ChartJS.register(
   CategoryScale,
@@ -175,33 +184,33 @@ const EnhancedAnalytics: React.FC<EnhancedAnalyticsProps> = ({
       <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
         <button
           onClick={() => setActiveChart("trends")}
-          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-            activeChart === "trends"
-              ? "bg-white text-blue-600 shadow-sm"
-              : "text-gray-600 hover:text-gray-900"
-          }`}
+          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors flex items-center justify-center space-x-2 ${activeChart === "trends"
+            ? "bg-white text-blue-600 shadow-sm"
+            : "text-gray-600 hover:text-gray-900"
+            }`}
         >
-          📈 Trends
+          <TrendingUp className="h-4 w-4" />
+          <span>Trends</span>
         </button>
         <button
           onClick={() => setActiveChart("performance")}
-          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-            activeChart === "performance"
-              ? "bg-white text-blue-600 shadow-sm"
-              : "text-gray-600 hover:text-gray-900"
-          }`}
+          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors flex items-center justify-center space-x-2 ${activeChart === "performance"
+            ? "bg-white text-blue-600 shadow-sm"
+            : "text-gray-600 hover:text-gray-900"
+            }`}
         >
-          🎯 Performance
+          <Target className="h-4 w-4" />
+          <span>Performance</span>
         </button>
         <button
           onClick={() => setActiveChart("weather")}
-          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-            activeChart === "weather"
-              ? "bg-white text-blue-600 shadow-sm"
-              : "text-gray-600 hover:text-gray-900"
-          }`}
+          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors flex items-center justify-center space-x-2 ${activeChart === "weather"
+            ? "bg-white text-blue-600 shadow-sm"
+            : "text-gray-600 hover:text-gray-900"
+            }`}
         >
-          🌤️ Weather Impact
+          <AlertTriangle className="h-4 w-4" />
+          <span>Weather Impact</span>
         </button>
       </div>
 
@@ -248,13 +257,17 @@ const EnhancedAnalytics: React.FC<EnhancedAnalyticsProps> = ({
               <p className="text-blue-600 text-sm font-medium">
                 Productivity Trend
               </p>
-              <p className="text-2xl font-bold text-blue-900">
-                {analytics.productivityIndex > 100 ? "↗️" : "↘️"}
+              <p className="text-2xl font-bold text-blue-900 flex items-center">
+                {analytics.productivityIndex > 100 ? (
+                  <TrendingUp className="h-5 w-5 mr-1" />
+                ) : (
+                  <TrendingDown className="h-5 w-5 mr-1" />
+                )}
                 {analytics.productivityIndex.toFixed(1)}%
               </p>
             </div>
             <div className="p-3 bg-blue-200 rounded-full">
-              <span className="text-2xl">📊</span>
+              <BarChart3 className="h-6 w-6 text-blue-600" />
             </div>
           </div>
           <p className="text-blue-700 text-sm mt-2">
@@ -275,7 +288,7 @@ const EnhancedAnalytics: React.FC<EnhancedAnalyticsProps> = ({
               </p>
             </div>
             <div className="p-3 bg-blue-200 rounded-full">
-              <span className="text-2xl">🛡️</span>
+              <Target className="h-6 w-6 text-blue-600" />
             </div>
           </div>
           <p className="text-blue-700 text-sm mt-2">
@@ -296,7 +309,7 @@ const EnhancedAnalytics: React.FC<EnhancedAnalyticsProps> = ({
               </p>
             </div>
             <div className="p-3 bg-orange-200 rounded-full">
-              <span className="text-2xl">🌦️</span>
+              <AlertTriangle className="h-6 w-6 text-orange-600" />
             </div>
           </div>
           <p className="text-orange-700 text-sm mt-2">
@@ -310,8 +323,9 @@ const EnhancedAnalytics: React.FC<EnhancedAnalyticsProps> = ({
       {/* Team Performance Rankings */}
       {analytics.topPerformers && analytics.topPerformers.length > 0 && (
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            🏆 Top Performers
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center space-x-2">
+            <Sparkles className="h-6 w-6 text-yellow-500" />
+            <span>Top Performers</span>
           </h3>
           <div className="space-y-3">
             {analytics.topPerformers
@@ -323,15 +337,14 @@ const EnhancedAnalytics: React.FC<EnhancedAnalyticsProps> = ({
                 >
                   <div className="flex items-center space-x-3">
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${
-                        index === 0
-                          ? "bg-yellow-500"
-                          : index === 1
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${index === 0
+                        ? "bg-yellow-500"
+                        : index === 1
                           ? "bg-gray-400"
                           : index === 2
-                          ? "bg-amber-600"
-                          : "bg-blue-500"
-                      }`}
+                            ? "bg-amber-600"
+                            : "bg-blue-500"
+                        }`}
                     >
                       {index + 1}
                     </div>
@@ -357,10 +370,10 @@ const EnhancedAnalytics: React.FC<EnhancedAnalyticsProps> = ({
         </div>
       )}
 
-      {/* Recommendations */}
       <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          💡 Smart Recommendations
+        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+          <Lightbulb className="w-5 h-5 mr-2 text-purple-600" />
+          Smart Recommendations
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-white rounded-lg p-4">

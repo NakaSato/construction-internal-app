@@ -1,5 +1,12 @@
 import React from "react";
 import { ProjectEntity } from "../../../shared/types/project-management";
+import {
+  TrendingUp,
+  TrendingDown,
+  BarChart3,
+  Construction,
+  Sparkles
+} from "lucide-react";
 
 interface ProgressAnalyticsProps {
   project: ProjectEntity;
@@ -47,10 +54,10 @@ export const ProgressAnalytics: React.FC<ProgressAnalyticsProps> = ({
   const getVarianceStatus = (planned: number, actual: number) => {
     const variance = actual - planned;
     if (variance >= 0)
-      return { status: "ahead", color: "text-blue-600", icon: "📈" };
+      return { status: "ahead", color: "text-blue-600", icon: <TrendingUp className="w-4 h-4" /> };
     if (variance > -5)
-      return { status: "on_track", color: "text-blue-600", icon: "📊" };
-    return { status: "behind", color: "text-red-600", icon: "📉" };
+      return { status: "on_track", color: "text-blue-600", icon: <BarChart3 className="w-4 h-4" /> };
+    return { status: "behind", color: "text-red-600", icon: <TrendingDown className="w-4 h-4" /> };
   };
 
   return (
@@ -63,7 +70,7 @@ export const ProgressAnalytics: React.FC<ProgressAnalyticsProps> = ({
             <h3 className="text-lg font-medium text-gray-900">
               Overall Progress
             </h3>
-            <span className="text-2xl">📊</span>
+            <BarChart3 className="w-6 h-6 text-blue-600" />
           </div>
           <div className="text-3xl font-bold text-blue-600 mb-2">
             {overallProgress}%
@@ -87,7 +94,7 @@ export const ProgressAnalytics: React.FC<ProgressAnalyticsProps> = ({
             <h3 className="text-lg font-medium text-gray-900">
               Phase Progress
             </h3>
-            <span className="text-2xl">🏗️</span>
+            <Construction className="w-6 h-6 text-blue-600" />
           </div>
           <div className="space-y-3">
             {phaseProgress.map((phase, index) => (
@@ -113,7 +120,7 @@ export const ProgressAnalytics: React.FC<ProgressAnalyticsProps> = ({
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-medium text-gray-900">Forecast</h3>
-            <span className="text-2xl">🔮</span>
+            <Sparkles className="w-6 h-6 text-blue-600" />
           </div>
           <div className="space-y-3">
             <div>
@@ -262,7 +269,9 @@ export const ProgressAnalytics: React.FC<ProgressAnalyticsProps> = ({
           </div>
           <div className="p-6">
             <div className="text-center py-8 text-gray-500">
-              <div className="text-4xl mb-4">📈</div>
+              <div className="flex justify-center mb-4">
+                <TrendingUp className="h-12 w-12 text-gray-300" />
+              </div>
               <h4 className="text-lg font-medium text-gray-900 mb-2">
                 Trend Chart Coming Soon
               </h4>
@@ -324,7 +333,7 @@ export const ProgressAnalytics: React.FC<ProgressAnalyticsProps> = ({
                 <div className="text-red-900 font-bold">
                   {new Date(
                     completionForecast.current.getTime() +
-                      14 * 24 * 60 * 60 * 1000
+                    14 * 24 * 60 * 60 * 1000
                   ).toLocaleDateString()}
                 </div>
               </div>

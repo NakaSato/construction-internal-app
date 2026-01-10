@@ -207,13 +207,36 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
     const progress = calculateProgress(project);
     const daysUntilEnd = getDaysUntilEnd(project.estimatedEndDate);
 
-    if (progress === 100) return "✅ Completed";
-    if (daysUntilEnd !== null) {
-      if (daysUntilEnd < 0) return "⚠️ Overdue";
-      if (daysUntilEnd < 7) return `⏰ Due in ${daysUntilEnd} days`;
-      if (daysUntilEnd < 30) return `📅 Due in ${daysUntilEnd} days`;
+    if (progress === 100) {
+      return (
+        <span className="flex items-center text-green-600">
+          <CheckCircle2 className="w-4 h-4 mr-1.5" /> Completed
+        </span>
+      );
     }
-    return `🚧 ${progress}% complete`;
+
+    if (daysUntilEnd !== null) {
+      if (daysUntilEnd < 0) {
+        return (
+          <span className="flex items-center text-red-600">
+            <AlertCircle className="w-4 h-4 mr-1.5" /> Overdue
+          </span>
+        );
+      }
+      if (daysUntilEnd < 30) {
+        return (
+          <span className="flex items-center text-blue-600">
+            <Calendar className="w-4 h-4 mr-1.5" /> Due in {daysUntilEnd} days
+          </span>
+        );
+      }
+    }
+
+    return (
+      <span className="flex items-center text-gray-600">
+        <Construction className="w-4 h-4 mr-1.5" /> {progress}% complete
+      </span>
+    );
   };
 
   // Get unique statuses for filter
@@ -286,7 +309,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
           <div className="flex items-center gap-3">
             <button
               onClick={onRefresh}
-              className="p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200"
+              className="p-2.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-xl transition-all duration-200"
               title="Refresh Projects"
             >
               <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
@@ -294,7 +317,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
             {(isAdmin || isManager) && onCreateProject && (
               <button
                 onClick={onCreateProject}
-                className="flex items-center gap-2 bg-gray-900 hover:bg-black text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+                className="flex items-center gap-2 bg-gray-900 hover:bg-black text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
               >
                 <Plus className="w-5 h-5" />
                 <span>New Project</span>
@@ -308,14 +331,14 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
           {/* Search Bar */}
           <div className="relative w-full lg:w-96 group">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+              <Search className="h-5 w-5 text-gray-400 group-focus-within:text-gray-500 transition-colors" />
             </div>
             <input
               type="text"
               placeholder="Search projects by name, client, address..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="block w-full pl-10 pr-10 py-2.5 border-none rounded-xl bg-white shadow-sm ring-1 ring-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-sm font-medium"
+              className="block w-full pl-10 pr-10 py-2.5 border-none rounded-xl bg-white shadow-sm ring-1 ring-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:bg-white transition-all text-sm font-medium"
             />
             {searchTerm && (
               <button
@@ -336,7 +359,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="appearance-none bg-white py-2.5 pl-4 pr-10 rounded-xl shadow-sm ring-1 ring-gray-200 text-sm font-medium text-gray-700 hover:ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer transition-all"
+                  className="appearance-none bg-white py-2.5 pl-4 pr-10 rounded-xl shadow-sm ring-1 ring-gray-200 text-sm font-medium text-gray-700 hover:ring-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 cursor-pointer transition-all"
                 >
                   <option value="all">All Statuses</option>
                   {uniqueStatuses.map((status) => (
@@ -356,7 +379,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="appearance-none bg-white py-2.5 pl-4 pr-10 rounded-xl shadow-sm ring-1 ring-gray-200 text-sm font-medium text-gray-700 hover:ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer transition-all"
+                  className="appearance-none bg-white py-2.5 pl-4 pr-10 rounded-xl shadow-sm ring-1 ring-gray-200 text-sm font-medium text-gray-700 hover:ring-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 cursor-pointer transition-all"
                 >
                   <option value="name">Name</option>
                   <option value="status">Status</option>
@@ -379,7 +402,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
               <button
                 onClick={() => setViewMode("grid")}
                 className={`p-2 rounded-lg transition-all ${viewMode === "grid"
-                  ? "bg-gray-100 text-blue-600 shadow-sm"
+                  ? "bg-gray-100 text-gray-600 shadow-sm"
                   : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
                   }`}
                 title="Grid View"
@@ -389,7 +412,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
               <button
                 onClick={() => setViewMode("list")}
                 className={`p-2 rounded-lg transition-all ${viewMode === "list"
-                  ? "bg-gray-100 text-blue-600 shadow-sm"
+                  ? "bg-gray-100 text-gray-600 shadow-sm"
                   : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
                   }`}
                 title="List View"
@@ -450,7 +473,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                 <div
                   key={project.projectId}
                   className={`${viewMode === "grid"
-                    ? "bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-xl p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    ? "bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-xl p-6 hover:shadow-xl transition-all duration-300 hover:scale-105"
                     : "bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all duration-200 flex items-center space-x-4"
                     }`}
                 >
@@ -464,9 +487,9 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                             onClick={() =>
                               navigate(`/projects/${project.projectId}`)
                             }
-                            className="text-left hover:text-blue-600 transition-colors mb-2"
+                            className="text-left hover:text-gray-600 transition-colors mb-2"
                           >
-                            <h4 className="text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors line-clamp-2">
+                            <h4 className="text-xl font-bold text-gray-900 hover:text-gray-600 transition-colors line-clamp-2">
                               {project.projectName || "Unnamed Project"}
                             </h4>
                           </button>
@@ -536,7 +559,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2.5">
                             <div
-                              className="bg-gradient-to-r from-blue-500 to-purple-500 h-2.5 rounded-full transition-all duration-500"
+                              className="bg-gradient-to-r from-gray-500 to-gray-600 h-2.5 rounded-full transition-all duration-500"
                               style={{ width: `${calculateProgress(project)}%` }}
                             ></div>
                           </div>
@@ -567,7 +590,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                           onClick={() =>
                             navigate(`/projects/${project.projectId}`)
                           }
-                          className="w-full bg-blue-50 text-blue-700 py-2 px-4 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium border border-blue-200"
+                          className="w-full bg-gray-50 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium border border-gray-200"
                         >
                           View Details
                         </button>
@@ -588,9 +611,9 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                             onClick={() =>
                               navigate(`/projects/${project.projectId}`)
                             }
-                            className="text-left hover:text-blue-600 transition-colors"
+                            className="text-left hover:text-gray-600 transition-colors"
                           >
-                            <h4 className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors truncate">
+                            <h4 className="text-lg font-semibold text-gray-900 hover:text-gray-600 transition-colors truncate">
                               {project.projectName || "Unnamed Project"}
                             </h4>
                           </button>
@@ -639,7 +662,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                         <div className="text-xs text-gray-500 mb-1">Progress</div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
-                            className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300"
+                            className="bg-gradient-to-r from-gray-500 to-gray-600 h-2 rounded-full transition-all duration-300"
                             style={{ width: `${calculateProgress(project)}%` }}
                           ></div>
                         </div>
@@ -654,12 +677,12 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                           onClick={() =>
                             navigate(`/projects/${project.projectId}`)
                           }
-                          className="bg-blue-50 text-blue-700 py-2 px-3 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium flex items-center"
+                          className="bg-gray-50 text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium flex items-center"
                         >
                           <Eye className="w-4 h-4 mr-2" /> View
                         </button>
                         {(isAdmin || isManager) && (
-                          <button className="bg-blue-50 text-blue-700 py-2 px-3 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium flex items-center">
+                          <button className="bg-gray-50 text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium flex items-center">
                             <Edit2 className="w-4 h-4 mr-2" /> Edit
                           </button>
                         )}
@@ -696,7 +719,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                       key={i + 1}
                       onClick={() => setCurrentPage(i + 1)}
                       className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${currentPage === i + 1
-                        ? "bg-blue-600 text-white shadow-sm"
+                        ? "bg-gray-600 text-white shadow-sm"
                         : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
                         }`}
                     >
@@ -766,7 +789,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
 
                     {selectedProject.address && (
                       <div className="flex items-start space-x-3">
-                        <span className="text-gray-400 mt-1">📍</span>
+                        <MapPin className="w-5 h-5 text-gray-400 mt-1" />
                         <div>
                           <div className="font-medium text-gray-900">Address</div>
                           <div className="text-gray-600">
@@ -778,7 +801,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
 
                     {selectedProject.clientInfo && (
                       <div className="flex items-start space-x-3">
-                        <span className="text-gray-400 mt-1">👤</span>
+                        <User className="w-5 h-5 text-gray-400 mt-1" />
                         <div>
                           <div className="font-medium text-gray-900">Client</div>
                           <div className="text-gray-600">
@@ -790,7 +813,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
 
                     {selectedProject.totalCapacityKw && (
                       <div className="flex items-start space-x-3">
-                        <span className="text-gray-400 mt-1">⚡</span>
+                        <Zap className="w-5 h-5 text-gray-400 mt-1" />
                         <div>
                           <div className="font-medium text-gray-900">
                             Total Capacity
@@ -803,7 +826,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                     )}
 
                     <div className="flex items-start space-x-3">
-                      <span className="text-gray-400 mt-1">📅</span>
+                      <Calendar className="w-5 h-5 text-gray-400 mt-1" />
                       <div>
                         <div className="font-medium text-gray-900">
                           Start Date
@@ -816,7 +839,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
 
                     {selectedProject.estimatedEndDate && (
                       <div className="flex items-start space-x-3">
-                        <span className="text-gray-400 mt-1">🎯</span>
+                        <Target className="w-5 h-5 text-gray-400 mt-1" />
                         <div>
                           <div className="font-medium text-gray-900">
                             Estimated End Date
@@ -830,7 +853,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
 
                     {selectedProject.projectManager && (
                       <div className="flex items-start space-x-3">
-                        <span className="text-gray-400 mt-1">👨‍💼</span>
+                        <Briefcase className="w-5 h-5 text-gray-400 mt-1" />
                         <div>
                           <div className="font-medium text-gray-900">
                             Project Manager
@@ -861,7 +884,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-3">
                         <div
-                          className="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-500"
+                          className="bg-gradient-to-r from-gray-500 to-gray-600 h-3 rounded-full transition-all duration-500"
                           style={{
                             width: `${calculateProgress(selectedProject)}%`,
                           }}
@@ -963,7 +986,7 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
                     Close
                   </button>
                   {(isAdmin || isManager) && (
-                    <button className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                    <button className="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors">
                       Edit Project
                     </button>
                   )}

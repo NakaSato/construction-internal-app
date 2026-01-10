@@ -1,4 +1,11 @@
 import React, { useState } from "react";
+import {
+  Calendar,
+  BarChart3,
+  ClipboardList,
+  Banknote,
+  FileText
+} from "lucide-react";
 import { Project } from "../../shared/types/project";
 import { ReportService } from "../../shared/utils";
 import { projectsToProjectDtos } from "../../shared/utils/projectTypeAdapter";
@@ -72,17 +79,15 @@ const ReportsTab: React.FC<ReportsTabProps> = ({ projects }) => {
           stats,
           {
             reportType,
-            filename: `solar-projects-${reportType}-report-${
-              new Date().toISOString().split("T")[0]
-            }.pdf`,
+            filename: `solar-projects-${reportType}-report-${new Date().toISOString().split("T")[0]
+              }.pdf`,
           }
         );
       }
 
       // Show success message
       alert(
-        `${
-          reportType.charAt(0).toUpperCase() + reportType.slice(1)
+        `${reportType.charAt(0).toUpperCase() + reportType.slice(1)
         } report generated successfully!`
       );
     } catch (error) {
@@ -160,11 +165,12 @@ const ReportsTab: React.FC<ReportsTabProps> = ({ projects }) => {
                 </div>
               </div>
               {dateRange.startDate && dateRange.endDate && (
-                <p className="text-sm text-blue-600">
-                  📅 Report will include projects from{" "}
+                <div className="flex items-center text-sm text-blue-600">
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Report will include projects from{" "}
                   {new Date(dateRange.startDate).toLocaleDateString()} to{" "}
                   {new Date(dateRange.endDate).toLocaleDateString()}
-                </p>
+                </div>
               )}
             </div>
 
@@ -177,45 +183,54 @@ const ReportsTab: React.FC<ReportsTabProps> = ({ projects }) => {
                 <button
                   onClick={() => handleGeneratePdf("overview")}
                   disabled={isGeneratingPdf}
-                  className="w-full flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="w-full flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-semibold"
                 >
                   {isGeneratingPdf ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Loading PDF engine...
+                      Processing...
                     </>
                   ) : (
-                    <>📊 Generate Overview Report</>
+                    <>
+                      <BarChart3 className="w-5 h-5 mr-2" />
+                      Generate Overview Report
+                    </>
                   )}
                 </button>
 
                 <button
                   onClick={() => handleGeneratePdf("detailed")}
                   disabled={isGeneratingPdf}
-                  className="w-full flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="w-full flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-semibold"
                 >
                   {isGeneratingPdf ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Loading PDF engine...
+                      Processing...
                     </>
                   ) : (
-                    <>📋 Generate Detailed Report</>
+                    <>
+                      <ClipboardList className="w-5 h-5 mr-2" />
+                      Generate Detailed Report
+                    </>
                   )}
                 </button>
 
                 <button
                   onClick={() => handleGeneratePdf("financial")}
                   disabled={isGeneratingPdf}
-                  className="w-full flex items-center justify-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="w-full flex items-center justify-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-semibold"
                 >
                   {isGeneratingPdf ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Loading PDF engine...
+                      Processing...
                     </>
                   ) : (
-                    <>💰 Generate Financial Report</>
+                    <>
+                      <Banknote className="w-5 h-5 mr-2" />
+                      Generate Financial Report
+                    </>
                   )}
                 </button>
               </div>

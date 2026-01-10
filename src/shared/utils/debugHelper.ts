@@ -19,7 +19,7 @@ export const checkVariableAccess = (varName: string, value: any) => {
   if (import.meta.env.DEV) {
     try {
       if (value === undefined) {
-        console.warn(`⚠️ Variable '${varName}' is undefined`);
+        console.warn(`[WARN] ⚠️ Variable '${varName}' is undefined`);
       }
       return value;
     } catch (error) {
@@ -57,9 +57,9 @@ export const safeAccess = <T>(
 export const debugImport = (moduleName: string, importedValue: any) => {
   if (import.meta.env.DEV) {
     if (importedValue === undefined) {
-      console.warn(`⚠️ Circular dependency detected in ${moduleName}`);
+      console.warn(`[WARN] ⚠️ Circular dependency detected in ${moduleName}`);
     } else {
-      console.debug(`✅ Module import successful: ${moduleName}`);
+      console.debug(`[SUCCESS] ✅ Module import successful: ${moduleName}`);
     }
   }
   return importedValue;

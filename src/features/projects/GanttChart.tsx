@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { BarChart3 } from "lucide-react";
 import {
   ProjectEntity,
   GanttTask,
@@ -316,8 +317,8 @@ export default function GanttChart({
       {/* Header */}
       <div className="bg-gray-50 px-6 py-4 border-b">
         <div className="flex justify-between items-center">
-          <h3 className="text-xl font-bold text-gray-900">
-            📊 Project Gantt Chart
+          <h3 className="text-xl font-bold text-gray-900 flex items-center gap-3">
+            <BarChart3 className="h-6 w-6 text-blue-600" /> Project Gantt Chart
           </h3>
           <div className="flex items-center space-x-4">
             <select

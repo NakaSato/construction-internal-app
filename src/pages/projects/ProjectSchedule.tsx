@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { AlertTriangle, BarChart3, CheckCircle2, TrendingUp, Target } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@hooks/useAuth";
 import ProtectedRoute from "@features/auth/ProtectedRoute";
@@ -13,10 +14,10 @@ import {
 
 // Tab configuration
 const SCHEDULE_TABS = [
-  { id: "overview", label: "Overview", icon: "📊" },
-  { id: "tasks", label: "Tasks", icon: "✅" },
-  { id: "progress", label: "Progress", icon: "📈" },
-  { id: "analytics", label: "Analytics", icon: "🎯" },
+  { id: "overview", label: "Overview", icon: <BarChart3 className="h-4 w-4" /> },
+  { id: "tasks", label: "Tasks", icon: <CheckCircle2 className="h-4 w-4" /> },
+  { id: "progress", label: "Progress", icon: <TrendingUp className="h-4 w-4" /> },
+  { id: "analytics", label: "Analytics", icon: <Target className="h-4 w-4" /> },
 ] as const;
 
 type ScheduleTab = (typeof SCHEDULE_TABS)[number]["id"];
@@ -96,15 +97,14 @@ const ScheduleHeader: React.FC<ScheduleHeaderProps> = ({
         </div>
         <div className="flex items-center space-x-3">
           <span
-            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-              project.status === ProjectStatus.IN_PROGRESS
-                ? "bg-blue-100 text-blue-800"
-                : project.status === ProjectStatus.PLANNING
+            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${project.status === ProjectStatus.IN_PROGRESS
+              ? "bg-blue-100 text-blue-800"
+              : project.status === ProjectStatus.PLANNING
                 ? "bg-blue-100 text-blue-800"
                 : project.status === ProjectStatus.COMPLETED
-                ? "bg-gray-100 text-gray-800"
-                : "bg-yellow-100 text-yellow-800"
-            }`}
+                  ? "bg-gray-100 text-gray-800"
+                  : "bg-yellow-100 text-yellow-800"
+              }`}
           >
             {project.status}
           </span>
@@ -133,13 +133,12 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
-                activeTab === tab.id
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
+              className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === tab.id
+                ? "border-blue-500 text-blue-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
             >
-              <span className="text-lg">{tab.icon}</span>
+              <span className="flex items-center justify-center">{tab.icon}</span>
               <span>{tab.label}</span>
             </button>
           ))}
@@ -177,7 +176,9 @@ const TabContent: React.FC<TabContentProps> = ({
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
-          <div className="text-red-500 text-lg mb-2">⚠️</div>
+          <div className="text-red-500 text-lg mb-2">
+            <AlertTriangle className="h-6 w-6" />
+          </div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
             Error Loading Schedule
           </h3>

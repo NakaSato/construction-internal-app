@@ -43,22 +43,29 @@ export const useDailyReports = (projectId?: string) => {
         // Convert to the format expected by the API
         const apiParams = searchParams
           ? {
-              ProjectId: searchParams.projectId,
-              ReporterId: searchParams.userId,
-              Status: searchParams.approvalStatus,
-              ReportDateAfter: searchParams.startDate,
-              ReportDateBefore: searchParams.endDate,
-              WeatherCondition: searchParams.weatherCondition,
-              HasCriticalIssues: searchParams.hasCriticalIssues,
-              PageNumber: searchParams.pageNumber,
-              PageSize: searchParams.pageSize,
-              SortBy: searchParams.sortBy,
-              SortOrder: searchParams.sortDirection,
-            }
+            ProjectId: searchParams.projectId,
+            ReporterId: searchParams.userId,
+            Status: searchParams.approvalStatus,
+            ReportDateAfter: searchParams.startDate,
+            ReportDateBefore: searchParams.endDate,
+            WeatherCondition: searchParams.weatherCondition,
+            HasCriticalIssues: searchParams.hasCriticalIssues,
+            PageNumber: searchParams.pageNumber,
+            PageSize: searchParams.pageSize,
+            SortBy: searchParams.sortBy,
+            SortOrder: searchParams.sortDirection,
+          }
+          : undefined;
+
+        // Filter out undefined values
+        const cleanParams = apiParams
+          ? Object.fromEntries(
+            Object.entries(apiParams).filter(([_, v]) => v !== undefined)
+          )
           : undefined;
 
         const response = await solarProjectApi.dailyReports.getDailyReports(
-          apiParams
+          cleanParams
         );
 
         if (response.success && response.data) {
@@ -84,7 +91,28 @@ export const useDailyReports = (projectId?: string) => {
     },
     [projectId]
   );
+  // Get single daily report by ID
+  const getReport = useCallback(async (id: string): Promise<DailyReportDto | null> => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await solarProjectApi.dailyReports.getDailyReport(id);
 
+      if (response.success && response.data) {
+        return response.data;
+      } else {
+        setError(response.message || "Failed to fetch daily report");
+        return null;
+      }
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to fetch daily report"
+      );
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
   // Initial load
   useEffect(() => {
     fetchReports();
@@ -208,9 +236,9 @@ export const useDailyReports = (projectId?: string) => {
           prev.map((report) =>
             report.id === id
               ? {
-                  ...report,
-                  approvalStatus: DailyReportApprovalStatus.APPROVED,
-                }
+                ...report,
+                approvalStatus: DailyReportApprovalStatus.APPROVED,
+              }
               : report
           )
         );
@@ -244,9 +272,9 @@ export const useDailyReports = (projectId?: string) => {
           prev.map((report) =>
             report.id === id
               ? {
-                  ...report,
-                  approvalStatus: DailyReportApprovalStatus.REJECTED,
-                }
+                ...report,
+                approvalStatus: DailyReportApprovalStatus.REJECTED,
+              }
               : report
           )
         );
@@ -275,9 +303,9 @@ export const useDailyReports = (projectId?: string) => {
           prev.map((report) =>
             report.id === id
               ? {
-                  ...report,
-                  approvalStatus: DailyReportApprovalStatus.SUBMITTED,
-                }
+                ...report,
+                approvalStatus: DailyReportApprovalStatus.SUBMITTED,
+              }
               : report
           )
         );
@@ -328,6 +356,7 @@ export const useDailyReports = (projectId?: string) => {
 
     // Actions
     fetchReports,
+    getReport,
     createReport,
     updateReport,
     deleteReport,

@@ -1,5 +1,19 @@
 import React from "react";
 import {
+    Drawer,
+    Box,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Divider,
+    IconButton,
+    Typography,
+    Tooltip,
+    Avatar,
+} from "@mui/material";
+import {
     LayoutDashboard,
     Briefcase,
     HardHat,
@@ -7,28 +21,29 @@ import {
     FileBarChart,
     BarChart3,
     LogOut,
-    Settings,
     ChevronLeft,
     ChevronRight
 } from "lucide-react";
-import { useAuth } from "../../shared/hooks/useAuth";
+import { useAuth, useRole } from "../../shared/hooks/useAuth";
+
+const DRAWER_WIDTH_OPEN = 280;
+const DRAWER_WIDTH_CLOSED = 72;
 
 interface SidebarProps {
     activeTab: string;
-    onTabChange: (tabId: any) => void;
+    onTabChange: (tabId: string) => void;
     isOpen: boolean;
     toggleSidebar: () => void;
-    roleName?: string;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
     activeTab,
     onTabChange,
     isOpen,
-    toggleSidebar,
-    roleName
+    toggleSidebar
 }) => {
     const { logout } = useAuth();
+    const { roleName } = useRole();
 
     const navigationItems = [
         { id: "overview", label: "Overview", icon: LayoutDashboard },
@@ -44,81 +59,199 @@ export const Sidebar: React.FC<SidebarProps> = ({
     );
 
     return (
-        <aside
-            className={`
-                fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 transition-all duration-300
-                ${isOpen ? "w-64" : "w-20"}
-                flex flex-col shadow-sm
-            `}
+        <Drawer
+            variant="permanent"
+            sx={{
+                width: isOpen ? DRAWER_WIDTH_OPEN : DRAWER_WIDTH_CLOSED,
+                flexShrink: 0,
+                "& .MuiDrawer-paper": {
+                    width: isOpen ? DRAWER_WIDTH_OPEN : DRAWER_WIDTH_CLOSED,
+                    boxSizing: "border-box",
+                    transition: "width 0.3s ease",
+                    overflowX: "hidden",
+                    borderRight: "1px solid",
+                    borderColor: "divider",
+                },
+            }}
         >
             {/* Brand Header */}
-            {/* Brand Header */}
-            <div className="h-16 flex items-center px-4 bg-white border-b border-gray-100">
-                <div className="flex items-center space-x-3 text-blue-600">
-                    {isOpen && (
-                        <span className="font-bold text-xl tracking-tight text-slate-800">
-                            TC
-                        </span>
-                    )}
-                </div>
-            </div>
+            <Box
+                sx={{
+                    height: 64,
+                    display: "flex",
+                    alignItems: "center",
+                    px: 2,
+                    borderBottom: 1,
+                    borderColor: "divider",
+                }}
+            >
+                <Avatar
+                    sx={{
+                        width: 40,
+                        height: 40,
+                        background: "linear-gradient(135deg, #10b981 0%, #0d9488 100%)",
+                        fontWeight: "bold",
+                        fontSize: "0.875rem",
+                    }}
+                >
+                    TC
+                </Avatar>
+                {isOpen && (
+                    <Box sx={{ ml: 1.5 }}>
+                        <Typography variant="subtitle1" fontWeight="bold" color="text.primary">
+                            TaskCenter
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                            Project Management
+                        </Typography>
+                    </Box>
+                )}
+            </Box>
 
             {/* Navigation */}
-            < div className="flex-1 py-6 overflow-y-auto" >
-                <nav className="space-y-1 px-3">
+            <Box sx={{ flex: 1, py: 2, overflow: "auto" }}>
+                <List disablePadding>
                     {filteredItems.map((item) => {
                         const Icon = item.icon;
                         const isActive = activeTab === item.id;
 
-                        return (
-                            <button
-                                key={item.id}
+                        const listItemButton = (
+                            <ListItemButton
                                 onClick={() => onTabChange(item.id)}
-                                className={`
-                                    w-full flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative mb-1
-                                    ${isActive
-                                        ? "bg-blue-50 text-blue-700 font-medium"
-                                        : "text-slate-500 hover:bg-gray-50 hover:text-slate-900"
-                                    }
-                                `}
+                                selected={isActive}
+                                sx={{
+                                    mx: 1,
+                                    borderRadius: 2,
+                                    mb: 0.5,
+                                    minHeight: 48,
+                                    justifyContent: isOpen ? "initial" : "center",
+                                    px: isOpen ? 2 : 2.5,
+                                    "&.Mui-selected": {
+                                        backgroundColor: "primary.light",
+                                        color: "primary.dark",
+                                        "&:hover": {
+                                            backgroundColor: "primary.light",
+                                        },
+                                        "& .MuiListItemIcon-root": {
+                                            color: "primary.main",
+                                        },
+                                    },
+                                    "&:hover": {
+                                        backgroundColor: "action.hover",
+                                    },
+                                }}
                             >
-                                <Icon className={`h-5 w-5 ${isOpen ? "mr-3" : "mx-auto"} ${isActive ? "text-blue-600" : "text-slate-400 group-hover:text-slate-600"}`} />
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: 0,
+                                        mr: isOpen ? 2 : "auto",
+                                        justifyContent: "center",
+                                        color: isActive ? "primary.main" : "text.secondary",
+                                    }}
+                                >
+                                    <Icon size={22} />
+                                </ListItemIcon>
                                 {isOpen && (
-                                    <span className="text-sm">{item.label}</span>
+                                    <ListItemText
+                                        primary={item.label}
+                                        primaryTypographyProps={{
+                                            fontSize: "0.875rem",
+                                            fontWeight: isActive ? 600 : 500,
+                                        }}
+                                    />
                                 )}
+                                {isActive && isOpen && (
+                                    <Box
+                                        sx={{
+                                            width: 8,
+                                            height: 8,
+                                            borderRadius: "50%",
+                                            backgroundColor: "primary.main",
+                                        }}
+                                    />
+                                )}
+                            </ListItemButton>
+                        );
 
-                                {!isOpen && (
-                                    <div className="absolute left-full ml-4 px-3 py-1.5 bg-slate-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 whitespace-nowrap z-50 pointer-events-none transition-opacity shadow-lg">
-                                        {item.label}
-                                    </div>
+                        return (
+                            <ListItem key={item.id} disablePadding sx={{ display: "block" }}>
+                                {isOpen ? (
+                                    listItemButton
+                                ) : (
+                                    <Tooltip title={item.label} placement="right" arrow>
+                                        {listItemButton}
+                                    </Tooltip>
                                 )}
-                            </button>
+                            </ListItem>
                         );
                     })}
-                </nav>
-            </div >
+                </List>
+            </Box>
 
-            {/* Footer / User / Logout */}
-            < div className="p-4 border-t border-gray-100 bg-white" >
-                <button
-                    onClick={logout}
-                    className={`
-                        w-full flex items-center rounded-xl transition-colors text-slate-500 hover:bg-red-50 hover:text-red-600
-                        ${isOpen ? "px-3 py-2" : "justify-center p-2"}
-                    `}
-                >
-                    <LogOut className={`h-5 w-5 ${isOpen ? "mr-3" : ""}`} />
-                    {isOpen && <span className="text-sm font-medium">Sign Out</span>}
-                </button>
-            </div >
+            {/* Footer / Logout */}
+            <Divider />
+            <Box sx={{ p: 1 }}>
+                <Tooltip title={isOpen ? "" : "Sign Out"} placement="right" arrow>
+                    <ListItemButton
+                        onClick={logout}
+                        sx={{
+                            borderRadius: 2,
+                            justifyContent: isOpen ? "initial" : "center",
+                            px: isOpen ? 2 : 2.5,
+                            "&:hover": {
+                                backgroundColor: "error.light",
+                                color: "error.main",
+                                "& .MuiListItemIcon-root": {
+                                    color: "error.main",
+                                },
+                            },
+                        }}
+                    >
+                        <ListItemIcon
+                            sx={{
+                                minWidth: 0,
+                                mr: isOpen ? 2 : "auto",
+                                justifyContent: "center",
+                                color: "text.secondary",
+                            }}
+                        >
+                            <LogOut size={22} />
+                        </ListItemIcon>
+                        {isOpen && (
+                            <ListItemText
+                                primary="Sign Out"
+                                primaryTypographyProps={{
+                                    fontSize: "0.875rem",
+                                    fontWeight: 500,
+                                }}
+                            />
+                        )}
+                    </ListItemButton>
+                </Tooltip>
+            </Box>
 
-            {/* Collapse Toggle Bubble */}
-            < button
+            {/* Collapse Toggle Button */}
+            <IconButton
                 onClick={toggleSidebar}
-                className="absolute -right-3 top-24 bg-white border border-gray-200 text-slate-500 p-1.5 rounded-full shadow-sm hover:text-blue-600 transition-colors hidden lg:flex"
+                sx={{
+                    position: "absolute",
+                    right: -16,
+                    top: 80,
+                    width: 32,
+                    height: 32,
+                    backgroundColor: "background.paper",
+                    border: 1,
+                    borderColor: "divider",
+                    boxShadow: 2,
+                    display: { xs: "none", lg: "flex" },
+                    "&:hover": {
+                        backgroundColor: "background.paper",
+                        color: "primary.main",
+                    },
+                }}
             >
-                {isOpen ? <ChevronLeft className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
-            </button >
-        </aside >
+                {isOpen ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
+            </IconButton>
+        </Drawer>
     );
 };

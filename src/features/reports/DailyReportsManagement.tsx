@@ -1,19 +1,58 @@
 import React, { useState, useEffect, useMemo } from "react";
 import {
+  FileText,
+  BarChart3,
+  Sparkles,
+  LineChart
+} from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Button,
+  Alert,
+  Box,
+  Typography,
+  Stack,
+  Tabs,
+  Tab,
+  Paper,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Checkbox,
+  Pagination,
+  Chip,
+  LinearProgress,
+  Tooltip,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  CircularProgress
+} from "@mui/material";
+import { X as CloseIcon, Download, CheckCircle, XCircle } from "lucide-react";
+import {
   useDailyReports,
   useDailyReportAnalytics,
   useDailyReportBulkOperations,
   useRole,
+  useAuth,
 } from "../../shared/hooks";
 import {
-  DailyReportDto,
-  CreateDailyReportRequest,
   DailyReportApprovalStatus,
   GetDailyReportsParams,
 } from "../../shared/types/project";
 import { EnhancedAnalyticsLoader } from "../../components";
 import PredictiveAnalytics from "./components/PredictiveAnalytics";
 import InteractiveCharts from "./components/InteractiveCharts";
+import DailyReportForm from "./DailyReportForm";
 
 interface DailyReportsManagementProps {
   projectId?: string;
@@ -27,6 +66,14 @@ const DailyReportsManagement: React.FC<DailyReportsManagementProps> = ({
   showAnalytics = true,
 }) => {
   const { isAdmin, isManager } = useRole();
+  const { user } = useAuth(); // Get user from useAuth directly
+  const currentUserId = user?.userId;
+
+  // Permissions
+  const canApprove = isAdmin || isManager;
+  const canDelete = isAdmin || isManager;
+  const canModify = (reportUserId: string) => isAdmin || isManager || reportUserId === currentUserId;
+  const canCreate = true; // All project members can create reports
   const [selectedTab, setSelectedTab] = useState<
     "reports" | "analytics" | "predictive" | "charts" | "templates"
   >("reports");
@@ -186,508 +233,325 @@ const DailyReportsManagement: React.FC<DailyReportsManagementProps> = ({
 
   if (loading && !reports.length) {
     return (
-      <div className="flex items-center justify-center min-h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
+      <Box sx={{ display: "flex", alignItems: "center", justifyCenter: "center", minHeight: 256 }}>
+        <CircularProgress size={48} thickness={4} />
+      </Box>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <Box sx={{ maxWidth: "1280px", mx: "auto", px: { xs: 2, sm: 3, lg: 4 }, py: 4 }}>
       {/* Header */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Daily Reports</h1>
-            <p className="text-gray-600">Manage and track daily work reports</p>
-          </div>
-          <div className="flex space-x-3">
-            {(isAdmin || isManager) && (
+      <Box sx={{ mb: 4 }}>
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="space-between" alignItems={{ xs: "flex-start", sm: "center" }}>
+          <Box>
+            <Typography variant="h4" component="h1" sx={{ fontWeight: 700, color: "text.primary" }}>
+              Daily Reports
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              Manage and track daily work reports
+            </Typography>
+          </Box>
+          <Stack direction="row" spacing={2}>
+            {canApprove && (
               <>
-                <button
+                <Button
                   onClick={handleExport}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                  variant="outlined"
+                  startIcon={<Download size={18} />}
                 >
-                  Export Reports
-                </button>
+                  Export
+                </Button>
                 {selectedReports.length > 0 && (
-                  <div className="flex space-x-2">
-                    <button
+                  <Stack direction="row" spacing={1}>
+                    <Button
                       onClick={handleBulkApprove}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                      variant="contained"
+                      color="success"
+                      startIcon={<CheckCircle size={18} />}
                     >
-                      Approve Selected ({selectedReports.length})
-                    </button>
-                    <button
+                      Approve ({selectedReports.length})
+                    </Button>
+                    <Button
                       onClick={handleBulkReject}
-                      className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                      variant="contained"
+                      color="error"
+                      startIcon={<XCircle size={18} />}
                     >
-                      Reject Selected
-                    </button>
-                  </div>
+                      Reject
+                    </Button>
+                  </Stack>
                 )}
               </>
             )}
-            <button
+            <Button
               onClick={() => setShowCreateModal(true)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              variant="contained"
+              sx={{ fontWeight: "bold" }}
+              startIcon={<FileText size={18} />}
             >
               Create Report
-            </button>
-          </div>
-        </div>
+            </Button>
+          </Stack>
+        </Stack>
 
         {/* Real-time updates notification */}
         {realTimeUpdates.length > 0 && (
-          <div className="mt-4 bg-blue-50 border-l-4 border-blue-400 p-4">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <div className="h-5 w-5 text-blue-400">
-                  <svg fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm text-blue-700">
-                  {realTimeUpdates.length} new update(s) received
-                  <button
-                    onClick={clearUpdates}
-                    className="ml-2 text-blue-600 hover:text-blue-800 underline"
-                  >
-                    Clear
-                  </button>
-                </p>
-              </div>
-            </div>
-          </div>
+          <Alert
+            severity="info"
+            sx={{ mt: 3 }}
+            action={
+              <Button color="inherit" size="small" onClick={clearUpdates}>
+                Clear
+              </Button>
+            }
+          >
+            {realTimeUpdates.length} new update(s) received
+          </Alert>
         )}
-      </div>
+      </Box>
 
       {/* Tabs */}
-      <div className="border-b border-gray-200 mb-6">
-        <nav className="-mb-px flex space-x-8">
-          <button
-            onClick={() => setSelectedTab("reports")}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
-              selectedTab === "reports"
-                ? "border-blue-500 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-            }`}
-          >
-            📋 Reports
-          </button>
+      <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 4 }}>
+        <Tabs
+          value={selectedTab}
+          onChange={(_, value) => setSelectedTab(value)}
+          variant="scrollable"
+          scrollButtons="auto"
+          aria-label="daily reports tabs"
+        >
+          <Tab
+            icon={<FileText size={18} />}
+            iconPosition="start"
+            label="Reports"
+            value="reports"
+          />
           {showAnalytics && (
-            <button
-              onClick={() => setSelectedTab("analytics")}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                selectedTab === "analytics"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
-            >
-              📊 Analytics
-            </button>
+            <Tab
+              icon={<BarChart3 size={18} />}
+              iconPosition="start"
+              label="Analytics"
+              value="analytics"
+            />
           )}
           {showAnalytics && analytics && (
-            <button
-              onClick={() => setSelectedTab("predictive")}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                selectedTab === "predictive"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
-            >
-              🔮 Predictive AI
-            </button>
+            <Tab
+              icon={<Sparkles size={18} />}
+              iconPosition="start"
+              label="Predictive AI"
+              value="predictive"
+            />
           )}
           {showAnalytics && analytics && (
-            <button
-              onClick={() => setSelectedTab("charts")}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                selectedTab === "charts"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
-            >
-              📊 Interactive Charts
-            </button>
+            <Tab
+              icon={<LineChart size={18} />}
+              iconPosition="start"
+              label="Interactive Charts"
+              value="charts"
+            />
           )}
-        </nav>
-      </div>
+        </Tabs>
+      </Box>
 
       {/* Error Display */}
       {error && (
-        <div className="mb-4 bg-red-50 border-l-4 border-red-400 p-4">
-          <div className="flex">
-            <div className="ml-3">
-              <p className="text-sm text-red-700">{error}</p>
-              <button
-                onClick={clearError}
-                className="mt-2 text-sm text-red-600 hover:text-red-800 underline"
-              >
-                Dismiss
-              </button>
-            </div>
-          </div>
-        </div>
+        <Alert
+          severity="error"
+          sx={{ mb: 4 }}
+          onClose={clearError}
+        >
+          {error}
+        </Alert>
       )}
 
       {/* Tab Content */}
       {selectedTab === "reports" && (
-        <div className="space-y-6">
+        <Stack spacing={4}>
           {/* Filters */}
-          <div className="bg-white p-4 rounded-lg shadow">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Filters</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Approval Status
-                </label>
-                <select
+          <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
+            <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
+              Filters
+            </Typography>
+            <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" }, gap: 3 }}>
+              <FormControl fullWidth size="small">
+                <InputLabel>Approval Status</InputLabel>
+                <Select
                   value={filters.approvalStatus || ""}
+                  label="Approval Status"
                   onChange={(e) =>
                     handleFilterChange(
                       "approvalStatus",
                       e.target.value || undefined
                     )
                   }
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                 >
-                  <option value="">All Statuses</option>
-                  <option value={DailyReportApprovalStatus.DRAFT}>Draft</option>
-                  <option value={DailyReportApprovalStatus.SUBMITTED}>
-                    Submitted
-                  </option>
-                  <option value={DailyReportApprovalStatus.APPROVED}>
-                    Approved
-                  </option>
-                  <option value={DailyReportApprovalStatus.REJECTED}>
-                    Rejected
-                  </option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Start Date
-                </label>
-                <input
-                  type="date"
-                  value={filters.startDate || ""}
-                  onChange={(e) =>
-                    handleFilterChange("startDate", e.target.value || undefined)
-                  }
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  End Date
-                </label>
-                <input
-                  type="date"
-                  value={filters.endDate || ""}
-                  onChange={(e) =>
-                    handleFilterChange("endDate", e.target.value || undefined)
-                  }
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                />
-              </div>
-            </div>
-          </div>
+                  <MenuItem value="">All Statuses</MenuItem>
+                  <MenuItem value={DailyReportApprovalStatus.DRAFT}>Draft</MenuItem>
+                  <MenuItem value={DailyReportApprovalStatus.SUBMITTED}>Submitted</MenuItem>
+                  <MenuItem value={DailyReportApprovalStatus.APPROVED}>Approved</MenuItem>
+                  <MenuItem value={DailyReportApprovalStatus.REJECTED}>Rejected</MenuItem>
+                </Select>
+              </FormControl>
+
+              <TextField
+                fullWidth
+                size="small"
+                label="Start Date"
+                type="date"
+                value={filters.startDate || ""}
+                onChange={(e) => handleFilterChange("startDate", e.target.value || undefined)}
+                InputLabelProps={{ shrink: true }}
+              />
+
+              <TextField
+                fullWidth
+                size="small"
+                label="End Date"
+                type="date"
+                value={filters.endDate || ""}
+                onChange={(e) => handleFilterChange("endDate", e.target.value || undefined)}
+                InputLabelProps={{ shrink: true }}
+              />
+            </Box>
+          </Paper>
 
           {/* Reports Table */}
-          <div className="bg-white shadow overflow-hidden sm:rounded-md">
-            <div className="px-4 py-5 sm:p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium text-gray-900">
-                  Daily Reports ({pagination?.totalCount || 0})
-                </h3>
-                {(isAdmin || isManager) && reports.length > 0 && (
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={
-                        selectedReports.length === filteredReports.length &&
-                        filteredReports.length > 0
-                      }
-                      onChange={handleSelectAll}
-                      className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-600">
-                      Select All
-                    </span>
-                  </label>
-                )}
-              </div>
+          <Paper variant="outlined" sx={{ borderRadius: 2, overflow: "hidden" }}>
+            <Box sx={{ p: 3, display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: 1, borderColor: "divider" }}>
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                Daily Reports ({pagination?.totalCount || 0})
+              </Typography>
+              {canApprove && reports.length > 0 && (
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <Checkbox
+                    size="small"
+                    checked={
+                      selectedReports.length === filteredReports.length &&
+                      filteredReports.length > 0
+                    }
+                    onChange={handleSelectAll}
+                  />
+                  <Typography variant="body2" color="text.secondary">
+                    Select All
+                  </Typography>
+                </Stack>
+              )}
+            </Box>
 
-              {filteredReports.length === 0 ? (
-                <div className="text-center py-8">
-                  <p className="text-gray-500">No daily reports found</p>
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        {(isAdmin || isManager) && (
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Select
-                          </th>
+            {filteredReports.length === 0 ? (
+              <Box sx={{ py: 8, textAlign: "center" }}>
+                <Typography color="text.secondary">No daily reports found</Typography>
+              </Box>
+            ) : (
+              <TableContainer>
+                <Table sx={{ minWidth: 800 }}>
+                  <TableHead sx={{ bgcolor: "grey.50" }}>
+                    <TableRow>
+                      {canApprove && <TableCell sx={{ fontWeight: 600 }}>Select</TableCell>}
+                      <TableCell sx={{ fontWeight: 600 }}>Date</TableCell>
+                      <TableCell sx={{ fontWeight: 600 }}>Reporter</TableCell>
+                      <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
+                      <TableCell sx={{ fontWeight: 600 }}>Hours</TableCell>
+                      <TableCell sx={{ fontWeight: 600 }}>Safety</TableCell>
+                      <TableCell sx={{ fontWeight: 600 }}>Quality</TableCell>
+                      <TableCell sx={{ fontWeight: 600 }} align="right">Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {filteredReports.map((report) => (
+                      <TableRow key={report.id} hover>
+                        {canApprove && (
+                          <TableCell sx={{ py: 1 }}>
+                            <Checkbox
+                              size="small"
+                              checked={selectedReports.includes(report.id)}
+                              onChange={() => handleSelectReport(report.id)}
+                            />
+                          </TableCell>
                         )}
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Date
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Reporter
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Status
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Hours
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Safety
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Quality
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {filteredReports.map((report) => (
-                        <tr key={report.id} className="hover:bg-gray-50">
-                          {(isAdmin || isManager) && (
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <input
-                                type="checkbox"
-                                checked={selectedReports.includes(report.id)}
-                                onChange={() => handleSelectReport(report.id)}
-                                className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        <TableCell sx={{ py: 1 }}>
+                          {new Date(report.reportDate).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell sx={{ py: 1 }}>{report.userName}</TableCell>
+                        <TableCell sx={{ py: 1 }}>
+                          <Chip
+                            label={report.approvalStatus.replace(/([A-Z])/g, " $1").trim()}
+                            size="small"
+                            color={
+                              report.approvalStatus === DailyReportApprovalStatus.APPROVED ? "success" :
+                                report.approvalStatus === DailyReportApprovalStatus.REJECTED ? "error" :
+                                  report.approvalStatus === DailyReportApprovalStatus.SUBMITTED ? "warning" : "default"
+                            }
+                            variant="outlined"
+                            sx={{ fontWeight: 600, textTransform: "capitalize" }}
+                          />
+                        </TableCell>
+                        <TableCell sx={{ py: 1 }}>{report.hoursWorked}</TableCell>
+                        <TableCell sx={{ py: 1 }}>
+                          <Stack direction="row" alignItems="center" spacing={1}>
+                            <Typography variant="body2" sx={{ minWidth: 40 }}>{report.safetyScore}/10</Typography>
+                            <Box sx={{ width: 64 }}>
+                              <LinearProgress
+                                variant="determinate"
+                                value={report.safetyScore * 10}
+                                color={report.safetyScore > 7 ? "success" : report.safetyScore > 4 ? "warning" : "error"}
+                                sx={{ height: 6, borderRadius: 3 }}
                               />
-                            </td>
-                          )}
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {new Date(report.reportDate).toLocaleDateString()}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {report.userName}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span
-                              className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                                report.approvalStatus ===
-                                DailyReportApprovalStatus.APPROVED
-                                  ? "bg-blue-100 text-blue-800"
-                                  : report.approvalStatus ===
-                                    DailyReportApprovalStatus.REJECTED
-                                  ? "bg-red-100 text-red-800"
-                                  : report.approvalStatus ===
-                                    DailyReportApprovalStatus.SUBMITTED
-                                  ? "bg-yellow-100 text-yellow-800"
-                                  : "bg-gray-100 text-gray-800"
-                              }`}
-                            >
-                              {report.approvalStatus
-                                .replace(/([A-Z])/g, " $1")
-                                .trim()}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {report.hoursWorked}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <span className="text-sm text-gray-900">
-                                {report.safetyScore}/10
-                              </span>
-                              <div className="ml-2 w-16 bg-gray-200 rounded-full h-2">
-                                <div
-                                  className="bg-blue-600 h-2 rounded-full"
-                                  style={{
-                                    width: `${
-                                      (report.safetyScore / 10) * 100
-                                    }%`,
-                                  }}
-                                ></div>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <span className="text-sm text-gray-900">
-                                {report.qualityScore}/10
-                              </span>
-                              <div className="ml-2 w-16 bg-gray-200 rounded-full h-2">
-                                <div
-                                  className="bg-blue-600 h-2 rounded-full"
-                                  style={{
-                                    width: `${
-                                      (report.qualityScore / 10) * 100
-                                    }%`,
-                                  }}
-                                ></div>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <div className="flex space-x-2">
-                              <button
-                                onClick={() => {
-                                  /* TODO: View report */
-                                }}
-                                className="text-blue-600 hover:text-blue-900"
-                              >
-                                View
-                              </button>
-                              {(isAdmin ||
-                                isManager ||
-                                report.userId === userId) &&
-                                report.approvalStatus ===
-                                  DailyReportApprovalStatus.DRAFT && (
-                                  <button
-                                    onClick={() => {
-                                      /* TODO: Edit report */
-                                    }}
-                                    className="text-indigo-600 hover:text-indigo-900"
-                                  >
-                                    Edit
-                                  </button>
-                                )}
-                              {(isAdmin || isManager) &&
-                                report.approvalStatus ===
-                                  DailyReportApprovalStatus.SUBMITTED && (
-                                  <>
-                                    <button
-                                      onClick={() => approveReport(report.id)}
-                                      className="text-blue-600 hover:text-blue-900"
-                                    >
-                                      Approve
-                                    </button>
-                                    <button
-                                      onClick={() => {
-                                        const reason =
-                                          prompt("Rejection reason:");
-                                        if (reason)
-                                          rejectReport(report.id, reason);
-                                      }}
-                                      className="text-red-600 hover:text-red-900"
-                                    >
-                                      Reject
-                                    </button>
-                                  </>
-                                )}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-
-              {/* Pagination */}
-              {pagination && pagination.totalPages > 1 && (
-                <div className="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex justify-between sm:hidden">
-                      <button
-                        onClick={() =>
-                          handlePageChange(pagination.pageNumber - 1)
-                        }
-                        disabled={!pagination.hasPreviousPage}
-                        className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        Previous
-                      </button>
-                      <button
-                        onClick={() =>
-                          handlePageChange(pagination.pageNumber + 1)
-                        }
-                        disabled={!pagination.hasNextPage}
-                        className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        Next
-                      </button>
-                    </div>
-                    <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-                      <div>
-                        <p className="text-sm text-gray-700">
-                          Showing{" "}
-                          <span className="font-medium">
-                            {(pagination.pageNumber - 1) * pagination.pageSize +
-                              1}
-                          </span>{" "}
-                          to{" "}
-                          <span className="font-medium">
-                            {Math.min(
-                              pagination.pageNumber * pagination.pageSize,
-                              pagination.totalCount
+                            </Box>
+                          </Stack>
+                        </TableCell>
+                        <TableCell sx={{ py: 1 }}>
+                          <Stack direction="row" alignItems="center" spacing={1}>
+                            <Typography variant="body2" sx={{ minWidth: 40 }}>{report.qualityScore}/10</Typography>
+                            <Box sx={{ width: 64 }}>
+                              <LinearProgress
+                                variant="determinate"
+                                value={report.qualityScore * 10}
+                                color={report.qualityScore > 7 ? "success" : report.qualityScore > 4 ? "warning" : "error"}
+                                sx={{ height: 6, borderRadius: 3 }}
+                              />
+                            </Box>
+                          </Stack>
+                        </TableCell>
+                        <TableCell sx={{ py: 1 }} align="right">
+                          <Stack direction="row" spacing={1} justifyContent="flex-end">
+                            <Button size="small" onClick={() => {/* TODO: View report */ }}>View</Button>
+                            {canModify(report.userId) && report.approvalStatus === DailyReportApprovalStatus.DRAFT && (
+                              <Button size="small" color="primary" onClick={() => {/* TODO: Edit report */ }}>Edit</Button>
                             )}
-                          </span>{" "}
-                          of{" "}
-                          <span className="font-medium">
-                            {pagination.totalCount}
-                          </span>{" "}
-                          results
-                        </p>
-                      </div>
-                      <div>
-                        <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-                          <button
-                            onClick={() =>
-                              handlePageChange(pagination.pageNumber - 1)
-                            }
-                            disabled={!pagination.hasPreviousPage}
-                            className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            Previous
-                          </button>
-                          {Array.from(
-                            { length: Math.min(5, pagination.totalPages) },
-                            (_, i) => {
-                              const page = i + 1;
-                              return (
-                                <button
-                                  key={page}
-                                  onClick={() => handlePageChange(page)}
-                                  className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                                    page === pagination.pageNumber
-                                      ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
-                                      : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"
-                                  }`}
-                                >
-                                  {page}
-                                </button>
-                              );
-                            }
-                          )}
-                          <button
-                            onClick={() =>
-                              handlePageChange(pagination.pageNumber + 1)
-                            }
-                            disabled={!pagination.hasNextPage}
-                            className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            Next
-                          </button>
-                        </nav>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+                            {canApprove && report.approvalStatus === DailyReportApprovalStatus.SUBMITTED && (
+                              <>
+                                <Button size="small" color="success" onClick={() => approveReport(report.id)}>Approve</Button>
+                                <Button size="small" color="error" onClick={() => {
+                                  const reason = prompt("Rejection reason:");
+                                  if (reason) rejectReport(report.id, reason);
+                                }}>Reject</Button>
+                              </>
+                            )}
+                          </Stack>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+
+            {/* Pagination */}
+            {pagination && pagination.totalPages > 1 && (
+              <Box sx={{ p: 2, display: "flex", justifyContent: "center", borderTop: 1, borderColor: "divider" }}>
+                <Pagination
+                  count={pagination.totalPages}
+                  page={pagination.pageNumber}
+                  onChange={(_, page) => handlePageChange(page)}
+                  color="primary"
+                  variant="outlined"
+                  shape="rounded"
+                />
+              </Box>
+            )}
+          </Paper>
+        </Stack>
       )}
 
       {/* Analytics Tab */}
@@ -714,7 +578,39 @@ const DailyReportsManagement: React.FC<DailyReportsManagementProps> = ({
       {selectedTab === "charts" && analytics && (
         <InteractiveCharts analytics={analytics} projectId={projectId || ""} />
       )}
-    </div>
+
+      {/* Create/Edit Modal */}
+      <Dialog
+        open={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        maxWidth="lg"
+        fullWidth
+        disableEnforceFocus // adding this to prevent potential focus fighting with third party libraries if any
+      >
+        <DialogTitle sx={{ m: 0, p: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span>{/* Title handled in form, or can be moved here */}Create/Edit Report</span>
+          <IconButton
+            aria-label="close"
+            onClick={() => setShowCreateModal(false)}
+            sx={{
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon size={20} />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          <DailyReportForm
+            projectId={projectId || ""}
+            onSave={() => {
+              setShowCreateModal(false);
+              fetchReports(filters);
+            }}
+            onCancel={() => setShowCreateModal(false)}
+          />
+        </DialogContent>
+      </Dialog>
+    </Box>
   );
 };
 
