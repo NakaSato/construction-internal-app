@@ -115,6 +115,9 @@ export const useDailyReports = (projectId?: string) => {
   }, []);
   // Initial load
   useEffect(() => {
+    // fetchReports sets loading:true synchronously before its first await — intended
+    // fetch-loading indicator, not derived state; cannot cascade/loop.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchReports();
   }, [fetchReports]);
 
@@ -449,6 +452,9 @@ export const useDailyReportTemplates = (projectId?: string) => {
   }, [projectId]);
 
   useEffect(() => {
+    // fetchTemplates sets loading:true synchronously before its first await — intended
+    // fetch-loading indicator, not derived state; cannot cascade/loop.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchTemplates();
   }, [fetchTemplates]);
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { AlertTriangle, BarChart3, CheckCircle2, TrendingUp, Target } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@hooks/useAuth";
@@ -255,7 +255,14 @@ const TabContent: React.FC<TabContentProps> = ({
 
 const ProjectSchedulePage: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
-  const [selectedTab, setSelectedTab] = useState<ScheduleTab>("overview");
+  const [selectedTab, setSelectedTab] = useState<ScheduleTab>(() => {
+    // Initialize the active tab from the URL query, if valid.
+    const urlParams = new URLSearchParams(window.location.search);
+    const tabParam = urlParams.get("tab") as ScheduleTab;
+    return tabParam && SCHEDULE_TABS.some((tab) => tab.id === tabParam)
+      ? tabParam
+      : "overview";
+  });
 
   // Use the schedule hook (will be implemented)
   const { schedule, loading, error, refreshSchedule } = useProjectSchedule(
@@ -267,15 +274,6 @@ const ProjectSchedulePage: React.FC = () => {
     setSelectedTab(tab);
     // Future: Update URL with tab parameter
   };
-
-  useEffect(() => {
-    // Future: Read tab from URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const tabParam = urlParams.get("tab") as ScheduleTab;
-    if (tabParam && SCHEDULE_TABS.some((tab) => tab.id === tabParam)) {
-      setSelectedTab(tabParam);
-    }
-  }, []);
 
   if (!projectId) {
     return (

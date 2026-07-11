@@ -223,7 +223,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const logout = async (): Promise<void> => {
+  async function logout(): Promise<void> {
     try {
       setIsLoading(true);
       const response = await AuthService.logout();
@@ -246,7 +246,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   const value: AuthContextType = {
     user,

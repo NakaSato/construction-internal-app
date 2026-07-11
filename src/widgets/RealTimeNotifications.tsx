@@ -54,6 +54,10 @@ const RealTimeNotifications: React.FC<RealTimeNotificationsProps> = ({
       })
     );
 
+    // Accumulate incoming realtime updates onto prior notifications (append +
+    // cap) — intentional stateful accumulation keyed on `updates`, not
+    // derivable during render.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setNotifications((prev) => {
       const combined = [...prev, ...newNotifications];
       return combined.slice(-maxNotifications);

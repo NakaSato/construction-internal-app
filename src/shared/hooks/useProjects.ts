@@ -283,7 +283,11 @@ export const useProjects = (): UseProjectsReturn => {
     console.log(
       "[SYNC] 🔄 [useProjects] Initial useEffect triggered - fetching projects and stats"
     );
+    // Fetch-on-mount: both fetchers set loading state before their first
+    // await (imperative side-effect, not derived state).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchProjects();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchStats();
   }, [fetchProjects, fetchStats]);
 

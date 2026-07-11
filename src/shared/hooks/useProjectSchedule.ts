@@ -73,6 +73,9 @@ export const useProjectSchedule = (projectId: string) => {
   }, [fetchScheduleData]);
 
   useEffect(() => {
+    // Fetch-on-mount: fetchScheduleData sets loading state before its first
+    // await (imperative side-effect, not derived state) — cannot cascade.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchScheduleData();
   }, [fetchScheduleData]);
 

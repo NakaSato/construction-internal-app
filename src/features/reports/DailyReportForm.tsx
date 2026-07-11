@@ -90,6 +90,10 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
       const defaultTemplate =
         templates.find((t) => t.isDefault) || templates[0];
       if (defaultTemplate) {
+        // Seed user-editable form state from async-loaded template defaults on
+        // first load; not derivable in render because formData is subsequently
+        // mutated by user input and must not be reset every render.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setFormData((prev) => ({
           ...prev,
           ...defaultTemplate.defaultValues,

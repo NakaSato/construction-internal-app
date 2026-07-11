@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo } from "react";
 import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@hooks/useAuth";
 import { LoginForm } from "@features/auth";
@@ -7,17 +7,12 @@ export default function Login() {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [message, setMessage] = useState<string | null>(null);
-
-  // Check if coming from successful registration
-  useEffect(() => {
+  // Derive registration-success message from the URL query (pure).
+  const message = useMemo(() => {
     const params = new URLSearchParams(location.search);
-    const registrationSuccess = params.get("registered");
-    if (registrationSuccess === "true") {
-      setMessage(
-        "Registration successful! Please log in with your new account."
-      );
-    }
+    return params.get("registered") === "true"
+      ? "Registration successful! Please log in with your new account."
+      : null;
   }, [location.search]);
 
   // Redirect if already authenticated

@@ -20,6 +20,7 @@ const DailyReports: React.FC = () => {
   // Set default selected project when projects are loaded
   useEffect(() => {
     if (projects.length > 0 && !selectedProjectId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time default from async-loaded projects; deriving would break sticky selection
       setSelectedProjectId(projects[0].projectId);
     }
   }, [projects, selectedProjectId]);

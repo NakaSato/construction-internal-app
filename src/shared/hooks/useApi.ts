@@ -34,6 +34,9 @@ export function useApi<T>(
   };
 
   useEffect(() => {
+    // fetchData sets loading:true synchronously before its first await — intended
+    // fetch-loading indicator, not derived state; cannot cascade/loop.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
   }, dependencies);
 

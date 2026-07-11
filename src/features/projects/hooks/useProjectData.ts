@@ -123,6 +123,8 @@ export const useProjectData = (projectId: string | undefined) => {
   );
 
   useEffect(() => {
+    // Intentional fetch-on-mount: fetchProject sets loading state before awaiting.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchProject();
   }, [fetchProject]);
 

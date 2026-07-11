@@ -155,6 +155,9 @@ export const useProgressKPIs = (projectId: string) => {
   }, [fetchKPIs]);
 
   useEffect(() => {
+    // fetchKPIs sets loading:true synchronously before its first await — intended
+    // fetch-loading indicator, not derived state; cannot cascade/loop.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchKPIs();
 
     // Refresh KPIs every 5 minutes

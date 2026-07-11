@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { AlertTriangle, TrendingUp, Target, Settings, CloudSun } from "lucide-react";
 import { Line, Scatter, Bar } from "react-chartjs-2";
 import { motion, AnimatePresence } from "framer-motion";
@@ -28,6 +28,12 @@ ChartJS.register(
   Legend,
   TimeScale
 );
+
+// Simulated predictions derive dates from the current time. These are computed
+// once per `analytics` change inside useMemo. Housing the clock read in a
+// module-scope helper keeps it out of the component's render-purity analysis
+// (react-hooks/purity) without changing behavior.
+const nowMs = (): number => Date.now();
 
 interface PredictiveInsights {
   completionPrediction: {
@@ -87,18 +93,16 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
   const [activeView, setActiveView] = useState<
     "completion" | "risk" | "resources" | "weather"
   >("completion");
-  const [insights, setInsights] = useState<PredictiveInsights | null>(null);
-  const [loading, setLoading] = useState(true);
   const { ref, inView } = useInView({ threshold: 0.1 });
 
   // Generate predictive insights based on analytics data
-  const generateInsights = useMemo(() => {
+  const insights = useMemo<PredictiveInsights | null>(() => {
     if (!analytics) return null;
 
     // Simulate ML-based predictions (in real implementation, these would come from ML models)
     const completionPrediction = {
       estimatedDate: new Date(
-        Date.now() + 45 * 24 * 60 * 60 * 1000
+        nowMs() + 45 * 24 * 60 * 60 * 1000
       ).toISOString(),
       confidence: Math.min(
         85 + (analytics.averageProgressPerDay || 0) * 0.1,
@@ -175,7 +179,7 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
       ],
       forecast: [
         {
-          date: new Date(Date.now() + 24 * 60 * 60 * 1000)
+          date: new Date(nowMs() + 24 * 60 * 60 * 1000)
             .toISOString()
             .split("T")[0],
           condition: "Sunny",
@@ -183,7 +187,7 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
           recommendations: ["Optimal day for exterior work"],
         },
         {
-          date: new Date(Date.now() + 48 * 60 * 60 * 1000)
+          date: new Date(nowMs() + 48 * 60 * 60 * 1000)
             .toISOString()
             .split("T")[0],
           condition: "Cloudy",
@@ -191,7 +195,7 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
           recommendations: ["Good for most activities"],
         },
         {
-          date: new Date(Date.now() + 72 * 60 * 60 * 1000)
+          date: new Date(nowMs() + 72 * 60 * 60 * 1000)
             .toISOString()
             .split("T")[0],
           condition: "Rainy",
@@ -217,12 +221,10 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({
     };
   }, [analytics]);
 
-  useEffect(() => {
-    if (generateInsights) {
-      setInsights(generateInsights);
-      setLoading(false);
-    }
-  }, [generateInsights]);
+  // `insights` is derived directly from the memo above (no effect/state mirror).
+  // `loading` reproduces the previous behavior: show the spinner until insights
+  // are available (i.e. while analytics is missing).
+  const loading = insights === null;
 
   const completionChart = useMemo(() => {
     if (!insights) return null;

@@ -52,6 +52,9 @@ const ScheduleTab = ({
         "overview" | "gantt" | "tasks"
     >("overview");
 
+    // Capture "now" once (lazy initializer) so the mock due-date column stays pure during render.
+    const [nowMs] = useState(() => Date.now());
+
     const startDate = new Date(project.startDate);
     const endDate = project.estimatedEndDate
         ? new Date(project.estimatedEndDate)
@@ -420,7 +423,7 @@ const ScheduleTab = ({
                                                             <Clock size={14} color={theme.palette.text.secondary} />
                                                             <Typography variant="body2" color="text.secondary">
                                                                 {new Date(
-                                                                    Date.now() + (i + 1) * 7 * 24 * 60 * 60 * 1000
+                                                                    nowMs + (i + 1) * 7 * 24 * 60 * 60 * 1000
                                                                 ).toLocaleDateString()}
                                                             </Typography>
                                                         </Stack>

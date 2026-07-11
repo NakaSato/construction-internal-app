@@ -47,6 +47,8 @@ const MilestoneManager = ({ project, onMilestoneChange }: MilestoneManagerProps)
     }, [project.projectId]);
 
     useEffect(() => {
+        // Intentional fetch-on-mount: fetchMilestones sets loading state before awaiting.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchMilestones();
     }, [fetchMilestones]);
 

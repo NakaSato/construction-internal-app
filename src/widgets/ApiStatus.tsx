@@ -25,6 +25,9 @@ export default function ApiStatus({ className = "" }: ApiStatusProps) {
   };
 
   useEffect(() => {
+    // Polling side-effect: checkApiStatus sets status before its first await;
+    // intentional imperative status probe, not derived state.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     checkApiStatus();
     // Check every 30 seconds
     const interval = setInterval(checkApiStatus, 30000);

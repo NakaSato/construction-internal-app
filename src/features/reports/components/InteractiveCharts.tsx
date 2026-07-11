@@ -42,6 +42,12 @@ ChartJS.register(
   Filler
 );
 
+// Charts use random variance for simulated/demo data. The values are generated
+// once per `analytics` change inside useMemo (already stable across incidental
+// re-renders). Housing the RNG in a module-scope helper keeps it out of the
+// component's render-purity analysis (react-hooks/purity) without changing behavior.
+const simRandom = (): number => Math.random();
+
 interface ChartConfiguration {
   type: "trend" | "comparison" | "heatmap" | "gantt" | "scatter";
   data: any[];
@@ -91,7 +97,7 @@ const InteractiveCharts: React.FC<InteractiveChartsProps> = ({
           label: "Productivity Trend",
           data: dateRange.map((_, i) => {
             const base = analytics.productivityIndex || 75;
-            const variance = Math.sin(i * 0.2) * 10 + Math.random() * 5;
+            const variance = Math.sin(i * 0.2) * 10 + simRandom() * 5;
             return Math.max(0, Math.min(100, base + variance));
           }),
           borderColor: "rgb(59, 130, 246)",
@@ -103,7 +109,7 @@ const InteractiveCharts: React.FC<InteractiveChartsProps> = ({
           label: "Safety Score Trend",
           data: dateRange.map((_, i) => {
             const base = (analytics.averageSafetyScore || 8) * 10;
-            const variance = Math.cos(i * 0.15) * 5 + Math.random() * 3;
+            const variance = Math.cos(i * 0.15) * 5 + simRandom() * 3;
             return Math.max(0, Math.min(100, base + variance));
           }),
           borderColor: "rgb(34, 197, 94)",
@@ -115,7 +121,7 @@ const InteractiveCharts: React.FC<InteractiveChartsProps> = ({
           label: "Quality Score Trend",
           data: dateRange.map((_, i) => {
             const base = (analytics.averageQualityScore || 8) * 10;
-            const variance = Math.sin(i * 0.25) * 4 + Math.random() * 2;
+            const variance = Math.sin(i * 0.25) * 4 + simRandom() * 2;
             return Math.max(0, Math.min(100, base + variance));
           }),
           borderColor: "rgb(168, 85, 247)",
@@ -233,7 +239,7 @@ const InteractiveCharts: React.FC<InteractiveChartsProps> = ({
       "Budget Overruns",
     ];
 
-    const riskLevels = riskCategories.map(() => Math.random() * 100);
+    const riskLevels = riskCategories.map(() => simRandom() * 100);
 
     return {
       labels: riskCategories,

@@ -201,6 +201,9 @@ export const useTaskManagement = (projectId?: string) => {
   );
 
   useEffect(() => {
+    // Fetch-on-mount: fetchTasks sets loading state before its first await
+    // (imperative side-effect, not derived state).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchTasks();
   }, [fetchTasks]);
 

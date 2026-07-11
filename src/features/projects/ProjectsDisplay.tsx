@@ -56,8 +56,11 @@ const ProjectsDisplay: React.FC<ProjectsDisplayProps> = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9); // Grid follows 3x3 layout by default
 
-  // Reset pagination when filters or sort change
+  // Reset pagination when filters or view change. Intentional side effect:
+  // currentPage is also user-controlled (pagination buttons), so it can't be
+  // derived during render; resetting via effect preserves existing behavior.
   React.useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentPage(1);
   }, [searchTerm, statusFilter, viewMode]);
 

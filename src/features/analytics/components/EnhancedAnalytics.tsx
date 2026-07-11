@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -44,16 +44,11 @@ const EnhancedAnalytics: React.FC<EnhancedAnalyticsProps> = ({
   analytics,
   projectId,
 }) => {
-  const [chartData, setChartData] = useState<any>(null);
   const [activeChart, setActiveChart] = useState<
     "trends" | "performance" | "weather"
   >("trends");
 
-  useEffect(() => {
-    prepareChartData();
-  }, [analytics]);
-
-  const prepareChartData = () => {
+  const chartData = useMemo(() => {
     // Prepare trend data
     const trendData = {
       labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
@@ -125,12 +120,12 @@ const EnhancedAnalytics: React.FC<EnhancedAnalyticsProps> = ({
       ],
     };
 
-    setChartData({
+    return {
       trends: trendData,
       performance: performanceData,
       weather: weatherData,
-    });
-  };
+    };
+  }, [analytics]);
 
   const chartOptions = {
     responsive: true,

@@ -18,8 +18,9 @@ export default function Dashboard() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [useEnhancedModal, setUseEnhancedModal] = useState(true); // Toggle between modals
 
-  // Demo project for master plan components
-  const demoProject: ProjectEntity = {
+  // Demo project for master plan components.
+  // Seeded via a lazy initializer so the impure Date calls run once (not during render).
+  const [demoProject] = useState<ProjectEntity>(() => ({
     projectId: "demo-001",
     projectName: "Solar Installation Demo",
     projectOwner: "Demo Owner",
@@ -66,7 +67,7 @@ export default function Dashboard() {
     ],
     createdAt: new Date(),
     updatedAt: new Date(),
-  };
+  }));
 
   // Use the projects hook with API integration
   const {

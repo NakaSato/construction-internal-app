@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../shared/hooks/useAuth";
 
@@ -34,6 +34,11 @@ export default function ErrorFallback({
 
   const errorMessage = error instanceof Error ? error.message : String(error);
   const errorStack = error instanceof Error ? error.stack : undefined;
+
+  const [errorId] = useState(
+    () => `ERR-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+  );
+  const [errorTime] = useState(() => new Date().toLocaleString());
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -170,13 +175,8 @@ export default function ErrorFallback({
               If this problem persists, please contact our support team.
             </p>
             <div className="space-y-1">
-              <p className="text-xs text-gray-400">
-                Error ID: ERR-{Date.now()}-
-                {Math.random().toString(36).substr(2, 9)}
-              </p>
-              <p className="text-xs text-gray-400">
-                Time: {new Date().toLocaleString()}
-              </p>
+              <p className="text-xs text-gray-400">Error ID: {errorId}</p>
+              <p className="text-xs text-gray-400">Time: {errorTime}</p>
               <p className="text-xs text-gray-400">
                 User Agent: {navigator.userAgent.slice(0, 100)}...
               </p>

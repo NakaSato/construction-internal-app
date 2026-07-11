@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { BarChart3 } from "lucide-react";
 import {
   ProjectEntity,
@@ -42,29 +42,8 @@ export default function GanttChart({
   onTaskUpdate,
   viewMode = "weeks",
 }: GanttChartProps) {
-  const [ganttState, setGanttState] = useState<GanttChartState | null>(null);
   const [selectedTask, setSelectedTask] = useState<string | null>(null);
   const [draggedTask, setDraggedTask] = useState<string | null>(null);
-
-  // Convert project to Gantt data
-  useEffect(() => {
-    const ganttData = convertProjectToGanttData(project);
-    const criticalPath =
-      ProgressCalculationEngine.calculateCriticalPath(project);
-
-    setGanttState({
-      tasks: ganttData.tasks,
-      timeline: {
-        ...ganttData.timeline,
-        totalDays: Math.ceil(
-          (ganttData.timeline.end.getTime() -
-            ganttData.timeline.start.getTime()) /
-          (1000 * 60 * 60 * 24)
-        ),
-      },
-      criticalPath,
-    });
-  }, [project]);
 
   const convertProjectToGanttData = (proj: ProjectEntity): GanttData => {
     const tasks: GanttTask[] = [];
@@ -147,6 +126,27 @@ export default function GanttChart({
       },
     };
   };
+
+  // Convert project to Gantt data (derived from `project`)
+  const ganttState = useMemo<GanttChartState | null>(() => {
+    const ganttData = convertProjectToGanttData(project);
+    const criticalPath =
+      ProgressCalculationEngine.calculateCriticalPath(project);
+
+    return {
+      tasks: ganttData.tasks,
+      timeline: {
+        ...ganttData.timeline,
+        totalDays: Math.ceil(
+          (ganttData.timeline.end.getTime() -
+            ganttData.timeline.start.getTime()) /
+          (1000 * 60 * 60 * 24)
+        ),
+      },
+      criticalPath,
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project]);
 
   // Generate time scale based on view mode
   const generateTimeScale = useMemo(() => {

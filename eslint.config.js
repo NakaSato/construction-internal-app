@@ -47,6 +47,10 @@ export default [
       ],
       "@typescript-eslint/no-explicit-any": "warn",
       "no-unused-vars": "off", // Turn off base rule as it conflicts with TypeScript
+      // TypeScript already resolves identifiers; `no-undef` produces false
+      // positives on type-only refs like `React.FormEvent`. Disable per
+      // typescript-eslint guidance.
+      "no-undef": "off",
       // Allow React import to be unused (modern JSX transform)
       "react/react-in-jsx-scope": "off",
     },

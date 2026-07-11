@@ -61,6 +61,7 @@ export const useProjects = (params?: GetProjectsParams) => {
   }, [params]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- async data fetch; loading/error setState is standard fetch-on-mount, not a derived-state cascade
     fetchProjects();
   }, [fetchProjects]);
 
@@ -197,6 +198,7 @@ export const useProject = (projectId: string | null) => {
   }, [projectId]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- async data fetch; loading/error setState is standard fetch-on-mount, not a derived-state cascade
     fetchProject();
   }, [fetchProject]);
 
@@ -268,6 +270,7 @@ export const useProjectStatus = (projectId: string | null) => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- async data fetch; loading/error setState is standard fetch-on-mount, not a derived-state cascade
     fetchStatus();
   }, [fetchStatus]);
 
@@ -309,6 +312,7 @@ export const useProjectAnalytics = (params?: ProjectAnalyticsParams) => {
   }, [params]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- async data fetch; loading/error setState is standard fetch-on-mount, not a derived-state cascade
     fetchAnalytics();
   }, [fetchAnalytics]);
 
@@ -358,6 +362,7 @@ export const useProjectPerformance = (projectId: string | null) => {
   }, [projectId]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- async data fetch; loading/error setState is standard fetch-on-mount, not a derived-state cascade
     fetchPerformance();
   }, [fetchPerformance]);
 
@@ -425,6 +430,7 @@ export const useProjectTemplates = () => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- async data fetch; loading/error setState is standard fetch-on-mount, not a derived-state cascade
     fetchTemplates();
   }, [fetchTemplates]);
 
@@ -518,6 +524,7 @@ export const useMyProjects = (params?: {
   }, [params]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- async data fetch; loading/error setState is standard fetch-on-mount, not a derived-state cascade
     fetchMyProjects();
   }, [fetchMyProjects]);
 
@@ -544,6 +551,7 @@ export const useRealTimeProjects = (
   useEffect(() => {
     // Don't start polling if disabled
     if (!enabled) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional reset of polling state when disabled; preserves existing behavior
       setConnected(false);
       setUpdates([]);
       setError(null);
@@ -651,6 +659,7 @@ export const useProjectStatusWorkflow = (projectId: string | null) => {
   }, [projectId]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- async data fetch; loading/error setState is standard fetch-on-mount, not a derived-state cascade
     fetchWorkflow();
   }, [fetchWorkflow]);
 
@@ -806,6 +815,7 @@ export const useEnhancedProjectManagement = () => {
       })
     );
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- accumulates notifications from external real-time updates; behavior-preserving, a useMemo rewrite would change the accumulation semantics
     setNotifications((prev) => [...prev, ...newNotifications]);
   }, [realTimeUpdates]);
 

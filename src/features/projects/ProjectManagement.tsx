@@ -165,6 +165,19 @@ const ProjectManagement: React.FC = () => {
     return projectDtosToProjectEntities(projects);
   }, [projects]);
 
+  // Stable timestamps for the demo fallback project, computed once on mount
+  // (avoids impure Date calls during render).
+  const [demoProjectDates] = useState(() => {
+    const now = new Date();
+    return {
+      plannedStartDate: now,
+      plannedEndDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      actualStartDate: now,
+      createdAt: now,
+      updatedAt: now,
+    };
+  });
+
   // Get the first project entity for components that need a single project
   // In a real app, this would be selected based on user interaction or route params
   const selectedProjectEntity = useMemo(() => {
@@ -178,17 +191,17 @@ const ProjectManagement: React.FC = () => {
       projectName: "Demo Solar Installation",
       projectOwner: "Demo Owner",
       mainContractor: "Demo Contractor",
-      plannedStartDate: new Date(),
-      plannedEndDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-      actualStartDate: new Date(),
+      plannedStartDate: demoProjectDates.plannedStartDate,
+      plannedEndDate: demoProjectDates.plannedEndDate,
+      actualStartDate: demoProjectDates.actualStartDate,
       actualEndDate: undefined,
       status: ProjectStatus.IN_PROGRESS,
       overallCompletion: 0.25,
       phases: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: demoProjectDates.createdAt,
+      updatedAt: demoProjectDates.updatedAt,
     } as ProjectEntity;
-  }, [projectEntities]);
+  }, [projectEntities, demoProjectDates]);
 
   // Sort projects - Logic moved to ProjectsDisplay
   // Pagination - Logic moved to ProjectsDisplay

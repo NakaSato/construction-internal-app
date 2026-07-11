@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../shared/hooks/useAuth";
 
@@ -14,6 +15,11 @@ export default function ServerError({
 }: ServerErrorProps) {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+
+  const [errorId] = useState(
+    () => `ERR-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+  );
+  const [errorTime] = useState(() => new Date().toLocaleString());
 
   const handleGoHome = () => {
     if (isAuthenticated) {
@@ -113,13 +119,8 @@ export default function ServerError({
               If this problem persists, please contact support.
             </p>
             <div className="space-y-2">
-              <p className="text-xs text-gray-400">
-                Error ID: ERR-{Date.now()}-
-                {Math.random().toString(36).substr(2, 9)}
-              </p>
-              <p className="text-xs text-gray-400">
-                Time: {new Date().toLocaleString()}
-              </p>
+              <p className="text-xs text-gray-400">Error ID: {errorId}</p>
+              <p className="text-xs text-gray-400">Time: {errorTime}</p>
             </div>
           </div>
         </div>

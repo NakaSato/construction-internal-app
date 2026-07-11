@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import {
   ProjectEntity,
   ProgressCalculation,
@@ -24,14 +24,13 @@ const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
   project,
   onUpdateProgress,
 }) => {
-  const [progressReport, setProgressReport] =
-    useState<ProgressCalculation | null>(null);
   const [selectedPhase, setSelectedPhase] = useState<string | null>(null);
 
-  useEffect(() => {
-    const report = ProgressCalculationEngine.generateProgressReport(project);
-    setProgressReport(report);
-  }, [project]);
+  // Derived from `project` — recomputed on change instead of via effect.
+  const progressReport = useMemo<ProgressCalculation | null>(
+    () => ProgressCalculationEngine.generateProgressReport(project),
+    [project]
+  );
 
   if (!progressReport) {
     return (

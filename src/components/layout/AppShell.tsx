@@ -25,8 +25,11 @@ export const AppShell: React.FC<AppShellProps> = ({
     const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
     const { roleName } = useRole();
 
-    // Handle responsive behavior
+    // Handle responsive behavior: reset sidebar visibility when the viewport
+    // crosses the breakpoint. User toggles override this until the next change,
+    // so this can't be purely derived during render.
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional reset of sidebar state on breakpoint change
         setSidebarOpen(!isMobile);
     }, [isMobile]);
 
