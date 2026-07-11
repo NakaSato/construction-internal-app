@@ -18,12 +18,12 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
   const [error, setError] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
 
-  // Real working accounts for easy access (all use password: Admin123!)
+  // Seeded backend account (see API seed: admin@example.com / Admin123!)
   const testAccounts = [
-    { username: "admin@solarprojects.com", password: "Admin123!", role: "Admin" },
+    { username: "admin@example.com", password: "Admin123!", role: "Admin" },
     { username: "manager@solarprojects.com", password: "Admin123!", role: "Manager" },
-    { username: "engineer@solarprojects.com", password: "Admin123!", role: "Engineer" },
     { username: "viewer@solarprojects.com", password: "Admin123!", role: "Viewer" },
+    { username: "engineer@solarprojects.com", password: "Admin123!", role: "Engineer" },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
