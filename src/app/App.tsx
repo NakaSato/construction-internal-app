@@ -151,32 +151,28 @@ const App: React.FC = () => {
               position="top-right"
               toastOptions={{
                 duration: 4000,
-                // Still using classes for the toast content itself unless we prefer styles style={}
-                // Keeping original classes as requested "work with tailwind" and existing config
-                className: "bg-gray-800 text-white rounded-lg text-sm max-w-md",
+                // react-hot-toast applies its default background/color via
+                // inline styles, which beat Tailwind classes. Set colors via
+                // `style` so they actually apply; keep layout in className.
+                className: "rounded-lg text-sm max-w-md",
+                style: {
+                  background: "#1f2937", // gray-800
+                  color: "#fff",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                },
                 success: {
                   duration: 3000,
-                  iconTheme: {
-                    primary: "#10b981",
-                    secondary: "#fff",
-                  },
-                  // Helper classes for Tailwind are still valid if set up
-                  className: "bg-blue-600 !text-white",
+                  iconTheme: { primary: "#10b981", secondary: "#fff" },
+                  style: { background: "#059669", color: "#fff" }, // emerald-600
                 },
                 error: {
                   duration: 6000,
-                  iconTheme: {
-                    primary: "#ef4444",
-                    secondary: "#fff",
-                  },
-                  className: "bg-red-600 !text-white",
+                  iconTheme: { primary: "#fff", secondary: "#dc2626" },
+                  style: { background: "#dc2626", color: "#fff" }, // red-600
                 },
                 loading: {
-                  iconTheme: {
-                    primary: "#3b82f6",
-                    secondary: "#fff",
-                  },
-                  className: "bg-blue-600 !text-white",
+                  iconTheme: { primary: "#fff", secondary: "#2563eb" },
+                  style: { background: "#2563eb", color: "#fff" }, // blue-600
                 },
               }}
             />

@@ -43,7 +43,7 @@ function AppRoutesContent() {
       <AuthLoader />
       <div className="min-h-screen bg-gray-50 flex flex-col">
         {isPublicPage && <Navigation />}
-        <main className="flex-grow">
+        <main className="flex-grow flex flex-col">
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Home />} />

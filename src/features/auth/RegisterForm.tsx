@@ -176,7 +176,7 @@ export default function RegisterForm({
   const passwordStrength = getPasswordStrength(formData.password);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="flex-1 flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -429,19 +429,6 @@ export default function RegisterForm({
                 Sign in here
               </button>
             </p>
-          </div>
-
-          {/* Password Requirements */}
-          <div className="mt-4 p-4 bg-gray-50 rounded-md">
-            <h4 className="text-sm font-medium text-gray-700 mb-2">
-              Password Requirements:
-            </h4>
-            <ul className="text-xs text-gray-600 space-y-1">
-              <li>• At least 8 characters long</li>
-              <li>• Contains uppercase and lowercase letters</li>
-              <li>• Contains at least one number</li>
-              <li>• Contains at least one special character (@$!%*?&)</li>
-            </ul>
           </div>
         </form>
       </div>

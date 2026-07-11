@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProjectDto } from "../../shared/types/project";
 import {
@@ -16,7 +16,12 @@ import {
   ChevronRight,
   Activity
 } from "lucide-react";
-import { ProjectMap } from "../../components/ui/ProjectMap";
+// Lazy-load map to defer leaflet + react-leaflet out of the dashboard chunk
+const ProjectMap = lazy(() =>
+  import("../../components/ui/ProjectMap").then((m) => ({
+    default: m.ProjectMap,
+  }))
+);
 
 interface ProjectStats {
   totalProjects: number;
@@ -144,7 +149,15 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
             <button className="text-sm text-gray-600 font-medium hover:underline">View Map</button>
           </div>
           <div className="flex-1 min-h-[350px] relative">
-            <ProjectMap projects={projects} />
+            <Suspense
+              fallback={
+                <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">
+                  Loading map…
+                </div>
+              }
+            >
+              <ProjectMap projects={projects} />
+            </Suspense>
           </div>
         </div>
 

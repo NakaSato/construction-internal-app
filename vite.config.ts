@@ -26,8 +26,10 @@ export default defineConfig({
     target: "esnext",
     outDir: "dist",
     sourcemap: false,
-    // Increase chunk size warning limit for PDF library
-    chunkSizeWarningLimit: 1000,
+    // The `pdf` chunk (@react-pdf/renderer + fontkit/yoga/brotli/… runtime)
+    // is ~1.4 MB but fully lazy — it loads only when a report is generated,
+    // never on initial paint. Raise the limit so its size doesn't warn.
+    chunkSizeWarningLimit: 1600,
     rollupOptions: {
       output: {
         // Generate random hash-based filenames for better caching
@@ -45,19 +47,48 @@ export default defineConfig({
           }
           return `assets/[hash][extname]`;
         },
-        manualChunks: {
+        manualChunks(id) {
+          if (!id.includes("node_modules")) return;
+
           // Core React libraries
-          vendor: ["react", "react-dom"],
-          router: ["react-router-dom"],
+          if (/[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/.test(id))
+            return "vendor";
+          if (id.includes("react-router")) return "router";
 
-          // UI and Animation libraries
-          ui: ["framer-motion", "react-hot-toast"],
+          // Heavy, lazy-loadable libraries — isolate each.
+          // @react-pdf/renderer + its whole transitive runtime (fontkit,
+          // yoga-layout, brotli, pako, hyphen, …). Group them all so they
+          // stay in the lazy pdf chunk instead of leaking into the eager
+          // bundle.
+          if (
+            /[\\/]node_modules[\\/](@react-pdf[\\/]|pdfkit|fontkit|yoga-layout|brotli|pako|hyphen|jay-peg|png-js|restructure|linebreak|bidi-js|unicode-properties|unicode-trie|dfa|clone|@foliojs-fork|pdf-parse)/.test(
+              id
+            )
+          )
+            return "pdf";
+          if (id.includes("tesseract.js")) return "ocr";
+          if (id.includes("leaflet")) return "maps";
+          if (
+            id.includes("chart.js") ||
+            id.includes("react-chartjs-2") ||
+            id.includes("/d3-") ||
+            id.includes("/d3/")
+          )
+            return "charts";
+          if (id.includes("lottie")) return "lottie";
 
-          // PDF and Charts (large libraries)
-          pdf: ["@react-pdf/renderer"],
+          // MUI + emotion (large UI kit)
+          if (id.includes("@mui") || id.includes("@emotion"))
+            return "mui";
 
-          // Utilities and smaller libraries
-          utils: ["crypto-js"],
+          // Animation / misc UI
+          if (id.includes("framer-motion") || id.includes("react-hot-toast"))
+            return "ui";
+
+          // Everything else third-party — split per top-level package
+          const m = id.match(/node_modules[\\/](@[^\\/]+[\\/][^\\/]+|[^\\/]+)/);
+          if (m) return "vm-" + m[1].replace(/[@\\/]/g, "-");
+          return "vendor-misc";
         },
       },
     },
