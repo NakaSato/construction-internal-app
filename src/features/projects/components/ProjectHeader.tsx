@@ -72,15 +72,17 @@ const ProjectHeader = ({
     <Box sx={{ mb: 4 }}>
       <Stack
         direction={{ xs: "column", md: "row" }}
-        alignItems={{ xs: "flex-start", md: "center" }}
-        justifyContent="space-between"
         spacing={2}
-        sx={{ mb: 2 }}
+        sx={{
+          alignItems: { xs: "flex-start", md: "center" },
+          justifyContent: "space-between",
+          mb: 2,
+        }}
       >
-        <Stack direction="row" alignItems="center" spacing={2}>
+        <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
           <Box>
-            <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 0.5 }}>
-              <Typography variant="h4" fontWeight="bold" color="text.primary">
+            <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 0.5 }}>
+              <Typography variant="h4" color="text.primary" sx={{ fontWeight: "bold" }}>
                 {project.projectName || "Unnamed Project"}
               </Typography>
               <Chip
@@ -90,10 +92,10 @@ const ProjectHeader = ({
                 sx={{ fontWeight: 600, height: 24 }}
               />
             </Stack>
-            <Stack direction="row" alignItems="center" spacing={2} sx={{ color: "text.secondary" }}>
+            <Stack direction="row" spacing={2} sx={{ alignItems: "center", color: "text.secondary" }}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                 <Typography variant="body2" sx={{ opacity: 0.7 }}>ID:</Typography>
-                <Typography variant="body2" fontFamily="monospace">{project.projectId}</Typography>
+                <Typography variant="body2" sx={{ fontFamily: "monospace" }}>{project.projectId}</Typography>
               </Box>
               {project.startDate && (
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
@@ -122,14 +124,14 @@ const ProjectHeader = ({
             borderStyle: "dashed",
           }}
         >
-          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+          <Stack direction="row" spacing={1} sx={{ alignItems: "center", mb: 2 }}>
             <MoreHorizontal size={20} className="text-gray-500" />
-            <Typography variant="subtitle2" fontWeight="bold" color="text.secondary" textTransform="uppercase">
+            <Typography variant="subtitle2" color="text.secondary" sx={{ fontWeight: "bold", textTransform: "uppercase" }}>
               Advanced Actions
             </Typography>
           </Stack>
 
-          <Stack direction="row" flexWrap="wrap" gap={2}>
+          <Stack direction="row" sx={{ flexWrap: "wrap", gap: 2 }}>
             <Button
               variant="outlined"
               color="warning"

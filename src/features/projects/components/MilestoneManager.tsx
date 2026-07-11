@@ -123,9 +123,9 @@ const MilestoneManager = ({ project, onMilestoneChange }: MilestoneManagerProps)
     return (
         <Box>
             {/* Header with Add Button */}
-            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
-                <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography variant="subtitle1" fontWeight="bold">
+            <Stack direction="row" sx={{ mb: 2, alignItems: "center", justifyContent: "space-between" }}>
+                <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
                         Project Milestones
                     </Typography>
                     {milestones.length > 0 && (
@@ -206,7 +206,7 @@ const MilestoneManager = ({ project, onMilestoneChange }: MilestoneManagerProps)
                                     key={milestone.milestoneId}
                                     direction="row"
                                     spacing={2}
-                                    alignItems="flex-start"
+                                    sx={{ alignItems: "flex-start" }}
                                 >
                                     {/* Timeline dot */}
                                     <Box
@@ -229,22 +229,24 @@ const MilestoneManager = ({ project, onMilestoneChange }: MilestoneManagerProps)
                                     <Box sx={{ flex: 1, pt: 0.5 }}>
                                         <Stack
                                             direction="row"
-                                            justifyContent="space-between"
-                                            alignItems="center"
-                                            flexWrap="wrap"
-                                            gap={1}
+                                            sx={{
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
+                                                flexWrap: "wrap",
+                                                gap: 1,
+                                            }}
                                         >
                                             <Typography
                                                 variant="body2"
-                                                fontWeight="medium"
                                                 sx={{
+                                                    fontWeight: "medium",
                                                     textDecoration: isCompleted ? "line-through" : "none",
                                                     color: isCompleted ? "text.secondary" : "text.primary",
                                                 }}
                                             >
                                                 {milestone.title}
                                             </Typography>
-                                            <Stack direction="row" alignItems="center" spacing={1}>
+                                            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                                                 <Typography variant="caption" color="text.secondary">
                                                     {isCompleted
                                                         ? `Completed: ${new Date(milestone.actualDate || milestone.targetDate).toLocaleDateString()}`

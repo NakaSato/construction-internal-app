@@ -98,7 +98,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </Avatar>
                 {isOpen && (
                     <Box sx={{ ml: 1.5 }}>
-                        <Typography variant="subtitle1" fontWeight="bold" color="text.primary">
+                        <Typography variant="subtitle1" color="text.primary" sx={{ fontWeight: "bold" }}>
                             TaskCenter
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
@@ -154,9 +154,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                 {isOpen && (
                                     <ListItemText
                                         primary={item.label}
-                                        primaryTypographyProps={{
-                                            fontSize: "0.875rem",
-                                            fontWeight: isActive ? 600 : 500,
+                                        slotProps={{
+                                            primary: {
+                                                sx: {
+                                                    fontSize: "0.875rem",
+                                                    fontWeight: isActive ? 600 : 500,
+                                                },
+                                            },
                                         }}
                                     />
                                 )}
@@ -220,9 +224,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         {isOpen && (
                             <ListItemText
                                 primary="Sign Out"
-                                primaryTypographyProps={{
-                                    fontSize: "0.875rem",
-                                    fontWeight: 500,
+                                slotProps={{
+                                    primary: {
+                                        sx: {
+                                            fontSize: "0.875rem",
+                                            fontWeight: 500,
+                                        },
+                                    },
                                 }}
                             />
                         )}

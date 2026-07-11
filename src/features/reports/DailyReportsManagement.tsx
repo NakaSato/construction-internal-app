@@ -243,7 +243,7 @@ const DailyReportsManagement: React.FC<DailyReportsManagementProps> = ({
     <Box sx={{ maxWidth: "1280px", mx: "auto", px: { xs: 2, sm: 3, lg: 4 }, py: 4 }}>
       {/* Header */}
       <Box sx={{ mb: 4 }}>
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="space-between" alignItems={{ xs: "flex-start", sm: "center" }}>
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ justifyContent: "space-between", alignItems: { xs: "flex-start", sm: "center" } }}>
           <Box>
             <Typography variant="h4" component="h1" sx={{ fontWeight: 700, color: "text.primary" }}>
               Daily Reports
@@ -400,7 +400,7 @@ const DailyReportsManagement: React.FC<DailyReportsManagementProps> = ({
                 type="date"
                 value={filters.startDate || ""}
                 onChange={(e) => handleFilterChange("startDate", e.target.value || undefined)}
-                InputLabelProps={{ shrink: true }}
+                slotProps={{ inputLabel: { shrink: true } }}
               />
 
               <TextField
@@ -410,7 +410,7 @@ const DailyReportsManagement: React.FC<DailyReportsManagementProps> = ({
                 type="date"
                 value={filters.endDate || ""}
                 onChange={(e) => handleFilterChange("endDate", e.target.value || undefined)}
-                InputLabelProps={{ shrink: true }}
+                slotProps={{ inputLabel: { shrink: true } }}
               />
             </Box>
           </Paper>
@@ -422,7 +422,7 @@ const DailyReportsManagement: React.FC<DailyReportsManagementProps> = ({
                 Daily Reports ({pagination?.totalCount || 0})
               </Typography>
               {canApprove && reports.length > 0 && (
-                <Stack direction="row" alignItems="center" spacing={1}>
+                <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                   <Checkbox
                     size="small"
                     checked={
@@ -488,7 +488,7 @@ const DailyReportsManagement: React.FC<DailyReportsManagementProps> = ({
                         </TableCell>
                         <TableCell sx={{ py: 1 }}>{report.hoursWorked}</TableCell>
                         <TableCell sx={{ py: 1 }}>
-                          <Stack direction="row" alignItems="center" spacing={1}>
+                          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                             <Typography variant="body2" sx={{ minWidth: 40 }}>{report.safetyScore}/10</Typography>
                             <Box sx={{ width: 64 }}>
                               <LinearProgress
@@ -501,7 +501,7 @@ const DailyReportsManagement: React.FC<DailyReportsManagementProps> = ({
                           </Stack>
                         </TableCell>
                         <TableCell sx={{ py: 1 }}>
-                          <Stack direction="row" alignItems="center" spacing={1}>
+                          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                             <Typography variant="body2" sx={{ minWidth: 40 }}>{report.qualityScore}/10</Typography>
                             <Box sx={{ width: 64 }}>
                               <LinearProgress
@@ -514,7 +514,7 @@ const DailyReportsManagement: React.FC<DailyReportsManagementProps> = ({
                           </Stack>
                         </TableCell>
                         <TableCell sx={{ py: 1 }} align="right">
-                          <Stack direction="row" spacing={1} justifyContent="flex-end">
+                          <Stack direction="row" spacing={1} sx={{ justifyContent: "flex-end" }}>
                             <Button size="small" onClick={() => {/* TODO: View report */ }}>View</Button>
                             {canModify(report.userId) && report.approvalStatus === DailyReportApprovalStatus.DRAFT && (
                               <Button size="small" color="primary" onClick={() => {/* TODO: Edit report */ }}>Edit</Button>

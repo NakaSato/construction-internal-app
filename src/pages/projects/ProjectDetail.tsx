@@ -247,11 +247,11 @@ const ProjectDetail = () => {
           <Container maxWidth="md">
             <Paper elevation={0} variant="outlined" sx={{ overflow: "hidden", borderRadius: 3 }}>
               <Box sx={{ bgcolor: "error.lighter", px: 4, py: 3, borderBottom: 1, borderColor: "error.light" }}>
-                <Typography variant="h5" color="error.dark" fontWeight="bold">Project Not Found</Typography>
+                <Typography variant="h5" color="error.dark" sx={{ fontWeight: "bold" }}>Project Not Found</Typography>
                 <Typography variant="body2" color="error.main">ID: {projectId}</Typography>
               </Box>
               <Box sx={{ p: 4, textAlign: "center" }}>
-                <Typography variant="body1" color="text.secondary" paragraph>
+                <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
                   {error || "The requested project could not be found. It may have been deleted, moved, or you might not have permission to access it."}
                 </Typography>
               </Box>
@@ -369,7 +369,7 @@ const ProjectDetail = () => {
                 <Zoom in={loadingPerformance}>
                   <Paper sx={{ display: "flex", alignItems: "center", gap: 2, p: 2, borderRadius: 5 }}>
                     <CircularProgress size={20} />
-                    <Typography variant="caption" fontWeight="medium">Updating performance...</Typography>
+                    <Typography variant="caption" sx={{ fontWeight: "medium" }}>Updating performance...</Typography>
                   </Paper>
                 </Zoom>
               </Box>

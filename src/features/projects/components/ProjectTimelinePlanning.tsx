@@ -56,9 +56,9 @@ const ProjectTimelinePlanning = ({
         <Paper elevation={0} variant="outlined" sx={{ borderRadius: 2, overflow: "hidden" }}>
             {/* Header */}
             <Box sx={{ px: 3, py: 2.5, borderBottom: 1, borderColor: "divider" }}>
-                <Stack direction="row" alignItems="center" spacing={1}>
+                <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                     <Calendar size={20} color={theme.palette.primary.main} />
-                    <Typography component="h2" variant="h6" fontWeight="bold">
+                    <Typography component="h2" variant="h6" sx={{ fontWeight: "bold" }}>
                         Project Timeline & Planning
                     </Typography>
                 </Stack>
@@ -80,14 +80,14 @@ const ProjectTimelinePlanning = ({
                                 height: "100%",
                             }}
                         >
-                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+                            <Stack direction="row" spacing={1} sx={{ mb: 2, alignItems: "center" }}>
                                 <Clock size={18} color={theme.palette.info.main} />
-                                <Typography variant="subtitle2" fontWeight="bold">
+                                <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
                                     Time Progress
                                 </Typography>
                             </Stack>
                             <Box sx={{ mb: 1.5 }}>
-                                <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.5 }}>
+                                <Stack direction="row" sx={{ mb: 0.5, justifyContent: "space-between" }}>
                                     <Typography variant="caption" color="text.secondary">
                                         {Math.round(timeProgress)}% of timeline elapsed
                                     </Typography>
@@ -108,14 +108,14 @@ const ProjectTimelinePlanning = ({
                                     }}
                                 />
                             </Box>
-                            <Stack direction="row" justifyContent="space-between">
-                                <Stack direction="row" alignItems="center" spacing={0.5}>
+                            <Stack direction="row" sx={{ justifyContent: "space-between" }}>
+                                <Stack direction="row" spacing={0.5} sx={{ alignItems: "center" }}>
                                     <Calendar size={14} color={theme.palette.text.secondary} />
                                     <Typography variant="caption" color="text.secondary">
                                         Start: {startDate.toLocaleDateString()}
                                     </Typography>
                                 </Stack>
-                                <Stack direction="row" alignItems="center" spacing={0.5}>
+                                <Stack direction="row" spacing={0.5} sx={{ alignItems: "center" }}>
                                     <Target size={14} color={theme.palette.text.secondary} />
                                     <Typography variant="caption" color="text.secondary">
                                         End: {endDate.toLocaleDateString()}
@@ -135,14 +135,14 @@ const ProjectTimelinePlanning = ({
                                 height: "100%",
                             }}
                         >
-                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+                            <Stack direction="row" spacing={1} sx={{ mb: 2, alignItems: "center" }}>
                                 <CheckCircle2 size={18} color={theme.palette.success.main} />
-                                <Typography variant="subtitle2" fontWeight="bold">
+                                <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
                                     Task Completion
                                 </Typography>
                             </Stack>
                             <Box sx={{ mb: 1.5 }}>
-                                <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.5 }}>
+                                <Stack direction="row" sx={{ mb: 0.5, justifyContent: "space-between" }}>
                                     <Typography variant="caption" color="text.secondary">
                                         {taskProgress}% tasks completed
                                     </Typography>
@@ -161,7 +161,7 @@ const ProjectTimelinePlanning = ({
                                     }}
                                 />
                             </Box>
-                            <Stack direction="row" justifyContent="space-between">
+                            <Stack direction="row" sx={{ justifyContent: "space-between" }}>
                                 <Chip
                                     size="small"
                                     label={`${project.completedTaskCount} Completed`}
@@ -193,7 +193,7 @@ const ProjectTimelinePlanning = ({
                                 borderRadius: 2,
                             }}
                         >
-                            <Typography variant="h4" fontWeight="bold" color="primary.main">
+                            <Typography variant="h4" color="primary.main" sx={{ fontWeight: "bold" }}>
                                 {totalDays}
                             </Typography>
                             <Typography variant="caption" color="text.secondary">
@@ -211,7 +211,7 @@ const ProjectTimelinePlanning = ({
                                 borderRadius: 2,
                             }}
                         >
-                            <Typography variant="h4" fontWeight="bold" color="success.main">
+                            <Typography variant="h4" color="success.main" sx={{ fontWeight: "bold" }}>
                                 {totalDays - daysRemaining}
                             </Typography>
                             <Typography variant="caption" color="text.secondary">
@@ -229,7 +229,7 @@ const ProjectTimelinePlanning = ({
                                 borderRadius: 2,
                             }}
                         >
-                            <Typography variant="h4" fontWeight="bold" color="warning.main">
+                            <Typography variant="h4" color="warning.main" sx={{ fontWeight: "bold" }}>
                                 {daysRemaining}
                             </Typography>
                             <Typography variant="caption" color="text.secondary">
@@ -247,7 +247,7 @@ const ProjectTimelinePlanning = ({
                                 borderRadius: 2,
                             }}
                         >
-                            <Typography variant="h4" fontWeight="bold" color="info.main">
+                            <Typography variant="h4" color="info.main" sx={{ fontWeight: "bold" }}>
                                 {project.taskCount}
                             </Typography>
                             <Typography variant="caption" color="text.secondary">

@@ -81,11 +81,11 @@ const ScheduleTab = ({
         <Paper elevation={0} variant="outlined" sx={{ borderRadius: 2, overflow: "hidden" }}>
             {/* Schedule Header */}
             <Box sx={{ px: 3, py: 2.5, borderBottom: 1, borderColor: "divider" }}>
-                <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "flex-start" }}>
                     <Box>
-                        <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 0.5 }}>
+                        <Stack direction="row" spacing={1} sx={{ alignItems: "center", mb: 0.5 }}>
                             <TrendingUp size={20} color={theme.palette.primary.main} />
-                            <Typography component="h2" variant="h6" fontWeight="bold">
+                            <Typography component="h2" variant="h6" sx={{ fontWeight: "bold" }}>
                                 Project Schedule
                             </Typography>
                         </Stack>
@@ -134,10 +134,10 @@ const ScheduleTab = ({
                                         bgcolor: alpha(theme.palette.primary.main, 0.04),
                                     }}
                                 >
-                                    <Typography variant="caption" color="primary.main" fontWeight="medium">
+                                    <Typography variant="caption" color="primary.main" sx={{ fontWeight: "medium" }}>
                                         Progress
                                     </Typography>
-                                    <Typography variant="h4" fontWeight="bold" color="primary.dark">
+                                    <Typography variant="h4" color="primary.dark" sx={{ fontWeight: "bold" }}>
                                         {progressPercentage}%
                                     </Typography>
                                     <Typography variant="caption" color="primary.main">
@@ -155,10 +155,10 @@ const ScheduleTab = ({
                                         bgcolor: alpha(theme.palette.primary.main, 0.04),
                                     }}
                                 >
-                                    <Typography variant="caption" color="primary.main" fontWeight="medium">
+                                    <Typography variant="caption" color="primary.main" sx={{ fontWeight: "medium" }}>
                                         Start Date
                                     </Typography>
-                                    <Typography variant="h6" fontWeight="bold" color="primary.dark">
+                                    <Typography variant="h6" color="primary.dark" sx={{ fontWeight: "bold" }}>
                                         {startDate.toLocaleDateString()}
                                     </Typography>
                                 </Paper>
@@ -173,10 +173,10 @@ const ScheduleTab = ({
                                         bgcolor: alpha(theme.palette.warning.main, 0.04),
                                     }}
                                 >
-                                    <Typography variant="caption" color="warning.main" fontWeight="medium">
+                                    <Typography variant="caption" color="warning.main" sx={{ fontWeight: "medium" }}>
                                         Target End
                                     </Typography>
-                                    <Typography variant="h6" fontWeight="bold" color="warning.dark">
+                                    <Typography variant="h6" color="warning.dark" sx={{ fontWeight: "bold" }}>
                                         {endDate.toLocaleDateString()}
                                     </Typography>
                                 </Paper>
@@ -191,10 +191,10 @@ const ScheduleTab = ({
                                         bgcolor: alpha(theme.palette.secondary.main, 0.04),
                                     }}
                                 >
-                                    <Typography variant="caption" color="secondary.main" fontWeight="medium">
+                                    <Typography variant="caption" color="secondary.main" sx={{ fontWeight: "medium" }}>
                                         Duration
                                     </Typography>
-                                    <Typography variant="h6" fontWeight="bold" color="secondary.dark">
+                                    <Typography variant="h6" color="secondary.dark" sx={{ fontWeight: "bold" }}>
                                         {totalDays} days
                                     </Typography>
                                     <Typography variant="caption" color="secondary.main">
@@ -206,7 +206,7 @@ const ScheduleTab = ({
 
                         {/* Progress Timeline */}
                         <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
-                            <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 3 }}>
+                            <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 3 }}>
                                 Project Phases
                             </Typography>
                             <Stack spacing={3}>
@@ -214,14 +214,16 @@ const ScheduleTab = ({
                                     <Box key={index}>
                                         <Stack
                                             direction="row"
-                                            justifyContent="space-between"
-                                            alignItems="center"
-                                            sx={{ mb: 1 }}
+                                            sx={{
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
+                                                mb: 1,
+                                            }}
                                         >
-                                            <Typography variant="body2" fontWeight="medium">
+                                            <Typography variant="body2" sx={{ fontWeight: "medium" }}>
                                                 {phase.name}
                                             </Typography>
-                                            <Stack direction="row" alignItems="center" spacing={1}>
+                                            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                                                 <Calendar size={14} color={theme.palette.text.secondary} />
                                                 <Typography variant="caption" color="text.secondary">
                                                     {phase.startDate.toLocaleDateString()} -{" "}
@@ -241,8 +243,10 @@ const ScheduleTab = ({
                                         />
                                         <Stack
                                             direction="row"
-                                            justifyContent="space-between"
-                                            alignItems="center"
+                                            sx={{
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
+                                            }}
                                         >
                                             <Chip
                                                 label={phase.status.replace("-", " ")}
@@ -264,7 +268,7 @@ const ScheduleTab = ({
                 {scheduleView === "gantt" && (
                     <Paper variant="outlined" sx={{ borderRadius: 2, overflow: "hidden" }}>
                         <Box sx={{ px: 2, py: 1.5, bgcolor: "grey.50", borderBottom: 1, borderColor: "divider" }}>
-                            <Typography variant="subtitle2" fontWeight="medium">
+                            <Typography variant="subtitle2" sx={{ fontWeight: "medium" }}>
                                 Project Timeline
                             </Typography>
                         </Box>
@@ -276,7 +280,7 @@ const ScheduleTab = ({
                                             variant="caption"
                                             color="text.secondary"
                                             align="center"
-                                            display="block"
+                                            sx={{ display: "block" }}
                                         >
                                             W{i + 1}
                                         </Typography>
@@ -285,12 +289,12 @@ const ScheduleTab = ({
                             </Grid>
                             <Stack spacing={1.5}>
                                 {timelineData.map((phase, index) => (
-                                    <Grid container spacing={0.5} alignItems="center" key={index}>
+                                    <Grid container spacing={0.5} key={index} sx={{ alignItems: "center" }}>
                                         <Grid size={3}>
                                             <Typography
                                                 variant="body2"
-                                                fontWeight="medium"
                                                 noWrap
+                                                sx={{ fontWeight: "medium" }}
                                             >
                                                 {phase.name}
                                             </Typography>
@@ -354,8 +358,8 @@ const ScheduleTab = ({
 
                 {scheduleView === "tasks" && (
                     <Stack spacing={2}>
-                        <Stack direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography variant="subtitle1" fontWeight="bold">
+                        <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
+                            <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
                                 Task Management
                             </Typography>
                             <Button
@@ -385,7 +389,7 @@ const ScheduleTab = ({
                                             (_, i) => (
                                                 <TableRow key={i} hover>
                                                     <TableCell>
-                                                        <Typography variant="body2" fontWeight="medium">
+                                                        <Typography variant="body2" sx={{ fontWeight: "medium" }}>
                                                             Task {i + 1} -{" "}
                                                             {timelineData[i % timelineData.length]?.name}
                                                         </Typography>
@@ -412,7 +416,7 @@ const ScheduleTab = ({
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell>
-                                                        <Stack direction="row" alignItems="center" spacing={0.5}>
+                                                        <Stack direction="row" spacing={0.5} sx={{ alignItems: "center" }}>
                                                             <Clock size={14} color={theme.palette.text.secondary} />
                                                             <Typography variant="body2" color="text.secondary">
                                                                 {new Date(
@@ -422,7 +426,7 @@ const ScheduleTab = ({
                                                         </Stack>
                                                     </TableCell>
                                                     <TableCell align="right">
-                                                        <Stack direction="row" spacing={0.5} justifyContent="flex-end">
+                                                        <Stack direction="row" spacing={0.5} sx={{ justifyContent: "flex-end" }}>
                                                             <IconButton size="small" color="primary">
                                                                 <Edit size={16} />
                                                             </IconButton>

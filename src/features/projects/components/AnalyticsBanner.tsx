@@ -100,7 +100,7 @@ const StatCard = ({ label, value, icon, color, subtext, loading }: StatCardProps
         </Box>
       </Box>
       <Box>
-        <Typography variant="h4" fontWeight="bold" sx={{ color: theme.palette.text.primary, mb: 0.5 }}>
+        <Typography variant="h4" sx={{ color: theme.palette.text.primary, mb: 0.5, fontWeight: "bold" }}>
           {value}
         </Typography>
         <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontWeight: 500 }}>
@@ -191,7 +191,7 @@ const AnalyticsBanner = ({ analytics, project, loading = false }: AnalyticsBanne
         <Box sx={{ display: "flex", justifyContent: "center", mb: 1.5, color: "primary.main" }}>
           <BarChart3 size={24} />
         </Box>
-        <Typography variant="subtitle1" fontWeight="bold" color="primary.main" gutterBottom>
+        <Typography variant="subtitle1" color="primary.main" gutterBottom sx={{ fontWeight: "bold" }}>
           Analytics Unavailable
         </Typography>
         <Typography variant="body2" color="text.secondary">
@@ -257,10 +257,10 @@ const AnalyticsBanner = ({ analytics, project, loading = false }: AnalyticsBanne
                   {stat.icon}
                 </Box>
                 <Box>
-                  <Typography variant="h6" component="span" fontWeight="bold" sx={{ mr: 1, lineHeight: 1 }}>
+                  <Typography variant="h6" component="span" sx={{ mr: 1, lineHeight: 1, fontWeight: "bold" }}>
                     {stat.value}
                   </Typography>
-                  <Typography variant="caption" color="text.secondary" fontWeight="medium">
+                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: "medium" }}>
                     {stat.label}
                   </Typography>
                 </Box>

@@ -264,7 +264,7 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
                     onChange={(e) => handleInputChange("reportDate", e.target.value)}
                     error={!!errors.reportDate}
                     helperText={errors.reportDate}
-                    InputLabelProps={{ shrink: true }}
+                    slotProps={{ inputLabel: { shrink: true } }}
                     required
                     size="small"
                   />
@@ -278,7 +278,7 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
                     onChange={(e) => handleInputChange("totalWorkHours", parseFloat(e.target.value))}
                     error={!!errors.totalWorkHours}
                     helperText={errors.totalWorkHours}
-                    inputProps={{ min: 0, max: 24, step: 0.5 }}
+                    slotProps={{ htmlInput: { min: 0, max: 24, step: 0.5 } }}
                     required
                     size="small"
                   />
@@ -290,7 +290,7 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
                     type="number"
                     value={formData.personnelOnSite}
                     onChange={(e) => handleInputChange("personnelOnSite", parseInt(e.target.value))}
-                    inputProps={{ min: 1 }}
+                    slotProps={{ htmlInput: { min: 1 } }}
                     size="small"
                   />
                 </Grid>
@@ -301,9 +301,11 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
                     type="number"
                     value={formData.dailyProgressContribution}
                     onChange={(e) => handleInputChange("dailyProgressContribution", parseFloat(e.target.value))}
-                    inputProps={{ min: 0, max: 100, step: 0.1 }}
-                    InputProps={{
-                      endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                    slotProps={{
+                      htmlInput: { min: 0, max: 100, step: 0.1 },
+                      input: {
+                        endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                      },
                     }}
                     size="small"
                   />
@@ -342,8 +344,10 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
                     type="number"
                     value={formData.temperature || ""}
                     onChange={(e) => handleInputChange("temperature", parseFloat(e.target.value) || undefined)}
-                    InputProps={{
-                      endAdornment: <InputAdornment position="end">°F</InputAdornment>,
+                    slotProps={{
+                      input: {
+                        endAdornment: <InputAdornment position="end">°F</InputAdornment>,
+                      },
                     }}
                     size="small"
                   />
@@ -355,9 +359,11 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
                     type="number"
                     value={formData.humidity || ""}
                     onChange={(e) => handleInputChange("humidity", parseInt(e.target.value) || undefined)}
-                    inputProps={{ min: 0, max: 100 }}
-                    InputProps={{
-                      endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                    slotProps={{
+                      htmlInput: { min: 0, max: 100 },
+                      input: {
+                        endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                      },
                     }}
                     size="small"
                   />
@@ -500,10 +506,12 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
                             type="number"
                             value={task.completionPercentage}
                             onChange={(e) => handleTaskChange(index, "completionPercentage", parseInt(e.target.value))}
-                            InputProps={{
-                              endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                            slotProps={{
+                              input: {
+                                endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                              },
+                              htmlInput: { min: 0, max: 100 },
                             }}
-                            inputProps={{ min: 0, max: 100 }}
                             size="small"
                           />
                         </Grid>
@@ -596,7 +604,7 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
               <Stack spacing={2}>
                 {validation.warnings.length > 0 && (
                   <Alert severity="warning">
-                    <Typography variant="body2" fontWeight="bold">Warnings:</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: "bold" }}>Warnings:</Typography>
                     <ul style={{ margin: 0, paddingLeft: 20 }}>
                       {validation.warnings.map((warning: any, index: number) => (
                         <li key={index}><Typography variant="caption">{warning.message}</Typography></li>
@@ -606,7 +614,7 @@ const DailyReportForm: React.FC<DailyReportFormProps> = ({
                 )}
                 {validation.suggestions.length > 0 && (
                   <Alert severity="info">
-                    <Typography variant="body2" fontWeight="bold">Suggestions:</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: "bold" }}>Suggestions:</Typography>
                     <ul style={{ margin: 0, paddingLeft: 20 }}>
                       {validation.suggestions.map((suggestion: string, index: number) => (
                         <li key={index}><Typography variant="caption">{suggestion}</Typography></li>

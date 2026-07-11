@@ -63,8 +63,8 @@ const CollapsibleCard = ({
     >
       {/* Header - Always visible */}
       <Box sx={{ p: 2 }}>
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Stack direction="row" alignItems="center" spacing={1.5}>
+        <Stack direction="row" sx={{ alignItems: "center", justifyContent: "space-between" }}>
+          <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
             <Box
               sx={{
                 width: 32,
@@ -80,7 +80,7 @@ const CollapsibleCard = ({
               {icon}
             </Box>
             <Box>
-              <Typography variant="subtitle2" fontWeight="bold">
+              <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
                 {title}
               </Typography>
               <Typography variant="caption" color="text.secondary" component="div">
@@ -117,7 +117,7 @@ const ProjectSidebar = ({ project }: ProjectSidebarProps) => {
         summary={project.projectManager?.fullName || "Not assigned"}
       >
         {project.projectManager ? (
-          <Stack direction="row" alignItems="center" spacing={2}>
+          <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
             <Avatar
               sx={{
                 bgcolor: theme.palette.primary.main,
@@ -128,7 +128,7 @@ const ProjectSidebar = ({ project }: ProjectSidebarProps) => {
               {project.projectManager.fullName?.charAt(0) || "?"}
             </Avatar>
             <Box>
-              <Typography variant="body2" fontWeight="medium">
+              <Typography variant="body2" sx={{ fontWeight: "medium" }}>
                 {project.projectManager.fullName || "Unknown"}
               </Typography>
               <Typography variant="caption" color="text.secondary">
@@ -158,7 +158,7 @@ const ProjectSidebar = ({ project }: ProjectSidebarProps) => {
             <Typography variant="caption" color="text.secondary">
               Revenue Value
             </Typography>
-            <Typography variant="body2" fontWeight="medium">
+            <Typography variant="body2" sx={{ fontWeight: "medium" }}>
               {project.revenueValue !== null && project.revenueValue !== 0
                 ? formatCurrency(project.revenueValue)
                 : project.totalCapacityKw
@@ -170,7 +170,7 @@ const ProjectSidebar = ({ project }: ProjectSidebarProps) => {
             <Typography variant="caption" color="text.secondary">
               FTS Value
             </Typography>
-            <Typography variant="body2" fontWeight="medium">
+            <Typography variant="body2" sx={{ fontWeight: "medium" }}>
               {project.ftsValue !== null && project.ftsValue !== 0
                 ? formatCurrency(project.ftsValue)
                 : "Not specified"}
@@ -180,7 +180,7 @@ const ProjectSidebar = ({ project }: ProjectSidebarProps) => {
             <Typography variant="caption" color="text.secondary">
               PQM Value
             </Typography>
-            <Typography variant="body2" fontWeight="medium">
+            <Typography variant="body2" sx={{ fontWeight: "medium" }}>
               {project.pqmValue !== null && project.pqmValue !== 0
                 ? formatCurrency(project.pqmValue)
                 : "Not specified"}
@@ -204,8 +204,8 @@ const ProjectSidebar = ({ project }: ProjectSidebarProps) => {
             <Typography variant="caption" color="text.secondary">
               Connection Type
             </Typography>
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Typography variant="body2" fontWeight="medium">
+            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+              <Typography variant="body2" sx={{ fontWeight: "medium" }}>
                 {project.connectionType || "Not specified"}
               </Typography>
               {project.connectionType === "MV" && (
@@ -232,7 +232,7 @@ const ProjectSidebar = ({ project }: ProjectSidebarProps) => {
             <Typography variant="caption" color="text.secondary">
               Total Capacity
             </Typography>
-            <Typography variant="body2" fontWeight="medium">
+            <Typography variant="body2" sx={{ fontWeight: "medium" }}>
               {project.totalCapacityKw
                 ? `${project.totalCapacityKw} kW`
                 : "Not specified"}
@@ -242,7 +242,7 @@ const ProjectSidebar = ({ project }: ProjectSidebarProps) => {
             <Typography variant="caption" color="text.secondary">
               PV Modules
             </Typography>
-            <Typography variant="body2" fontWeight="medium">
+            <Typography variant="body2" sx={{ fontWeight: "medium" }}>
               {project.pvModuleCount || "Not specified"}
               {project.pvModuleCount && project.totalCapacityKw && (
                 <Typography component="span" variant="caption" color="text.secondary" sx={{ ml: 1 }}>
@@ -265,7 +265,7 @@ const ProjectSidebar = ({ project }: ProjectSidebarProps) => {
             <Typography variant="caption" color="text.secondary">
               Team Assignment
             </Typography>
-            <Typography variant="body2" fontWeight="medium">
+            <Typography variant="body2" sx={{ fontWeight: "medium" }}>
               {project.team || "Not assigned"}
             </Typography>
           </Box>
@@ -273,7 +273,7 @@ const ProjectSidebar = ({ project }: ProjectSidebarProps) => {
             <Typography variant="caption" color="text.secondary">
               Current Status
             </Typography>
-            <Typography variant="body2" fontWeight="medium">
+            <Typography variant="body2" sx={{ fontWeight: "medium" }}>
               {project.status || "Unknown"}
             </Typography>
           </Box>
@@ -282,7 +282,7 @@ const ProjectSidebar = ({ project }: ProjectSidebarProps) => {
               <Typography variant="caption" color="text.secondary">
                 Estimated End Date
               </Typography>
-              <Typography variant="body2" fontWeight="medium">
+              <Typography variant="body2" sx={{ fontWeight: "medium" }}>
                 {new Date(project.estimatedEndDate).toLocaleDateString()}
               </Typography>
             </Box>
@@ -302,7 +302,7 @@ const ProjectSidebar = ({ project }: ProjectSidebarProps) => {
               <Typography variant="caption" color="text.secondary">
                 Coordinates
               </Typography>
-              <Typography variant="body2" fontFamily="monospace" fontSize="0.75rem">
+              <Typography variant="body2" sx={{ fontFamily: "monospace", fontSize: "0.75rem" }}>
                 {project.locationCoordinates.latitude.toFixed(6)},{" "}
                 {project.locationCoordinates.longitude.toFixed(6)}
               </Typography>

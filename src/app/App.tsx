@@ -57,11 +57,11 @@ class ErrorBoundary extends React.Component<
                 <AlertCircle size={64} />
               </Box>
 
-              <Typography variant="h4" fontWeight="bold" color="text.primary" gutterBottom>
+              <Typography variant="h4" color="text.primary" gutterBottom sx={{ fontWeight: "bold" }}>
                 Something went wrong
               </Typography>
 
-              <Typography variant="body1" color="text.secondary" paragraph sx={{ mb: 4 }}>
+              <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
                 An unexpected error occurred in the application. Please try
                 refreshing the page or contact support if the issue persists.
               </Typography>
@@ -77,7 +77,7 @@ class ErrorBoundary extends React.Component<
                     textAlign: "left"
                   }}
                 >
-                  <Typography variant="subtitle2" color="error.dark" gutterBottom fontWeight="bold">
+                  <Typography variant="subtitle2" color="error.dark" gutterBottom sx={{ fontWeight: "bold" }}>
                     Error Details (Development Mode)
                   </Typography>
                   <Box

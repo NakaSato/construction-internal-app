@@ -57,12 +57,12 @@ const MilestoneDialog = ({ open, onClose, onSave, loading = false }: MilestoneDi
             onClose={handleClose}
             maxWidth="sm"
             fullWidth
-            PaperProps={{
-                sx: { borderRadius: 2 }
+            slotProps={{
+                paper: { sx: { borderRadius: 2 } }
             }}
         >
             <DialogTitle sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", pb: 1 }}>
-                <Typography component="span" variant="h6" fontWeight="bold">
+                <Typography component="span" variant="h6" sx={{ fontWeight: "bold" }}>
                     Add Milestone
                 </Typography>
                 <IconButton size="small" onClick={handleClose}>
