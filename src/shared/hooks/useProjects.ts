@@ -287,7 +287,6 @@ export const useProjects = (): UseProjectsReturn => {
     // await (imperative side-effect, not derived state).
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchProjects();
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchStats();
   }, [fetchProjects, fetchStats]);
 

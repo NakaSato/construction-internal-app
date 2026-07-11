@@ -145,7 +145,6 @@ export default function GanttChart({
       },
       criticalPath,
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
 
   // Generate time scale based on view mode

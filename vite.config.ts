@@ -1,20 +1,23 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { visualizer } from "rollup-plugin-visualizer";
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    react(),
-    // Bundle analyzer - enabled only when ANALYZE=true
-    process.env.ANALYZE === "true" &&
-      visualizer({
-        filename: "dist/stats.html",
-        open: true,
-        gzipSize: true,
-        brotliSize: true,
-      }),
-  ].filter(Boolean),
+export default defineConfig(async () => {
+  // Bundle analyzer - enabled only when ANALYZE=true.
+  // rollup-plugin-visualizer is ESM-only; import it dynamically so it never
+  // gets require()'d during config load under Vite 8's rolldown loader.
+  const analyzer =
+    process.env.ANALYZE === "true"
+      ? (await import("rollup-plugin-visualizer")).visualizer({
+          filename: "dist/stats.html",
+          open: true,
+          gzipSize: true,
+          brotliSize: true,
+        })
+      : null;
+
+  return {
+    plugins: [react(), analyzer].filter(Boolean),
 
   server: {
     host: true,
@@ -113,4 +116,5 @@ export default defineConfig({
   define: {
     __DEV__: JSON.stringify(process.env.NODE_ENV === "development"),
   },
+  };
 });
