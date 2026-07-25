@@ -20,7 +20,8 @@ export const useRole = () => {
     isManager: user?.roleId === 2 || user?.roleId === 1,
     isUser: user?.roleId === 3 || user?.roleId === 2 || user?.roleId === 1,
     isViewer: Boolean(user), // All authenticated users can view
-    hasRole: (roleId: number) => (user ? user.roleId <= roleId : false),
+    hasRole: (roleId: number) =>
+      user?.roleId != null ? user.roleId <= roleId : false,
     roleName: user?.roleName,
   };
 };

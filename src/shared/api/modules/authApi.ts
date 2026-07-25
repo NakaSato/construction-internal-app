@@ -41,9 +41,11 @@ export class AuthApi {
    * Refresh authentication token
    */
   async refreshToken(refreshToken: string): Promise<ApiResponse<string>> {
-    return this.apiClient.post<ApiResponse<string>>("/api/v1/Auth/refresh", {
-      refreshToken,
-    });
+    // Backend binds [FromBody] string — send the raw token, not an object.
+    return this.apiClient.post<ApiResponse<string>>(
+      "/api/v1/Auth/refresh",
+      refreshToken
+    );
   }
 
   /**

@@ -4,8 +4,8 @@ export interface User {
   username: string;
   email: string;
   fullName: string;
-  roleName: string;
-  roleId: number;
+  roleName: string | null;
+  roleId?: number; // Backend omits this; derived from roleName client-side
   isActive: boolean;
 }
 
@@ -61,6 +61,7 @@ export interface AuthContextType {
   logout: () => void;
   register: (userData: RegisterRequest) => Promise<boolean>;
   refreshToken: () => Promise<boolean>;
+  devBypass?: () => void; // DEV-only: skip auth, inject fake admin. Stripped in prod build.
   initializationPromise?: Promise<void>;
 }
 

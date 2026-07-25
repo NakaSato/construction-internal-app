@@ -10,7 +10,7 @@ interface LoginFormProps {
 }
 
 export default function LoginForm({ onSuccess }: LoginFormProps) {
-  const { login, isLoading } = useAuth();
+  const { login, isLoading, devBypass } = useAuth();
   const [formData, setFormData] = useState<LoginRequest>({
     username: "",
     password: "",
@@ -183,6 +183,22 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
               ))}
             </div>
           </div>
+
+          {/* DEV-only bypass: skip auth entirely. Stripped in prod build. */}
+          {import.meta.env.DEV && devBypass && (
+            <div className="mt-4">
+              <button
+                type="button"
+                onClick={() => {
+                  devBypass();
+                  onSuccess?.();
+                }}
+                className="w-full px-3 py-2 text-xs font-medium border border-dashed border-amber-400 text-amber-700 bg-amber-50 rounded-md hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              >
+                ⚡ Bypass login (DEV only)
+              </button>
+            </div>
+          )}
 
           {/* Registration Link */}
           <div className="text-center mt-6">

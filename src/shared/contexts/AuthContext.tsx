@@ -248,6 +248,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  // DEV-only auth bypass: inject a fake admin session without a backend.
+  // Guarded by import.meta.env.DEV so Vite dead-code-eliminates it in prod.
+  const devBypass = import.meta.env.DEV
+    ? () => {
+        setUser({
+          userId: "dev-bypass",
+          username: "dev",
+          email: "dev@localhost",
+          fullName: "Dev Bypass",
+          roleName: "Admin",
+          roleId: 1,
+          isActive: true,
+        });
+        setToken("dev-bypass-token");
+      }
+    : undefined;
+
   const value: AuthContextType = {
     user,
     token,
@@ -257,6 +274,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     logout,
     register,
     refreshToken,
+    devBypass,
     initializationPromise,
   };
 

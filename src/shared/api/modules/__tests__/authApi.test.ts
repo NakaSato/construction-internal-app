@@ -109,9 +109,10 @@ describe("AuthApi", () => {
       const result = await authApi.refreshToken(refreshToken);
 
       // Assert
-      expect(mockApiClient.post).toHaveBeenCalledWith("/api/v1/Auth/refresh", {
-        refreshToken,
-      });
+      expect(mockApiClient.post).toHaveBeenCalledWith(
+        "/api/v1/Auth/refresh",
+        refreshToken
+      );
       expect(result).toEqual(mockResponse);
     });
   });

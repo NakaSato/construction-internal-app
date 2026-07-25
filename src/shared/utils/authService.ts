@@ -16,6 +16,30 @@ export class AuthService {
   private static readonly REFRESH_TOKEN_KEY = "solar_refresh_token";
   private static readonly USER_KEY = "solar_user";
 
+  // Backend returns roleName (string) but omits numeric roleId.
+  // RBAC hooks (useRole, hasRole, hasPermission) key off roleId, so derive it.
+  private static readonly ROLE_NAME_TO_ID: Record<string, number> = {
+    admin: 1,
+    manager: 2,
+    user: 3,
+    engineer: 3,
+    technician: 3,
+    viewer: 4,
+  };
+
+  static roleIdFromName(roleName: string | null | undefined): number | undefined {
+    if (!roleName) return undefined;
+    return this.ROLE_NAME_TO_ID[roleName.toLowerCase()];
+  }
+
+  // Backfill numeric roleId from roleName when the backend omits it.
+  static normalizeUser(user: User): User {
+    if (user && user.roleId == null) {
+      return { ...user, roleId: this.roleIdFromName(user.roleName) };
+    }
+    return user;
+  }
+
   // Safe localStorage access with fallback
   private static isStorageAvailable(): boolean {
     try {
@@ -61,6 +85,10 @@ export class AuthService {
       );
 
       if (response.success && response.data) {
+        // Backfill roleId from roleName (mutates so callers reading
+        // response.data.user directly, e.g. AuthContext, get it too)
+        response.data.user = this.normalizeUser(response.data.user);
+
         // Store tokens and user data
         this.setToken(response.data.token);
         this.setRefreshToken(response.data.refreshToken);
@@ -206,12 +234,15 @@ export class AuthService {
       }
 
       console.log("AuthService: Attempting token refresh");
+      // Backend binds [FromBody] string — send the raw token as a JSON string,
+      // not an object.
       const response = await apiClient.post<LoginResponse>(
         AUTH_ENDPOINTS.REFRESH,
-        { refreshToken }
+        refreshToken
       );
 
       if (response.success && response.data) {
+        response.data.user = this.normalizeUser(response.data.user);
         this.setToken(response.data.token);
         this.setRefreshToken(response.data.refreshToken);
         this.setUser(response.data.user);
@@ -371,7 +402,7 @@ export class AuthService {
   // Role-based access control
   static hasRole(requiredRoleId: number): boolean {
     const user = this.getCurrentUser();
-    return user ? user.roleId >= requiredRoleId : false;
+    return user?.roleId != null ? user.roleId >= requiredRoleId : false;
   }
 
   static hasPermission(permission: string): boolean {
@@ -386,7 +417,8 @@ export class AuthService {
       4: ["viewer"], // Viewer
     };
 
-    const userPermissions = rolePermissions[user.roleId] || [];
+    const userPermissions =
+      user.roleId != null ? rolePermissions[user.roleId] || [] : [];
     return userPermissions.includes(permission);
   }
 
