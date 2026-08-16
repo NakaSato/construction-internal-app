@@ -1,10 +1,9 @@
 import { apiClient } from "./apiClient";
+import { CreateProjectInput, toApiCreateProjectPayload } from "./projectPayload";
 import {
   CreateProjectRequest,
   ProjectDto,
   UpdateProjectRequest,
-  EnhancedCreateProjectRequest,
-  EnhancedUpdateProjectRequest,
   UpdateProjectStatusRequest,
   ProjectStatusUpdateResponse,
   ProjectSearchRequest,
@@ -282,11 +281,11 @@ export class ProjectsApiService {
    * Create new project (Admin/Manager only)
    * POST /api/v1/projects
    */
-  async createProject(projectData: CreateProjectRequest): Promise<ProjectDto> {
+  async createProject(projectData: CreateProjectInput): Promise<ProjectDto> {
     try {
       const response = await apiClient.post<ApiResponse<ProjectDto>>(
         this.endpoint,
-        projectData
+        toApiCreateProjectPayload(projectData)
       );
       if (!response.data) {
         throw new Error("Failed to create project");
@@ -295,28 +294,6 @@ export class ProjectsApiService {
     } catch (error) {
       console.error("Failed to create project:", error);
       throw new Error("Failed to create project");
-    }
-  }
-
-  /**
-   * Enhanced project creation with validation
-   * POST /api/v1/projects/enhanced
-   */
-  async createEnhancedProject(
-    projectData: EnhancedCreateProjectRequest
-  ): Promise<ProjectDto> {
-    try {
-      const response = await apiClient.post<ApiResponse<ProjectDto>>(
-        `${this.endpoint}/enhanced`,
-        projectData
-      );
-      if (!response.data) {
-        throw new Error("Failed to create enhanced project");
-      }
-      return response.data;
-    } catch (error) {
-      console.error("Failed to create enhanced project:", error);
-      throw new Error("Failed to create enhanced project");
     }
   }
 
@@ -340,29 +317,6 @@ export class ProjectsApiService {
     } catch (error) {
       console.error(`Failed to update project ${id}:`, error);
       throw new Error(`Failed to update project ${id}`);
-    }
-  }
-
-  /**
-   * Enhanced project update with validation
-   * PUT /api/v1/projects/{id}/enhanced
-   */
-  async updateEnhancedProject(
-    id: string,
-    projectData: EnhancedUpdateProjectRequest
-  ): Promise<ProjectDto> {
-    try {
-      const response = await apiClient.put<ApiResponse<ProjectDto>>(
-        `${this.endpoint}/${id}/enhanced`,
-        projectData
-      );
-      if (!response.data) {
-        throw new Error("Failed to update enhanced project");
-      }
-      return response.data;
-    } catch (error) {
-      console.error(`Failed to update enhanced project ${id}:`, error);
-      throw new Error(`Failed to update enhanced project ${id}`);
     }
   }
 

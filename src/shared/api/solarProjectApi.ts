@@ -1,5 +1,9 @@
 import { ApiClient } from "../utils/apiClient";
 import {
+  CreateProjectInput,
+  toApiCreateProjectPayload,
+} from "../utils/projectPayload";
+import {
   ApiResponse,
   CalendarEventDto,
   CreateCalendarEventDto,
@@ -158,11 +162,11 @@ export class SolarProjectApi {
    * Create new project
    */
   async createProject(
-    project: CreateProjectRequest
+    project: CreateProjectInput
   ): Promise<ApiResponse<ProjectDto>> {
     return this.apiClient.post<ApiResponse<ProjectDto>>(
       "/api/v1/Projects",
-      project
+      toApiCreateProjectPayload(project)
     );
   }
 

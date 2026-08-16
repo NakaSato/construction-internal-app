@@ -208,48 +208,6 @@ export interface ProjectLink {
     method: string;
 }
 
-// Enhanced project creation with full equipment details
-export interface EnhancedCreateProjectRequest {
-    projectName: string;
-    address: string;
-    clientInfo?: string;
-    startDate: string;
-    estimatedEndDate?: string;
-    projectManagerId: string;
-    team?: string;
-    connectionType?: ConnectionType;
-    connectionNotes?: string;
-    totalCapacityKw?: number;
-    pvModuleCount?: number;
-    equipmentDetails?: EquipmentDetailsDto;
-    ftsValue?: number;
-    revenueValue?: number;
-    pqmValue?: number;
-    locationCoordinates?: LocationCoordinatesDto;
-}
-
-// Enhanced project update with full equipment details
-export interface EnhancedUpdateProjectRequest {
-    projectName?: string;
-    address?: string;
-    clientInfo?: string;
-    status?: ProjectStatus;
-    startDate?: string;
-    estimatedEndDate?: string;
-    actualEndDate?: string;
-    projectManagerId?: string;
-    team?: string;
-    connectionType?: ConnectionType;
-    connectionNotes?: string;
-    totalCapacityKw?: number;
-    pvModuleCount?: number;
-    equipmentDetails?: EquipmentDetailsDto;
-    ftsValue?: number;
-    revenueValue?: number;
-    pqmValue?: number;
-    locationCoordinates?: LocationCoordinatesDto;
-}
-
 // Backward compatibility type aliases
 export type NewProjectForm = CreateProjectRequest;
 export type UpdateProjectForm = UpdateProjectRequest;
