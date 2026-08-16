@@ -57,7 +57,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 // Base: fixed overlay on mobile, in-flow rail on desktop
                 "fixed inset-y-0 left-0 z-50 flex flex-col bg-slate-900 text-slate-300",
                 "border-r border-slate-800 transition-all duration-300 ease-in-out",
-                "lg:static lg:translate-x-0",
+                // Desktop: stay in flow (so it reserves layout width rather than
+                // overlaying content) but keep the viewport-height box the mobile
+                // `fixed inset-y-0` gives us. Plain `static` let the rail grow to the
+                // full page height, which pushed the profile/sign-out footer below the
+                // fold and scrolled the nav away with the page.
+                "lg:sticky lg:top-0 lg:bottom-auto lg:h-screen lg:translate-x-0",
                 // Width: full drawer on mobile, collapsible on desktop
                 "w-[280px]",
                 isOpen ? "translate-x-0 lg:w-[280px]" : "-translate-x-full lg:w-[76px]",
