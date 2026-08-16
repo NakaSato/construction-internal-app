@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => {
@@ -17,7 +18,73 @@ export default defineConfig(async () => {
       : null;
 
   return {
-    plugins: [react(), analyzer].filter(Boolean),
+    plugins: [
+      react(),
+      VitePWA({
+        registerType: "autoUpdate",
+        // Inject the service-worker registration automatically — no app code
+        // changes needed. autoUpdate silently activates new versions.
+        injectRegister: "auto",
+        includeAssets: ["vite.svg", "icons/apple-touch-icon.png"],
+        manifest: {
+          name: "ICMS – ระบบจัดการโครงการก่อสร้างภายในองค์กร",
+          short_name: "ICMS",
+          description:
+            "ระบบจัดการโครงการก่อสร้างพลังงานแสงอาทิตย์ภายในองค์กร ติดตาม จัดการ และรายงานแบบเรียลไทม์",
+          lang: "th",
+          dir: "ltr",
+          theme_color: "#0f172a",
+          background_color: "#0f172a",
+          display: "standalone",
+          start_url: "/",
+          scope: "/",
+          categories: ["business", "productivity"],
+          icons: [
+            { src: "icons/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+            { src: "icons/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+            { src: "icons/maskable-192.png", sizes: "192x192", type: "image/png", purpose: "maskable" },
+            { src: "icons/maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+            { src: "icons/icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" },
+          ],
+        },
+        workbox: {
+          globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,woff,woff2}"],
+          // The lazy pdf chunk is ~1.4 MB; raise the precache size ceiling.
+          maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
+          cleanupOutdatedCaches: true,
+          clientsClaim: true,
+          navigateFallback: "index.html",
+          // Never serve the SPA shell for API/docs requests.
+          navigateFallbackDenylist: [/^\/api/, /^\/swagger/],
+          runtimeCaching: [
+            {
+              // Live backend — try network first, fall back to cache offline.
+              urlPattern: /^https:\/\/construction-dotnet-rest-api\.onrender\.com\/.*/i,
+              handler: "NetworkFirst",
+              options: {
+                cacheName: "api-cache",
+                networkTimeoutSeconds: 10,
+                expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 },
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+            {
+              urlPattern: ({ request }) => request.destination === "image",
+              handler: "StaleWhileRevalidate",
+              options: {
+                cacheName: "image-cache",
+                expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 7 },
+              },
+            },
+          ],
+        },
+        devOptions: {
+          // Keep the SW out of `vite dev` so it never interferes with HMR.
+          enabled: false,
+        },
+      }),
+      analyzer,
+    ].filter(Boolean),
 
   server: {
     host: true,

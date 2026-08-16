@@ -12,7 +12,6 @@ import {
   RealTimeProjectDashboardLazy,
 } from "./LazyPages";
 import { Navigation } from "../widgets";
-import Footer from "../components/layout/Footer";
 import ProtectedRoute from "../features/auth/ProtectedRoute";
 
 function AuthLoader() {
@@ -124,7 +123,6 @@ function AppRoutesContent() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
-        {isPublicPage && <Footer />}
       </div>
     </Suspense>
   );
