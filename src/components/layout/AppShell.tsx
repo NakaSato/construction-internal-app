@@ -52,7 +52,11 @@ export const AppShell: React.FC<AppShellProps> = ({
                     flexGrow: 1,
                     display: "flex",
                     flexDirection: "column",
-
+                    // Flex items default to min-width:auto, so this column would grow to
+                    // its widest child's min-content width and push the page into
+                    // horizontal scroll. Allowing it to shrink lets wide content (e.g. the
+                    // projects table) scroll inside its own overflow-x container instead.
+                    minWidth: 0,
                 }}
             >
                 <Header toggleSidebar={toggleSidebar} title={title} />
